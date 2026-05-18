@@ -1,4 +1,4 @@
--- ANTI-LAG DEFINITIVO - CON ESPERA DE 6 SEGUNDOS - DanielSonrieScripts
+-- ANTI-LAG DEFINITIVO - CON ANIMACIONES SIMPLES - DanielSonrieScripts
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
@@ -6,7 +6,7 @@ local LocalPlayer = Players.LocalPlayer
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 
-print("⚔️ ANTI-LAG DEFINITIVO - ESPERANDO 6 SEGUNDOS PARA OPTIMIZAR")
+print("⚔️ ANTI-LAG DEFINITIVO - ESPERANDO 8 SEGUNDOS")
 
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 for _, gui in pairs(PlayerGui:GetChildren()) do
@@ -14,7 +14,7 @@ for _, gui in pairs(PlayerGui:GetChildren()) do
 end
 
 -- ============================================
--- ANIMACIÓN DE ENTRADA CHIDA (DURA 5 SEGUNDOS)
+-- TEXTO DE BIENVENIDA (ANIMACIÓN: entra desde abajo, sube, se desvanece)
 -- ============================================
 pcall(function()
     local WelcomeGui = Instance.new("ScreenGui")
@@ -22,128 +22,62 @@ pcall(function()
     WelcomeGui.ResetOnSpawn = false
     WelcomeGui.Parent = PlayerGui
 
-    -- Marco principal
     local MainFrame = Instance.new("Frame")
-    MainFrame.Size = UDim2.new(0, 450, 0, 140)
-    MainFrame.Position = UDim2.new(0.5, -225, 0.5, -70)
-    MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
-    MainFrame.BackgroundTransparency = 0.2
+    MainFrame.Size = UDim2.new(0, 350, 0, 80)
+    MainFrame.Position = UDim2.new(0.5, -175, 1, 0)
+    MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    MainFrame.BackgroundTransparency = 0.4
     MainFrame.BorderSizePixel = 0
     MainFrame.Parent = WelcomeGui
 
     local MainCorner = Instance.new("UICorner")
-    MainCorner.CornerRadius = UDim.new(0, 20)
+    MainCorner.CornerRadius = UDim.new(0, 15)
     MainCorner.Parent = MainFrame
 
-    -- Efecto de brillo (gradiente)
-    local Gradient = Instance.new("UIGradient")
-    Gradient.Color = ColorSequence.new({
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 200, 0)),
-        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 100, 0)),
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 200, 0))
-    })
-    Gradient.Rotation = 45
-    Gradient.Parent = MainFrame
-
-    -- Texto principal
     local TitleLabel = Instance.new("TextLabel")
-    TitleLabel.Size = UDim2.new(1, 0, 0, 55)
-    TitleLabel.Position = UDim2.new(0, 0, 0, 20)
+    TitleLabel.Size = UDim2.new(1, 0, 0, 40)
+    TitleLabel.Position = UDim2.new(0, 0, 0, 10)
     TitleLabel.BackgroundTransparency = 1
     TitleLabel.Text = "🥔 MODO PATATA 🥔"
     TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-    TitleLabel.TextSize = 36
+    TitleLabel.TextSize = 24
     TitleLabel.Font = Enum.Font.GothamBold
     TitleLabel.Parent = MainFrame
 
-    -- Subtítulo
     local SubLabel = Instance.new("TextLabel")
-    SubLabel.Size = UDim2.new(1, 0, 0, 30)
-    SubLabel.Position = UDim2.new(0, 0, 0, 75)
+    SubLabel.Size = UDim2.new(1, 0, 0, 20)
+    SubLabel.Position = UDim2.new(0, 0, 0, 50)
     SubLabel.BackgroundTransparency = 1
-    SubLabel.Text = "Anti-Lag Optimizado | DanielSonrieScripts"
+    SubLabel.Text = "DanielSonrieScripts"
     SubLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
-    SubLabel.TextSize = 16
+    SubLabel.TextSize = 12
     SubLabel.Font = Enum.Font.Gotham
     SubLabel.Parent = MainFrame
-    
-    -- Texto de carga
-    local LoadLabel = Instance.new("TextLabel")
-    LoadLabel.Size = UDim2.new(1, 0, 0, 20)
-    LoadLabel.Position = UDim2.new(0, 0, 0, 105)
-    LoadLabel.BackgroundTransparency = 1
-    LoadLabel.Text = "Cargando optimizaciones..."
-    LoadLabel.TextColor3 = Color3.fromRGB(255, 200, 0)
-    LoadLabel.TextSize = 12
-    LoadLabel.Font = Enum.Font.Gotham
-    LoadLabel.Parent = MainFrame
 
-    -- Animación de entrada (rebote)
-    MainFrame.Position = UDim2.new(0.5, -225, 0.5, -120)
-    MainFrame.BackgroundTransparency = 1
-    TitleLabel.TextTransparency = 1
-    SubLabel.TextTransparency = 1
-    LoadLabel.TextTransparency = 1
+    -- Animación: entra desde abajo, sube a su posición, se desvanece
+    local entrarAnim = TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, -175, 0.7, 0)})
+    entrarAnim:Play()
     
-    local entrada1 = TweenService:Create(MainFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, -225, 0.5, -70)})
-    local entrada2 = TweenService:Create(MainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {BackgroundTransparency = 0.2})
-    local entrada3 = TweenService:Create(TitleLabel, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 0})
-    local entrada4 = TweenService:Create(SubLabel, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 0})
-    local entrada5 = TweenService:Create(LoadLabel, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 0})
+    task.wait(3)
     
-    entrada1:Play()
-    task.wait(0.2)
-    entrada2:Play()
-    entrada3:Play()
-    entrada4:Play()
-    entrada5:Play()
+    local salirAnim = TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Position = UDim2.new(0.5, -175, 1, 0), BackgroundTransparency = 1})
+    salirAnim:Play()
+    TweenService:Create(TitleLabel, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 1}):Play()
+    TweenService:Create(SubLabel, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 1}):Play()
     
-    -- Animación de brillo (pulso)
-    local pulse = TweenService:Create(Gradient, TweenInfo.new(1.5, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), {Rotation = 405})
-    pulse:Play()
-    
-    -- Animación de carga (puntos suspensivos)
-    local puntos = 0
-    local cargaLoop = task.spawn(function()
-        while WelcomeGui.Parent do
-            task.wait(0.5)
-            puntos = (puntos % 3) + 1
-            LoadLabel.Text = "Cargando optimizaciones" .. string.rep(".", puntos)
-        end
-    end)
-    
-    -- Esperar 5 SEGUNDOS (en lugar de 2.5)
-    task.wait(5)
-    
-    -- Detener el loop de carga
-    task.cancel(cargaLoop)
-    
-    -- Animación de salida
-    local saida1 = TweenService:Create(MainFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Position = UDim2.new(0.5, -225, 0.5, 120)})
-    local saida2 = TweenService:Create(MainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {BackgroundTransparency = 1})
-    local saida3 = TweenService:Create(TitleLabel, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 1})
-    local saida4 = TweenService:Create(SubLabel, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 1})
-    local saida5 = TweenService:Create(LoadLabel, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 1})
-    
-    saida1:Play()
-    saida2:Play()
-    saida3:Play()
-    saida4:Play()
-    saida5:Play()
-    
-    task.wait(0.5)
+    task.wait(0.6)
     WelcomeGui:Destroy()
 end)
 
 -- ============================================
--- ESPERAR 6 SEGUNDOS ANTES DE EJECUTAR OPTIMIZACIONES
+-- ESPERAR 8 SEGUNDOS ANTES DE EJECUTAR TODO
 -- ============================================
-task.wait(6)
+task.wait(8)
 
 print("✅ INICIANDO OPTIMIZACIONES - El juego ya cargó")
 
 -- ============================================
--- CONTADOR DE FPS (ESQUINA SUPERIOR IZQUIERDA)
+-- CONTADOR DE FPS (ANIMACIÓN: entra desde abajo)
 -- ============================================
 pcall(function()
     local FpsGui = Instance.new("ScreenGui")
@@ -153,7 +87,7 @@ pcall(function()
 
     local FpsFrame = Instance.new("Frame")
     FpsFrame.Size = UDim2.new(0, 70, 0, 25)
-    FpsFrame.Position = UDim2.new(0, 10, 0, 10)
+    FpsFrame.Position = UDim2.new(0, 10, 1, 0)
     FpsFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
     FpsFrame.BackgroundTransparency = 0.5
     FpsFrame.BorderSizePixel = 0
@@ -172,6 +106,10 @@ pcall(function()
     FpsLabel.Font = Enum.Font.GothamBold
     FpsLabel.TextXAlignment = Enum.TextXAlignment.Center
     FpsLabel.Parent = FpsFrame
+
+    -- Animación de entrada
+    local entrarAnim = TweenService:Create(FpsFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0, 10, 1, -35)})
+    entrarAnim:Play()
 
     local lastTime = tick()
     local frameCount = 0
@@ -196,7 +134,7 @@ pcall(function()
 end)
 
 -- ============================================
--- PANEL DE ACTUALIZACIONES (CON ANIMACIÓN)
+-- PANEL DE ACTUALIZACIONES (ANIMACIÓN: entra desde abajo, sale abajo)
 -- ============================================
 pcall(function()
     local UpdateGui = Instance.new("ScreenGui")
@@ -205,10 +143,10 @@ pcall(function()
     UpdateGui.Parent = PlayerGui
 
     local UpdateFrame = Instance.new("Frame")
-    UpdateFrame.Size = UDim2.new(0, 170, 0, 95)
-    UpdateFrame.Position = UDim2.new(0, -180, 1, -105)
+    UpdateFrame.Size = UDim2.new(0, 160, 0, 95)
+    UpdateFrame.Position = UDim2.new(0, 10, 1, 0)
     UpdateFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-    UpdateFrame.BackgroundTransparency = 0.6
+    UpdateFrame.BackgroundTransparency = 0.5
     UpdateFrame.BorderSizePixel = 0
     UpdateFrame.Parent = UpdateGui
 
@@ -216,8 +154,9 @@ pcall(function()
     UpdateCorner.CornerRadius = UDim.new(0, 8)
     UpdateCorner.Parent = UpdateFrame
 
-    local entradaAnim = TweenService:Create(UpdateFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0, 10, 1, -105)})
-    entradaAnim:Play()
+    -- Animación de entrada
+    local entrarAnim = TweenService:Create(UpdateFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0, 10, 1, -105)})
+    entrarAnim:Play()
 
     local TitleLabel = Instance.new("TextLabel")
     TitleLabel.Size = UDim2.new(1, -10, 0, 22)
@@ -252,17 +191,24 @@ pcall(function()
         yPos = yPos + 18
     end
 
+    -- Salir después de 8 segundos (animación hacia abajo)
     task.spawn(function()
         task.wait(8)
-        local saidaAnim = TweenService:Create(UpdateFrame, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Position = UDim2.new(0, -180, 1, -105)})
-        saidaAnim:Play()
-        task.wait(0.3)
+        local salirAnim = TweenService:Create(UpdateFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Position = UDim2.new(0, 10, 1, 0), BackgroundTransparency = 1})
+        salirAnim:Play()
+        TweenService:Create(TitleLabel, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 1}):Play()
+        for _, child in pairs(UpdateFrame:GetChildren()) do
+            if child:IsA("TextLabel") and child ~= TitleLabel then
+                TweenService:Create(child, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 1}):Play()
+            end
+        end
+        task.wait(0.5)
         UpdateGui:Destroy()
     end)
 end)
 
 -- ============================================
--- MARCA DE AGUA
+-- MARCA DE AGUA (ANIMACIÓN: entra desde abajo, se queda)
 -- ============================================
 pcall(function()
     local WatermarkGui = Instance.new("ScreenGui")
@@ -272,7 +218,7 @@ pcall(function()
 
     local WatermarkLabel = Instance.new("TextLabel")
     WatermarkLabel.Size = UDim2.new(0, 140, 0, 18)
-    WatermarkLabel.Position = UDim2.new(1, -150, 1, -30)
+    WatermarkLabel.Position = UDim2.new(1, -150, 1, 0)
     WatermarkLabel.BackgroundTransparency = 1
     WatermarkLabel.Text = "DanielSonrieScripts"
     WatermarkLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -282,12 +228,13 @@ pcall(function()
     WatermarkLabel.TextTransparency = 0.3
     WatermarkLabel.Parent = WatermarkGui
     
-    local parpadeo = TweenService:Create(WatermarkLabel, TweenInfo.new(2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), {TextTransparency = 0.6})
-    parpadeo:Play()
+    -- Animación de entrada
+    local entrarAnim = TweenService:Create(WatermarkLabel, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(1, -150, 1, -30)})
+    entrarAnim:Play()
 end)
 
 -- ============================================
--- OPTIMIZACIONES (SE EJECUTAN DESPUÉS DE 6 SEGUNDOS)
+-- OPTIMIZACIONES (SE EJECUTAN DESPUÉS DE 8 SEGUNDOS)
 -- ============================================
 
 -- Eliminar árboles
