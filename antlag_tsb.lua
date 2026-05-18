@@ -1,11 +1,11 @@
--- DanielScript Ultimate Anti-Lag | TSB Anti-VisualEffects Edition
+-- DanielScript Ultimate Anti-Lag | TSB Extreme Wipe Edition
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 local TweenService = game:GetService("TweenService")
 local LocalPlayer = Players.LocalPlayer
 
-print("⚔️ TSB Anti-Lag (Cero Efectos Especiales) por DanielSonrie")
+print("⚔️ TSB Anti-Lag (Modo Extremo Limpieza) por DanielSonrie")
 
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 if PlayerGui:FindFirstChild("DanielWelcomeGui") then PlayerGui.DanielWelcomeGui:Destroy() end
@@ -126,45 +126,49 @@ pcall(function()
     end)
 end)
 
--- 3. BYPASS AGRESIVO DE EFECTOS MESH/VISUALES (Borrador de Torbellinos y Rocas)
-local function BypassVisualEffects(obj)
+-- 3. FILTRO DE EXTREMA UNCIÓN (Borra efectos sin importar dónde estén escondidos)
+local function AbsoluteWipe(obj)
     local name = obj.Name and string.lower(obj.Name) or ""
     local parentName = obj.Parent and string.lower(obj.Parent.Name) or ""
 
-    -- Regla de oro estricta: Salvar el Dash de Garou y efectos azules esenciales
+    -- Regla de oro intocable: Salvar Garou Dash y auras azules de tu skin/personaje
     if string.find(name, "dash") or string.find(name, "blue") or string.find(name, "garou") 
        or string.find(parentName, "dash") or string.find(parentName, "garou") then 
         return 
     end
 
-    -- Eliminar Palmeras
+    -- Borrar Palmeras de raíz
     if string.find(name, "tree") or string.find(name, "palm") or string.find(name, "palmera") then
         obj:Destroy()
         return
     end
 
-    -- INTERCEPTAR EFECTOS VISUALES 3D (Torbellinos de Garou, Rocas, Escombros gigantes)
-    if obj:IsA("BasePart") or obj:IsA("MeshPart") then
-        -- Asegurar que no borre el mapa donde pisas
+    -- DETECTOR RADICAL PARA EFECTOS DE MOVIMIENTOS (Torbellinos, texturas naranjas, rocas)
+    if obj:IsA("BasePart") or obj:IsA("MeshPart") or obj:IsA("SpecialMesh") or obj:IsA("Decal") or obj:IsA("Texture") then
+        -- No romper el mapa base sobre el que caminas
         if obj.Name ~= "Terrain" and name ~= "baseplate" and not obj:IsDescendantOf(Workspace:FindFirstChild("Map")) then
             
-            -- Si está en carpetas de efectos o tiene nombres sospechosos de habilidades
+            -- SI NO TIENE COLISIÓN O ESTÁ EN CARPETAS DE EFECTOS / ATAQUES (Filtro total por tamaño y tipo)
             if parentName == "visualeffects" or string.find(parentName, "fx") or parentName == "debris" 
                or string.find(name, "rock") or string.find(name, "debris") or string.find(name, "stone") 
-               or string.find(name, "tornado") or string.find(name, "whirlwind") or string.find(name, "ef")
-               or name == "part" or name == "meshpart" or name == "effect" or name == "orange" then
+               or string.find(name, "tornado") or string.find(name, "whirlwind") or string.find(name, "effect")
+               or string.find(name, "orange") or string.find(name, "hit") or string.find(name, "slash")
+               or (obj:IsA("BasePart") and obj.CanCollide == false and not obj:IsA("MeshPart") and obj.Size.Y < 40)
+               or (obj:IsA("MeshPart") and obj.CanCollide == false) then
                 
                 pcall(function()
                     obj.Transparency = 1
-                    obj.Size = Vector3.new(0, 0, 0)
-                    obj.Position = Vector3.new(0, -999, 0) -- Mandado al olvido
-                    obj.CanCollide = false
+                    if obj:IsA("BasePart") or obj:IsA("MeshPart") then
+                        obj.Size = Vector3.new(0, 0, 0)
+                        obj.Position = Vector3.new(0, -999, 0) -- Mandado al tártaro
+                        obj.CanCollide = false
+                    end
                 end)
             end
         end
     end
 
-    -- Apagar todas las demás partículas, fuegos y humos sueltos
+    -- Apagar absolutamente todos los emisores de efectos visuales secundarios
     if obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") or obj:IsA("Smoke") or obj:IsA("Fire") then
         pcall(function() obj.Enabled = false end)
     elseif obj:IsA("Explosion") then
@@ -172,11 +176,11 @@ local function BypassVisualEffects(obj)
     end
 end
 
--- Ejecución y escaneo constante en vivo para destruir efectos al instante
-for _, child in pairs(Workspace:GetDescendants()) do pcall(BypassVisualEffects, child) end
-Workspace.DescendantAdded:Connect(function(descendant) pcall(BypassVisualEffects, descendant) end)
+-- Escaneo masivo en paralelo y detector en tiempo real super rápido
+for _, child in pairs(Workspace:GetDescendants()) do pcall(AbsoluteWipe, child) end
+Workspace.DescendantAdded:Connect(function(descendant) pcall(AbsoluteWipe, descendant) end)
 
--- Iluminación optimizada limpia
+-- Iluminación optimizada limpia al máximo
 pcall(function()
     Lighting.GlobalShadows = false
     Lighting.FogEnd = 1e6
