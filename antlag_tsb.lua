@@ -1,10 +1,10 @@
--- ANTI-LAG DEFINITIVO - CON PROTECCIÓN DE DUMMY - DanielSonrieScripts
+-- ANTI-LAG DEFINITIVO - CON DUMMY 100% PROTEGIDO
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 local LocalPlayer = Players.LocalPlayer
 
-print("⚔️ ANTI-LAG - CON DUMMY PROTEGIDO - DanielSonrieScripts")
+print("⚔️ ANTI-LAG - DUMMY PROTEGIDO")
 
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 for _, gui in pairs(PlayerGui:GetChildren()) do
@@ -12,7 +12,7 @@ for _, gui in pairs(PlayerGui:GetChildren()) do
 end
 
 -- ============================================
--- INTRODUCCIÓN (3 segundos)
+-- INTRODUCCIÓN
 -- ============================================
 pcall(function()
     local WelcomeGui = Instance.new("ScreenGui")
@@ -35,7 +35,7 @@ pcall(function()
 end)
 
 -- ============================================
--- PANEL DE ACTUALIZACIONES
+-- PANEL ACTUALIZACIONES
 -- ============================================
 pcall(function()
     local UpdateGui = Instance.new("ScreenGui")
@@ -127,31 +127,26 @@ pcall(function()
 end)
 
 -- ============================================
--- ELIMINAR ÁRBOLES
+-- LISTA DE NOMBRES PROHIBIDOS (NO ELIMINAR)
 -- ============================================
-pcall(function()
-    for _, obj in pairs(Workspace:GetDescendants()) do
-        local nombre = obj.Name and string.lower(obj.Name) or ""
-        if nombre:find("tree") or nombre:find("palm") or nombre:find("palmera") then
-            obj:Destroy()
-        end
-    end
-end)
+local nombresProtegidos = {
+    "punetazo", "golpes", "empujar", "corte", "superior", "sucesivos",
+    "dummy", "training", "target", "humanoid", "modo serio",
+    "puñetazo", "normal", "1", "2", "3", "4", "si", "no"
+}
 
--- ============================================
--- PROTECCIÓN DE DUMMY Y PERSONAJES
--- ============================================
-
-local function esParteDePersonaje(obj)
-    local current = obj.Parent
-    while current do
-        -- Detectar Humanoid (personajes, dummies, jugadores)
-        if current:FindFirstChild("Humanoid") then
+local function esProtegido(obj)
+    local nombre = obj.Name and string.lower(obj.Name) or ""
+    for _, protegido in pairs(nombresProtegidos) do
+        if nombre:find(protegido) then
             return true
         end
-        -- También proteger cualquier modelo que sea dummy por nombre
-        local nombre = current.Name and string.lower(current.Name) or ""
-        if nombre:find("dummy") or nombre:find("training") or nombre:find("target") then
+    end
+    
+    -- Proteger cualquier cosa con Humanoid
+    local current = obj.Parent
+    while current do
+        if current:FindFirstChild("Humanoid") then
             return true
         end
         current = current.Parent
@@ -160,12 +155,24 @@ local function esParteDePersonaje(obj)
 end
 
 -- ============================================
--- DETECCIÓN DE PIEDRAS (SIN BORRAR DUMMY)
+-- ELIMINAR ÁRBOLES (solo árboles)
+-- ============================================
+pcall(function()
+    for _, obj in pairs(Workspace:GetDescendants()) do
+        local nombre = obj.Name and string.lower(obj.Name) or ""
+        if (nombre:find("tree") or nombre:find("palm") or nombre:find("palmera")) and not esProtegido(obj) then
+            obj:Destroy()
+        end
+    end
+end)
+
+-- ============================================
+-- ELIMINAR ROCAS (SIN TOCAR DUMMY)
 -- ============================================
 
 local function esRoca(obj)
-    -- 🛡️ PROTECCIÓN: Si es parte de un personaje o dummy, NO borrar
-    if esParteDePersonaje(obj) then
+    -- NUNCA eliminar cosas protegidas
+    if esProtegido(obj) then
         return false
     end
     
@@ -176,31 +183,19 @@ local function esRoca(obj)
         return false
     end
     
-    -- Detectar rocas
     if obj:IsA("BasePart") or obj:IsA("MeshPart") then
-        -- Excluir terreno y baseplate
         if obj.Name == "Terrain" then return false end
-        if obj.Name == "Baseplate" then return false end
         
-        -- Detectar por nombre de piedra
+        -- Detectar por nombre
         if nombre:find("rock") or nombre:find("stone") or nombre:find("piedra") 
            or nombre:find("roca") or nombre:find("debris") or nombre:find("fragment")
            or nombre:find("slam") or nombre:find("down") then
             return true
         end
         
-        -- Detectar por tamaño (pero limitado para no borrar el dummy)
+        -- Detectar por tamaño (solo cosas MUY pequeñas)
         local tamano = obj.Size.Magnitude
-        -- El dummy tiene partes de tamaño ~2-5, pero las protegimos arriba
-        if tamano < 15 and tamano > 0.5 then
-            -- Verificar que no sea parte del entorno
-            local parent = obj.Parent
-            while parent do
-                if parent.Name == "Map" or parent.Name == "Terrain" then
-                    return false
-                end
-                parent = parent.Parent
-            end
+        if tamano < 8 and tamano > 0.5 then
             return true
         end
     end
@@ -227,12 +222,11 @@ Workspace.DescendantAdded:Connect(function(obj)
 end)
 
 -- ============================================
--- ELIMINAR EFECTOS (SIN BORRAR DUMMY)
+-- ELIMINAR EFECTOS (SIN TOCAR DUMMY)
 -- ============================================
 Workspace.DescendantAdded:Connect(function(obj)
     pcall(function()
-        -- Proteger dummy
-        if esParteDePersonaje(obj) then return end
+        if esProtegido(obj) then return end
         
         local nombre = obj.Name and string.lower(obj.Name) or ""
         if nombre:find("garou") or nombre:find("dash") then return end
@@ -256,4 +250,4 @@ pcall(function()
     end
 end)
 
-print("✅ ANTI-LAG CON DUMMY PROTEGIDO - DanielSonrieScripts")
+print("✅ ANTI-LAG - DUMMY 100% PROTEGIDO")
