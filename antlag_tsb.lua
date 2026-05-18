@@ -1,19 +1,18 @@
--- ANTI-LAG ULTRA DEFINITIVO - Modo Patata + Rocas instantáneas + Árboles fuera
+-- ANTI-LAG ULTRA RÁPIDO - Rocas 0.0000000001s
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 local LocalPlayer = Players.LocalPlayer
 
-print("⚔️ MODO PATATA - Dash Garou intacto | Rocas 0.01s | Árboles eliminados")
+print("⚔️ ANTI-LAG ACTIVADO - Rocas 0.0000000001s")
 
--- Limpiar GUIs viejos
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 for _, gui in pairs(PlayerGui:GetChildren()) do
     if gui.Name:find("Daniel") then gui:Destroy() end
 end
 
 -- ============================================
--- TEXTO DE BIENVENIDA (3 segundos)
+-- BIENVENIDA
 -- ============================================
 pcall(function()
     local WelcomeGui = Instance.new("ScreenGui")
@@ -22,21 +21,21 @@ pcall(function()
     WelcomeGui.Parent = PlayerGui
 
     local CenterLabel = Instance.new("TextLabel")
-    CenterLabel.Size = UDim2.new(0, 400, 0, 50)
-    CenterLabel.Position = UDim2.new(0.5, -200, 0.4, -25)
+    CenterLabel.Size = UDim2.new(0, 300, 0, 40)
+    CenterLabel.Position = UDim2.new(0.5, -150, 0.4, -20)
     CenterLabel.BackgroundTransparency = 1
-    CenterLabel.Text = "🥔 MODO PATATA ACTIVADO 🥔"
+    CenterLabel.Text = "🥔 MODO PATATA 🥔"
     CenterLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-    CenterLabel.TextSize = 28
+    CenterLabel.TextSize = 26
     CenterLabel.Font = Enum.Font.GothamBold
     CenterLabel.Parent = WelcomeGui
 
-    task.wait(3)
+    task.wait(2)
     WelcomeGui:Destroy()
 end)
 
 -- ============================================
--- TEXTO TEMPORAL ESQUINA IZQUIERDA (8 segundos)
+-- TEXTO TEMPORAL (8 segundos)
 -- ============================================
 pcall(function()
     local WarningGui = Instance.new("ScreenGui")
@@ -45,76 +44,133 @@ pcall(function()
     WarningGui.Parent = PlayerGui
 
     local LeftFrame = Instance.new("Frame")
-    LeftFrame.Size = UDim2.new(0, 210, 0, 95)
-    LeftFrame.Position = UDim2.new(0, 10, 1, -105)
+    LeftFrame.Size = UDim2.new(0, 180, 0, 70)
+    LeftFrame.Position = UDim2.new(0, 10, 1, -80)
     LeftFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
     LeftFrame.BackgroundTransparency = 0.5
     LeftFrame.BorderSizePixel = 0
     LeftFrame.Parent = WarningGui
 
     local UICorner = Instance.new("UICorner")
-    UICorner.CornerRadius = UDim.new(0, 8)
+    UICorner.CornerRadius = UDim.new(0, 6)
     UICorner.Parent = LeftFrame
 
     local FPSLabel = Instance.new("TextLabel")
-    FPSLabel.Size = UDim2.new(1, -10, 0, 22)
+    FPSLabel.Size = UDim2.new(1, -10, 0, 20)
     FPSLabel.Position = UDim2.new(0, 5, 0, 5)
     FPSLabel.BackgroundTransparency = 1
-    FPSLabel.Text = "🥔 POTATO MODE ACTIVATED"
+    FPSLabel.Text = "MODO PATATA"
     FPSLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
-    FPSLabel.TextSize = 14
+    FPSLabel.TextSize = 13
     FPSLabel.Font = Enum.Font.GothamBold
     FPSLabel.TextXAlignment = Enum.TextXAlignment.Left
     FPSLabel.Parent = LeftFrame
 
-    local GraphicLabel = Instance.new("TextLabel")
-    GraphicLabel.Size = UDim2.new(1, -10, 0, 20)
-    GraphicLabel.Position = UDim2.new(0, 5, 0, 30)
-    GraphicLabel.BackgroundTransparency = 1
-    GraphicLabel.Text = "Gráficos en modo patata"
-    GraphicLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
-    GraphicLabel.TextSize = 13
-    GraphicLabel.Font = Enum.Font.Gotham
-    GraphicLabel.TextXAlignment = Enum.TextXAlignment.Left
-    GraphicLabel.Parent = LeftFrame
+    local RocaLabel = Instance.new("TextLabel")
+    RocaLabel.Size = UDim2.new(1, -10, 0, 18)
+    RocaLabel.Position = UDim2.new(0, 5, 0, 28)
+    RocaLabel.BackgroundTransparency = 1
+    RocaLabel.Text = "ROCAS 0.0000000001s"
+    RocaLabel.TextColor3 = Color3.fromRGB(100, 255, 100)
+    RocaLabel.TextSize = 10
+    RocaLabel.Font = Enum.Font.Gotham
+    RocaLabel.TextXAlignment = Enum.TextXAlignment.Left
+    RocaLabel.Parent = LeftFrame
 
-    local PhysicsLabel = Instance.new("TextLabel")
-    PhysicsLabel.Size = UDim2.new(1, -10, 0, 20)
-    PhysicsLabel.Position = UDim2.new(0, 5, 0, 52)
-    PhysicsLabel.BackgroundTransparency = 1
-    PhysicsLabel.Text = "Rocas eliminadas en 0.01s"
-    PhysicsLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
-    PhysicsLabel.TextSize = 13
-    PhysicsLabel.Font = Enum.Font.Gotham
-    PhysicsLabel.TextXAlignment = Enum.TextXAlignment.Left
-    PhysicsLabel.Parent = LeftFrame
-
-    local RightLabel = Instance.new("TextLabel")
-    RightLabel.Size = UDim2.new(0, 180, 0, 22)
-    RightLabel.Position = UDim2.new(1, -190, 1, -35)
-    RightLabel.BackgroundTransparency = 1
-    RightLabel.Text = "DanielSonrieScripts"
-    RightLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-    RightLabel.TextSize = 13
-    RightLabel.Font = Enum.Font.GothamBold
-    RightLabel.TextXAlignment = Enum.TextXAlignment.Right
-    RightLabel.Parent = WarningGui
+    local DashLabel = Instance.new("TextLabel")
+    DashLabel.Size = UDim2.new(1, -10, 0, 18)
+    DashLabel.Position = UDim2.new(0, 5, 0, 48)
+    DashLabel.BackgroundTransparency = 1
+    DashLabel.Text = "DASH GAROU OK"
+    DashLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
+    DashLabel.TextSize = 10
+    DashLabel.Font = Enum.Font.GothamBold
+    DashLabel.TextXAlignment = Enum.TextXAlignment.Left
+    DashLabel.Parent = LeftFrame
 
     task.wait(8)
     for i = 1, 10 do
         local alpha = i / 10
         LeftFrame.BackgroundTransparency = 0.5 + (alpha * 0.5)
         FPSLabel.TextTransparency = alpha
-        GraphicLabel.TextTransparency = alpha
-        PhysicsLabel.TextTransparency = alpha
-        RightLabel.TextTransparency = alpha
+        RocaLabel.TextTransparency = alpha
+        DashLabel.TextTransparency = alpha
         task.wait(0.05)
     end
     WarningGui:Destroy()
 end)
 
 -- ============================================
--- ELIMINAR ÁRBOLES Y PALMERAS (una sola vez)
+-- PANEL DE ACTUALIZACIONES (TEXTO CORTO)
+-- ============================================
+pcall(function()
+    local UpdateGui = Instance.new("ScreenGui")
+    UpdateGui.Name = "DanielUpdateGui"
+    UpdateGui.ResetOnSpawn = false
+    UpdateGui.Parent = PlayerGui
+
+    local UpdateFrame = Instance.new("Frame")
+    UpdateFrame.Size = UDim2.new(0, 180, 0, 150)
+    UpdateFrame.Position = UDim2.new(1, -190, 1, -160)
+    UpdateFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    UpdateFrame.BackgroundTransparency = 0.4
+    UpdateFrame.BorderSizePixel = 0
+    UpdateFrame.Parent = UpdateGui
+
+    local UpdateCorner = Instance.new("UICorner")
+    UpdateCorner.CornerRadius = UDim.new(0, 8)
+    UpdateCorner.Parent = UpdateFrame
+
+    local TitleLabel = Instance.new("TextLabel")
+    TitleLabel.Size = UDim2.new(1, -10, 0, 22)
+    TitleLabel.Position = UDim2.new(0, 5, 0, 5)
+    TitleLabel.BackgroundTransparency = 1
+    TitleLabel.Text = "ACTUALIZACIONES"
+    TitleLabel.TextColor3 = Color3.fromRGB(255, 200, 0)
+    TitleLabel.TextSize = 12
+    TitleLabel.Font = Enum.Font.GothamBold
+    TitleLabel.TextXAlignment = Enum.TextXAlignment.Center
+    TitleLabel.Parent = UpdateFrame
+
+    local ScrollFrame = Instance.new("ScrollingFrame")
+    ScrollFrame.Size = UDim2.new(1, -10, 1, -35)
+    ScrollFrame.Position = UDim2.new(0, 5, 0, 30)
+    ScrollFrame.BackgroundTransparency = 1
+    ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
+    ScrollFrame.ScrollBarThickness = 3
+    ScrollFrame.Parent = UpdateFrame
+
+    local UIListLayout = Instance.new("UIListLayout")
+    UIListLayout.Parent = ScrollFrame
+    UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    UIListLayout.Padding = UDim.new(0, 3)
+
+    local actualizaciones = {
+        "✅ rocas eliminadas",
+        "✅ modo patata",
+        "✅ dash garou ok",
+        "✅ arboles fuera",
+        "✅ efectos reducidos"
+    }
+
+    for _, update in pairs(actualizaciones) do
+        local label = Instance.new("TextLabel")
+        label.Size = UDim2.new(1, -10, 0, 16)
+        label.BackgroundTransparency = 1
+        label.Text = update
+        label.TextColor3 = Color3.fromRGB(200, 200, 200)
+        label.TextSize = 10
+        label.Font = Enum.Font.Gotham
+        label.TextXAlignment = Enum.TextXAlignment.Left
+        label.Parent = ScrollFrame
+    end
+
+    task.wait()
+    ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, UIListLayout.AbsoluteContentSize.Y)
+end)
+
+-- ============================================
+-- ELIMINAR ÁRBOLES
 -- ============================================
 pcall(function()
     for _, obj in pairs(Workspace:GetDescendants()) do
@@ -126,18 +182,15 @@ pcall(function()
 end)
 
 -- ============================================
--- ROCAS DEL DOWN SLAM: ELIMINADAS EN 0.01 SEGUNDOS (INSTANTÁNEO)
+-- ROCAS: 0.0000000001 SEGUNDOS
 -- ============================================
 
--- Función para detectar rocas (sin borrar dash de Garou)
-local function esRocaDelSlam(obj)
-    -- NO borrar si tiene que ver con Garou o dash
+local function esRoca(obj)
     local nombre = obj.Name and string.lower(obj.Name) or ""
     if nombre:find("garou") or nombre:find("dash") then
         return false
     end
     
-    -- NO borrar si está dentro de un personaje
     local current = obj.Parent
     while current do
         if current:FindFirstChild("Humanoid") then
@@ -146,91 +199,53 @@ local function esRocaDelSlam(obj)
         current = current.Parent
     end
     
-    -- Detectar rocas (partes pequeñas)
     if obj:IsA("BasePart") or obj:IsA("MeshPart") then
         local tamano = obj.Size.Magnitude
         if tamano < 12 and tamano > 0.5 and obj.Name ~= "Terrain" then
             return true
         end
     end
-    
     return false
 end
 
--- Escaneo inicial
 for _, obj in pairs(Workspace:GetDescendants()) do
     pcall(function()
-        if esRocaDelSlam(obj) then
-            obj:Destroy()
-        end
+        if esRoca(obj) then obj:Destroy() end
     end)
 end
 
--- Escaneo RAPIDÍSIMO cuando aparece algo nuevo (0.01 segundos)
 Workspace.DescendantAdded:Connect(function(obj)
-    task.wait(0.01) -- 0.01 segundos = prácticamente instantáneo
+    task.wait(0.0000000001)
     pcall(function()
-        if esRocaDelSlam(obj) then
-            obj:Destroy()
-        end
+        if esRoca(obj) then obj:Destroy() end
     end)
 end)
 
 -- ============================================
--- MODO PATATA: Eliminar efectos visuales que dan lag (PERO CONSERVAR DASH GAROU)
+-- ELIMINAR EFECTOS
 -- ============================================
-
 Workspace.DescendantAdded:Connect(function(obj)
     pcall(function()
         local nombre = obj.Name and string.lower(obj.Name) or ""
+        if nombre:find("garou") or nombre:find("dash") then return end
         
-        -- CONSERVAR dash de Garou (importante)
-        if nombre:find("garou") or nombre:find("dash") then
-            return
-        end
-        
-        -- Eliminar partículas y efectos (modo patata)
         if obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") 
-           or obj:IsA("Smoke") or obj:IsA("Fire") then
-            obj:Destroy()
-        end
-        
-        -- Eliminar explosiones
-        if obj:IsA("Explosion") then
-            obj:Destroy()
-        end
-        
-        -- Eliminar efectos de aura excesivos (pero no los importantes)
-        if nombre:find("aura") and not nombre:find("garou") then
+           or obj:IsA("Smoke") or obj:IsA("Fire") or obj:IsA("Explosion") then
             obj:Destroy()
         end
     end)
 end)
 
 -- ============================================
--- OPTIMIZACIÓN DE GRÁFICOS (Modo Patata)
+-- OPTIMIZACIÓN
 -- ============================================
 pcall(function()
-    -- Apagar sombras
     Lighting.GlobalShadows = false
-    Lighting.FogEnd = 1e6
-    
-    -- Apagar efectos post-procesamiento
     for _, effect in pairs(Lighting:GetChildren()) do
-        if effect:IsA("PostEffect") or effect:IsA("BloomEffect") or effect:IsA("BlurEffect") 
-           or effect:IsA("ColorCorrectionEffect") or effect:IsA("SunRaysEffect") then
+        if effect:IsA("PostEffect") or effect:IsA("BloomEffect") or effect:IsA("BlurEffect") then
             effect.Enabled = false
         end
     end
-    
-    -- Reducir calidad de materiales (si es posible)
-    for _, part in pairs(Workspace:GetDescendants()) do
-        pcall(function()
-            if part:IsA("BasePart") then
-                part.Material = Enum.Material.Plastic
-            end
-        end)
-    end
 end)
 
-print("✅ MODO PATATA ACTIVADO - Rocas 0.01s | Árboles fuera | Dash Garou intacto")
+print("✅ ACTIVADO - Rocas 0.0000000001s")
