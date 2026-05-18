@@ -1,4 +1,4 @@
--- ANTI-LAG ULTIMATE - ELIMINA BASURA, NO EDIFICIOS - DanielSonrieScripts
+-- ANTI-LAG DEFINITIVO - CON PROTECCIÓN DE EDIFICIOS - DanielSonrieScripts
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
@@ -6,22 +6,26 @@ local LocalPlayer = Players.LocalPlayer
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 
-print("⚔️ ANTI-LAG ULTIMATE - ESPERANDO CONTRASEÑA")
+print("⚔️ ANTI-LAG DEFINITIVO - ESPERANDO CONTRASEÑA")
 
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
--- VENTANA DE CONTRASEÑA
+-- ============================================
+-- VENTANA PARA INGRESAR CONTRASEÑA
+-- ============================================
 local PasswordGui = Instance.new("ScreenGui")
 PasswordGui.Name = "PasswordGui"
 PasswordGui.ResetOnSpawn = false
 PasswordGui.Parent = PlayerGui
 
+-- Fondo oscuro
 local FondoPass = Instance.new("Frame")
 FondoPass.Size = UDim2.new(1, 0, 1, 0)
 FondoPass.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 FondoPass.BackgroundTransparency = 0.8
 FondoPass.Parent = PasswordGui
 
+-- Marco del login
 local LoginFrame = Instance.new("Frame")
 LoginFrame.Size = UDim2.new(0, 300, 0, 150)
 LoginFrame.Position = UDim2.new(0.5, -150, 0.5, -75)
@@ -33,6 +37,7 @@ local LoginCorner = Instance.new("UICorner")
 LoginCorner.CornerRadius = UDim.new(0, 15)
 LoginCorner.Parent = LoginFrame
 
+-- Título
 local TitlePass = Instance.new("TextLabel")
 TitlePass.Size = UDim2.new(1, 0, 0, 35)
 TitlePass.Position = UDim2.new(0, 0, 0, 10)
@@ -43,6 +48,7 @@ TitlePass.TextSize = 16
 TitlePass.Font = Enum.Font.GothamBold
 TitlePass.Parent = LoginFrame
 
+-- Cuadro de texto para contraseña
 local PasswordBox = Instance.new("TextBox")
 PasswordBox.Size = UDim2.new(0, 200, 0, 35)
 PasswordBox.Position = UDim2.new(0.5, -100, 0, 55)
@@ -59,6 +65,7 @@ local PassCorner = Instance.new("UICorner")
 PassCorner.CornerRadius = UDim.new(0, 8)
 PassCorner.Parent = PasswordBox
 
+-- Botón para confirmar
 local ConfirmButton = Instance.new("TextButton")
 ConfirmButton.Size = UDim2.new(0, 100, 0, 35)
 ConfirmButton.Position = UDim2.new(0.5, -50, 0, 105)
@@ -73,6 +80,7 @@ local ButtonCorner = Instance.new("UICorner")
 ButtonCorner.CornerRadius = UDim.new(0, 8)
 ButtonCorner.Parent = ConfirmButton
 
+-- Mensaje de error
 local ErrorMsg = Instance.new("TextLabel")
 ErrorMsg.Size = UDim2.new(1, 0, 0, 25)
 ErrorMsg.Position = UDim2.new(0, 0, 0, 145)
@@ -83,17 +91,23 @@ ErrorMsg.TextSize = 12
 ErrorMsg.Font = Enum.Font.Gotham
 ErrorMsg.Parent = LoginFrame
 
+-- Contraseña correcta
 local CONTRASENA_CORRECTA = "DanielSonrieScripts"
 
+-- Función para ejecutar el script si la contraseña es correcta
 local function ejecutarScriptCompleto()
     PasswordGui:Destroy()
-    print("✅ CONTRASEÑA CORRECTA - INICIANDO")
+    
+    -- ============================================
+    -- AQUÍ VA TODO EL SCRIPT PRINCIPAL
+    -- ============================================
+    print("✅ CONTRASEÑA CORRECTA - INICIANDO SCRIPT")
     
     for _, gui in pairs(PlayerGui:GetChildren()) do
         if gui.Name:find("Daniel") then gui:Destroy() end
     end
 
-    -- PANTALLA DE CARGA
+    -- Pantalla de carga
     local LoadGui = Instance.new("ScreenGui")
     LoadGui.Name = "DanielLoadGui"
     LoadGui.ResetOnSpawn = false
@@ -105,15 +119,18 @@ local function ejecutarScriptCompleto()
     Blur.Parent = Lighting
 
     local FondoCarga = Instance.new("Frame")
-    FondoCarga.Size = UDim2.new(1, 0, 1, 0)
+    FondoCarga.Size = UDim2.new(2, 0, 2, 0)
+    FondoCarga.Position = UDim2.new(-0.5, 0, -0.5, 0)
     FondoCarga.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-    FondoCarga.BackgroundTransparency = 0.3
+    FondoCarga.BackgroundTransparency = 0.2
+    FondoCarga.BorderSizePixel = 0
     FondoCarga.Parent = LoadGui
 
     local BarFrame = Instance.new("Frame")
     BarFrame.Size = UDim2.new(0, 300, 0, 30)
     BarFrame.Position = UDim2.new(0.5, -150, 0.5, -15)
     BarFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
+    BarFrame.BackgroundTransparency = 0
     BarFrame.BorderSizePixel = 0
     BarFrame.Parent = LoadGui
 
@@ -166,7 +183,7 @@ local function ejecutarScriptCompleto()
         print("✅ OPTIMIZACIONES INICIANDO")
         Blur:Destroy()
         
-        -- BIENVENIDA MODO PATATA
+        -- Bienvenida
         pcall(function()
             local WelcomeGui = Instance.new("ScreenGui")
             WelcomeGui.Name = "DanielWelcomeGui"
@@ -220,7 +237,7 @@ local function ejecutarScriptCompleto()
             WelcomeGui:Destroy()
         end)
 
-        -- CONTADOR FPS
+        -- FPS Counter
         pcall(function()
             local FpsGui = Instance.new("ScreenGui")
             FpsGui.Name = "DanielFpsGui"
@@ -271,7 +288,7 @@ local function ejecutarScriptCompleto()
             end)
         end)
 
-        -- PANEL FPS BOOST BETA
+        -- Panel FPS BOOST BETA
         pcall(function()
             local BoostGui = Instance.new("ScreenGui")
             BoostGui.Name = "DanielBoostGui"
@@ -279,7 +296,7 @@ local function ejecutarScriptCompleto()
             BoostGui.Parent = PlayerGui
 
             local BoostFrame = Instance.new("Frame")
-            BoostFrame.Size = UDim2.new(0, 170, 0, 110)
+            BoostFrame.Size = UDim2.new(0, 160, 0, 95)
             BoostFrame.Position = UDim2.new(0, 10, 1, 0)
             BoostFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
             BoostFrame.BackgroundTransparency = 0.5
@@ -290,7 +307,7 @@ local function ejecutarScriptCompleto()
             BoostCorner.CornerRadius = UDim.new(0, 8)
             BoostCorner.Parent = BoostFrame
 
-            local entrarAnim = TweenService:Create(BoostFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0, 10, 1, -120)})
+            local entrarAnim = TweenService:Create(BoostFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0, 10, 1, -105)})
             entrarAnim:Play()
 
             local TitleLabel = Instance.new("TextLabel")
@@ -306,9 +323,9 @@ local function ejecutarScriptCompleto()
 
             local mejoras = {
                 {texto = "rocas eliminadas", color = Color3.fromRGB(0, 255, 0)},
-                {texto = "palmeras eliminadas", color = Color3.fromRGB(0, 255, 0)},
-                {texto = "botes de basura", color = Color3.fromRGB(0, 255, 0)},
-                {texto = "efectos reducidos", color = Color3.fromRGB(0, 255, 0)}
+                {texto = "modo patata", color = Color3.fromRGB(0, 255, 0)},
+                {texto = "efectos reducidos", color = Color3.fromRGB(0, 255, 0)},
+                {texto = "arboles removidos", color = Color3.fromRGB(0, 255, 0)}
             }
 
             local yPos = 30
@@ -341,7 +358,7 @@ local function ejecutarScriptCompleto()
             end)
         end)
 
-        -- MARCA DE AGUA
+        -- Marca de agua
         pcall(function()
             local WatermarkGui = Instance.new("ScreenGui")
             WatermarkGui.Name = "DanielWatermark"
@@ -362,113 +379,123 @@ local function ejecutarScriptCompleto()
         end)
 
         -- ============================================
-        -- LIMPIEZA DE BASURA (SIN DAÑAR EDIFICIOS)
+        -- OPTIMIZACIONES (CON PROTECCIÓN DE EDIFICIOS)
         -- ============================================
+        
+        -- FUNCIÓN PARA PROTEGER EDIFICIOS
+        local function esEdificio(obj)
+            local modelo = obj.Parent
+            while modelo do
+                local nombre = modelo.Name and string.lower(modelo.Name) or ""
+                if nombre:find("building") or nombre:find("house") or nombre:find("wall") or nombre:find("base") or nombre:find("floor") then
+                    return true
+                end
+                modelo = modelo.Parent
+            end
+            return false
+        end
+        
+        -- Eliminar árboles y palmeras (pero no edificios)
+        for _, obj in pairs(Workspace:GetDescendants()) do
+            pcall(function()
+                if not esEdificio(obj) then
+                    local nombre = obj.Name and string.lower(obj.Name) or ""
+                    if nombre:find("tree") or nombre:find("palm") or nombre:find("palmera") then
+                        obj:Destroy()
+                    end
+                end
+            end)
+        end
+
+        -- Protección de dummy
+        local function esDummy(obj)
+            local current = obj.Parent
+            while current do
+                if current:FindFirstChild("Humanoid") then
+                    return true
+                end
+                local nombre = current.Name and string.lower(current.Name) or ""
+                if nombre:find("dummy") or nombre:find("training") or nombre:find("target") or nombre:find("weakest") then
+                    return true
+                end
+                current = current.Parent
+            end
+            return false
+        end
+
+        -- Eliminar rocas (pero no edificios)
+        local function esRoca(obj)
+            if esEdificio(obj) then return false end
+            if esDummy(obj) then return false end
+            local nombre = obj.Name and string.lower(obj.Name) or ""
+            if nombre:find("garou") or nombre:find("dash") then return false end
+            if obj:IsA("BasePart") or obj:IsA("MeshPart") then
+                if obj.Name == "Terrain" then return false end
+                if nombre:find("rock") or nombre:find("stone") or nombre:find("piedra") 
+                   or nombre:find("roca") or nombre:find("debris") or nombre:find("fragment")
+                   or nombre:find("slam") or nombre:find("down") then
+                    return true
+                end
+                local tamano = obj.Size.Magnitude
+                if tamano < 50 and tamano > 0.5 then
+                    return true
+                end
+            end
+            return false
+        end
+
+        for _, obj in pairs(Workspace:GetDescendants()) do
+            pcall(function() if esRoca(obj) then obj:Destroy() end end)
+        end
+
+        Workspace.DescendantAdded:Connect(function(obj)
+            task.wait(0.0000000001)
+            pcall(function() if esRoca(obj) then obj:Destroy() end end)
+        end)
+
+        -- Eliminar efectos (pero no edificios)
+        Workspace.DescendantAdded:Connect(function(obj)
+            pcall(function()
+                if esEdificio(obj) then return end
+                if esDummy(obj) then return end
+                local nombre = obj.Name and string.lower(obj.Name) or ""
+                if nombre:find("garou") or nombre:find("dash") then return end
+                if obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") 
+                   or obj:IsA("Smoke") or obj:IsA("Fire") or obj:IsA("Explosion") then
+                    obj:Destroy()
+                end
+            end)
+        end)
+
+        -- Optimización de gráficos
         pcall(function()
-            -- Apagar sombras y efectos
             Lighting.GlobalShadows = false
             for _, effect in pairs(Lighting:GetChildren()) do
                 if effect:IsA("PostEffect") or effect:IsA("BloomEffect") or effect:IsA("BlurEffect") then
                     effect.Enabled = false
                 end
             end
-            
-            -- FUNCIÓN PARA PROTEGER EDIFICIOS
-            local function esProtegido(obj)
-                -- Proteger personajes y jugadores
-                local current = obj.Parent
-                while current do
-                    if current:FindFirstChild("Humanoid") then
-                        return true
-                    end
-                    current = current.Parent
-                end
-                
-                -- Proteger edificios por nombre
-                local nombre = obj.Name and string.lower(obj.Name) or ""
-                if nombre:find("building") or nombre:find("house") or nombre:find("wall") or nombre:find("base") or nombre:find("floor") or nombre:find("platform") then
-                    return true
-                end
-                
-                -- Proteger el terreno
-                if obj.Name == "Terrain" then
-                    return true
-                end
-                
-                return false
-            end
-            
-            -- 1. ELIMINAR PALMERAS Y ÁRBOLES
-            for _, obj in pairs(Workspace:GetDescendants()) do
-                pcall(function()
-                    if not esProtegido(obj) then
-                        local nombre = obj.Name and string.lower(obj.Name) or ""
-                        if nombre:find("tree") or nombre:find("palm") or nombre:find("palmera") or nombre:find("bush") or nombre:find("planta") then
-                            obj:Destroy()
-                        end
-                    end
-                end)
-            end
-            
-            -- 2. ELIMINAR ROCAS Y PIEDRAS (incluyendo Down Slam)
-            for _, obj in pairs(Workspace:GetDescendants()) do
-                pcall(function()
-                    if not esProtegido(obj) then
-                        local nombre = obj.Name and string.lower(obj.Name) or ""
-                        if obj:IsA("BasePart") or obj:IsA("MeshPart") then
-                            -- Por nombre
-                            if nombre:find("rock") or nombre:find("stone") or nombre:find("piedra") or nombre:find("roca") or nombre:find("debris") or nombre:find("fragment") or nombre:find("slam") or nombre:find("down") then
-                                obj:Destroy()
-                            end
-                            -- Por tamaño (cosas pequeñas)
-                            local tamano = obj.Size.Magnitude
-                            if tamano < 10 and tamano > 0.5 then
-                                obj:Destroy()
-                            end
-                        end
-                    end
-                end)
-            end
-            
-            -- 3. ELIMINAR BOTES DE BASURA
-            for _, obj in pairs(Workspace:GetDescendants()) do
-                pcall(function()
-                    if not esProtegido(obj) then
-                        local nombre = obj.Name and string.lower(obj.Name) or ""
-                        if nombre:find("trash") or nombre:find("basura") or nombre:find("bote") or nombre:find("can") or nombre:find("dumpster") then
-                            obj:Destroy()
-                        end
-                    end
-                end)
-            end
-            
-            -- 4. ELIMINAR PARTÍCULAS Y EFECTOS
-            for _, obj in pairs(Workspace:GetDescendants()) do
-                pcall(function()
-                    if not esProtegido(obj) then
-                        if obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") or obj:IsA("Smoke") or obj:IsA("Fire") or obj:IsA("Explosion") then
-                            obj:Destroy()
-                        end
-                    end
-                end)
-            end
-            
-            -- 5. ELIMINAR OBJETOS NUEVOS (monitoreo en vivo)
-            Workspace.DescendantAdded:Connect(function(obj)
-                pcall(function()
-                    if not esProtegido(obj) then
-                        local nombre = obj.Name and string.lower(obj.Name) or ""
-                        -- Árboles y palmeras
-                        if nombre:find("tree") or nombre:find("palm") or nombre:find("palmera") then
-                            obj:Destroy()
-                        end
-                        -- Rocas y piedras
-                        if obj:IsA("BasePart") and (nombre:find("rock") or nombre:find("stone") or nombre:find("piedra") or nombre:find("slam") or nombre:find("down")) then
-                            obj:Destroy()
-                        end
-                        -- Botes de basura
-                        if nombre:find("trash") or nombre:find("basura") or nombre:find("bote") then
-                            obj:Destroy()
-                        end
-                        -- Partículas
-                        if obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") or obj:IsA("Smoke") or obj:IsA("Fire") or obj:I
+        end)
+
+        print("✅ FPS BOOST BETA - OPTIMIZACIONES COMPLETADAS")
+    end
+
+    -- Carga de 5 segundos
+    local duracion = 5
+    local inicio = tick()
+
+    local function actualizarBarra()
+        if not LoadGui or not LoadGui.Parent then return end
+        local transcurrido = tick() - inicio
+        local progreso = math.min(transcurrido / duracion, 1)
+        local ancho = 300 * progreso
+        ProgressBar:TweenSize(UDim2.new(0, ancho, 1, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 0.05, true)
+        PercentText.Text = math.floor(progreso * 100) .. "%"
+        
+        if progreso < 1 then
+            task.wait(0.05)
+            actualizarBarra()
+        else
+            task.cancel(cargaLoop)
+            LoadGui:Destroy()
+      
