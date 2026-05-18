@@ -26,7 +26,7 @@ pcall(function()
     CenterLabel.Size = UDim2.new(0, 400, 0, 50)
     CenterLabel.Position = UDim2.new(0.5, -200, 0.4, -25)
     CenterLabel.BackgroundTransparency = 1
-    CenterLabel.Text = "✨ ANTI-LAG ACTIVADO ✨"
+    CenterLabel.Text = "✨ DANIEL FPS BOOST ✨"
     CenterLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     CenterLabel.TextSize = 28
     CenterLabel.Font = Enum.Font.GothamBold
