@@ -1,11 +1,10 @@
--- ANTI-LAG DEFINITIVO TSB - ELIMINA PIEDRAS DEL DOWN SLAM
+-- ANTI-LAG OPTIMIZADO TSB - SIN LAG, ROCAS INSTANTÁNEAS, GAROU DASH INTACTO
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
-local TweenService = game:GetService("TweenService")
 local LocalPlayer = Players.LocalPlayer
 
-print("⚔️ ANTI-LAG DEFINITIVO - Modo extremo contra piedras")
+print("⚔️ ANTI-LAG OPTIMIZADO - Sin lag adicional")
 
 -- Limpiar GUIs viejos
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
@@ -26,7 +25,7 @@ pcall(function()
     CenterLabel.Size = UDim2.new(0, 400, 0, 50)
     CenterLabel.Position = UDim2.new(0.5, -200, 0.4, -25)
     CenterLabel.BackgroundTransparency = 1
-    CenterLabel.Text = "✨ DANIEL FPS BOOST ✨"
+    CenterLabel.Text = "✨ ANTI-LAG OPTIMIZADO ✨"
     CenterLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     CenterLabel.TextSize = 28
     CenterLabel.Font = Enum.Font.GothamBold
@@ -115,77 +114,83 @@ pcall(function()
 end)
 
 -- ============================================
--- CORAZÓN DEL ANTI-LAG: ELIMINA PIEDRAS HAGA LO QUE HAGA EL JUEGO
+-- ANTI-LAG OPTIMIZADO (NO da lag adicional)
 -- ============================================
 
--- Función que detecta piedras por CARACTERÍSTICAS, no por nombre
-local function esPiedraDelSlam(obj)
-    -- Ignorar personajes completos
+-- Función rápida para verificar si un objeto es una roca del Down Slam
+local function esRocaDelSlam(obj)
+    -- Verificar que NO sea parte de un personaje
     local current = obj.Parent
     while current do
         if current:FindFirstChild("Humanoid") then
-            return false -- Es parte de un personaje, NO borrar
+            return false
         end
         current = current.Parent
     end
     
-    -- Si es una parte física (MeshPart, BasePart, Part)
-    if obj:IsA("BasePart") or obj:IsA("MeshPart") or obj:IsA("Part") then
-        -- Características TÍPICAS de las piedras del Down Slam:
-        -- 1. Tamaño pequeño (menos de 10 unidades)
-        -- 2. No colisionable O colisión especial
-        -- 3. No es el terreno
-        -- 4. Se crean y desaparecen rápido
-        
-        local tamano = obj.Size.Magnitude
-        if tamano < 15 and obj.Name ~= "Terrain" then
-            return true
-        end
+    -- Verificar que NO sea el dash de Garou (por nombre)
+    local nombre = obj.Name and string.lower(obj.Name) or ""
+    if nombre:find("dash") or nombre:find("garou") then
+        return false -- Conservar dash de Garou
     end
     
-    -- También atrapar objetos con nombres sospechosos (por si acaso)
-    local nombre = obj.Name and string.lower(obj.Name) or ""
-    if nombre:find("rock") or nombre:find("stone") or nombre:find("debris") 
-       or nombre:find("fragment") or nombre:find("slam") or nombre:find("piedra") then
-        return true
+    -- Detectar rocas del Down Slam (tamaño pequeño)
+    if obj:IsA("BasePart") or obj:IsA("MeshPart") then
+        local tamano = obj.Size.Magnitude
+        if tamano < 12 and tamano > 0.5 and obj.Name ~= "Terrain" then
+            return true
+        end
     end
     
     return false
 end
 
--- Eliminación agresiva cada 0.2 segundos (MUY RÁPIDO)
-spawn(function()
-    while wait(0.2) do
-        pcall(function()
-            for _, obj in pairs(Workspace:GetDescendants()) do
-                if esPiedraDelSlam(obj) then
-                    obj:Destroy()
-                end
-            end
-        end)
-    end
+-- ESCANEO INTELIGENTE: Solo cuando aparecen objetos NUEVOS (NO cada 0.2 segundos)
+-- Esto ELIMINA el lag adicional que causaba el escaneo constante
+
+-- Escaneo inicial (una sola vez)
+for _, obj in pairs(Workspace:GetDescendants()) do
+    pcall(function()
+        if esRocaDelSlam(obj) then
+            obj:Destroy()
+        end
+    end)
+end
+
+-- Escaneo SOLO cuando aparece algo nuevo (MUCHO más eficiente)
+Workspace.DescendantAdded:Connect(function(obj)
+    task.wait(0.05) -- Pequeña espera para que el objeto se termine de crear
+    pcall(function()
+        if esRocaDelSlam(obj) then
+            obj:Destroy()
+        end
+    end)
 end)
 
--- También eliminar partículas y efectos visuales molestos
-spawn(function()
-    while wait(0.5) do
-        pcall(function()
-            for _, obj in pairs(Workspace:GetDescendants()) do
-                if obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") 
-                   or obj:IsA("Smoke") or obj:IsA("Fire") or obj:IsA("Explosion") then
-                    obj:Destroy()
-                end
-                -- Eliminar árboles
-                local nombre = obj.Name and string.lower(obj.Name) or ""
-                if nombre:find("tree") or nombre:find("palm") then
-                    obj:Destroy()
-                end
-            end
-        end)
-    end
+-- Eliminar efectos visuales (solo los que NO son importantes)
+Workspace.DescendantAdded:Connect(function(obj)
+    pcall(function()
+        local nombre = obj.Name and string.lower(obj.Name) or ""
+        
+        -- Conservar dash de Garou (por si acaso)
+        if nombre:find("dash") or nombre:find("garou") then
+            return
+        end
+        
+        -- Eliminar partículas y efectos molestos
+        if obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") 
+           or obj:IsA("Smoke") or obj:IsA("Fire") or obj:IsA("Explosion") then
+            obj:Destroy()
+        end
+        
+        -- Eliminar árboles
+        if nombre:find("tree") or nombre:find("palm") then
+            obj:Destroy()
+        end
+    end)
 end)
 
--- Optimizar iluminación
+-- Optimizar iluminación (solo una vez, no causa lag)
 pcall(function()
     Lighting.GlobalShadows = false
     for _, effect in pairs(Lighting:GetChildren()) do
@@ -195,4 +200,4 @@ pcall(function()
     end
 end)
 
-print("✅ ANTI-LAG DEFINITIVO ACTIVADO - Piedras eliminadas cada 0.2 segundos")
+print("✅ ANTI-LAG OPTIMIZADO - Sin lag adicional, dash de Garou conservado")
