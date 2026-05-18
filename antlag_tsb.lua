@@ -2,59 +2,105 @@
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
+local TweenService = game:GetService("TweenService")
 local LocalPlayer = Players.LocalPlayer
 
-print("⚔️ TSB Anti-Lag (UI Idéntica) por Daniel")
+print("⚔️ TSB Anti-Lag v7 (Tiempos de UI Corregidos) por Daniel")
 
--- 1. NOTIFICACIÓN LIMPIA E IDÉNTICA A LA FOTO (Sin cuadros, texto fino)
+-- Limpiar UIs anteriores si existen
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+if PlayerGui:FindFirstChild("DanielWelcomeGui") then PlayerGui.DanielWelcomeGui:Destroy() end
+if PlayerGui:FindFirstChild("DanielToastGui") then PlayerGui.DanielToastGui:Destroy() end
+
+-- 1. TEXTO DE BIENVENIDA AL CENTRO (Desaparece en 3 segundos)
 pcall(function()
-    local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
-    if PlayerGui:FindFirstChild("DanielToastGui") then 
-        PlayerGui.DanielToastGui:Destroy() 
-    end
-    
+    local WelcomeGui = Instance.new("ScreenGui")
+    WelcomeGui.Name = "DanielWelcomeGui"
+    WelcomeGui.ResetOnSpawn = false
+    WelcomeGui.DisplayOrder = 99999
+    WelcomeGui.Parent = PlayerGui
+
+    local CenterLabel = Instance.new("TextLabel")
+    CenterLabel.Size = UDim2.new(0, 400, 0, 50)
+    CenterLabel.Position = UDim2.new(0.5, -200, 0.4, -25)
+    CenterLabel.BackgroundTransparency = 1
+    CenterLabel.Text = "Creado por DanielSonrie"
+    CenterLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    CenterLabel.TextSize = 28
+    CenterLabel.Font = Enum.Font.GothamBold
+    CenterLabel.TextStrokeTransparency = 0.5 -- Sombra para que se lea chido
+    CenterLabel.Parent = WelcomeGui
+
+    -- Esperar 3 segundos y desvanecer
+    task.spawn(function()
+        task.wait(3)
+        local tweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Linear)
+        local tweenText = TweenService:Create(CenterLabel, tweenInfo, {TextTransparency = 1, TextStrokeTransparency = 1})
+        tweenText:Play()
+        tweenText.Completed:Connect(function()
+            WelcomeGui:Destroy()
+        end)
+    end)
+end)
+
+-- 2. CARTEL NEGRO DE LA ESQUINA (Desaparece en 6 segundos)
+pcall(function()
     local ToastGui = Instance.new("ScreenGui")
     ToastGui.Name = "DanielToastGui"
     ToastGui.ResetOnSpawn = false
-    ToastGui.DisplayOrder = 99999
+    ToastGui.DisplayOrder = 99998
     ToastGui.Parent = PlayerGui
     
-    -- Contenedor transparente (Sin recuadro de fondo)
     local MainFrame = Instance.new("Frame")
-    MainFrame.Size = UDim2.new(0, 200, 0, 50)
-    MainFrame.Position = UDim2.new(1, -220, 1, -120) 
-    MainFrame.BackgroundTransparency = 1 -- Totalmente invisible el fondo
+    MainFrame.Size = UDim2.new(0, 180, 0, 50)
+    MainFrame.Position = UDim2.new(1, -240, 1, -150) -- Alejado del botón de saltar
+    MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+    MainFrame.BackgroundTransparency = 0.3
     MainFrame.BorderSizePixel = 0
     MainFrame.Parent = ToastGui
     
-    -- Texto Principal (Blanco, alineado a la derecha)
+    local UICorner = Instance.new("UICorner")
+    UICorner.CornerRadius = UDim.new(0, 6)
+    UICorner.Parent = MainFrame
+    
     local TitleLabel = Instance.new("TextLabel")
-    TitleLabel.Size = UDim2.new(1, 0, 0, 20)
-    TitleLabel.Position = UDim2.new(0, 0, 0, 5)
+    TitleLabel.Size = UDim2.new(1, -10, 0, 20)
+    TitleLabel.Position = UDim2.new(0, 0, 0, 6)
     TitleLabel.BackgroundTransparency = 1
     TitleLabel.Text = "Script Made by Daniel"
     TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-    TitleLabel.TextSize = 14
-    TitleLabel.Font = Enum.Font.SourceSansBold
+    TitleLabel.TextSize = 13
+    TitleLabel.Font = Enum.Font.GothamBold
     TitleLabel.TextXAlignment = Enum.TextXAlignment.Right
     TitleLabel.Parent = MainFrame
     
-    -- Texto Secundario (Gris, alineado a la derecha)
     local SubLabel = Instance.new("TextLabel")
-    SubLabel.Size = UDim2.new(1, 0, 0, 15)
-    SubLabel.Position = UDim2.new(0, 0, 0, 25)
+    SubLabel.Size = UDim2.new(1, -10, 0, 15)
+    SubLabel.Position = UDim2.new(0, 0, 0, 24)
     SubLabel.BackgroundTransparency = 1
     SubLabel.Text = "Script modificado por Daniel"
-    SubLabel.TextColor3 = Color3.fromRGB(160, 160, 160)
-    SubLabel.TextSize = 12
-    SubLabel.Font = Enum.Font.SourceSans
+    SubLabel.TextColor3 = Color3.fromRGB(180, 180, 180)
+    SubLabel.TextSize = 11
+    SubLabel.Font = Enum.Font.Gotham
     SubLabel.TextXAlignment = Enum.TextXAlignment.Right
     SubLabel.Parent = MainFrame
+
+    -- Esperar 6 segundos y desvanecer todo junto
+    task.spawn(function()
+        task.wait(6)
+        local tweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Linear)
+        TweenService:Create(MainFrame, tweenInfo, {BackgroundTransparency = 1}):Play()
+        TweenService:Create(TitleLabel, tweenInfo, {TextTransparency = 1}):Play()
+        local tweenSub = TweenService:Create(SubLabel, tweenInfo, {TextTransparency = 1})
+        tweenSub:Play()
+        tweenSub.Completed:Connect(function()
+            ToastGui:Destroy()
+        end)
+    end)
 end)
 
--- 2. LIMPIADOR DE ROCAS SEGURO (Respeta mapa y árboles)
+-- 3. FILTRO SUPREMO (Borra Palmeras y Rocas de Golpes)
 local function CleanLaggyThings(obj)
-    -- Proteger Dash
     local isDash = false
     pcall(function()
         local n = string.lower(obj.Name)
@@ -64,36 +110,56 @@ local function CleanLaggyThings(obj)
     end)
     if isDash then return end
 
-    -- Borrar solo escombros de los golpes
-    local isTrashDebris = false
+    -- Eliminar Palmeras
+    local isTree = false
     pcall(function()
-        if obj:IsA("BasePart") then
-            if obj.Parent and (obj.Parent.Name == "VisualEffects" or string.find(string.lower(obj.Parent.Name), "fx") or obj.Parent.Name == "Debris") then
-                isTrashDebris = true
-            elseif not obj.Parent:FindFirstChild("Humanoid") and (string.find(string.lower(obj.Name), "rock") or string.find(string.lower(obj.Name), "debris")) then
-                isTrashDebris = true
-            end
-        elseif obj:IsA("Debris") then
-            isTrashDebris = true
+        local n = string.lower(obj.Name)
+        if string.find(n, "tree") or string.find(n, "palm") or string.find(n, "leaf") or string.find(n, "leaves") or string.find(n, "palmera") then
+            isTree = true
         end
     end)
-
-    if isTrashDebris then
+    if isTree then
         obj:Destroy()
         return
     end
 
-    -- Desactivar partículas pesadas sin romper el escenario
+    -- Eliminar Rocas de golpes
+    local isRockDebris = false
+    pcall(function()
+        if obj:IsA("BasePart") then
+            local n = string.lower(obj.Name)
+            if obj.Parent and (obj.Parent.Name == "VisualEffects" or string.find(string.lower(obj.Parent.Name), "fx") or obj.Parent.Name == "Debris") then
+                isRockDebris = true
+            elseif not obj.Parent:FindFirstChild("Humanoid") and (string.find(n, "rock") or string.find(n, "debris") or string.find(n, "stone") or n == "part") then
+                if obj.Name ~= "Terrain" and obj.Size.Y < 30 then
+                    isRockDebris = true
+                end
+            end
+        elseif obj:IsA("Debris") or obj.Name == "Debris" then
+            isRockDebris = true
+        end
+    end)
+
+    if isRockDebris then
+        obj:Destroy()
+        return
+    end
+
+    -- Modo Papa
     if obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") then
         if not obj:IsDescendantOf(LocalPlayer.Character) then
             obj.Enabled = false
         end
     elseif obj:IsA("Explosion") then
         obj.Visible = false
+    elseif obj:IsA("BasePart") and not obj:IsA("MeshPart") and not obj.Parent:FindFirstChild("Humanoid") then
+        obj.Material = Enum.Material.SmoothPlastic
+    elseif obj:IsA("Texture") or obj:IsA("Decal") then
+        obj:Destroy()
     end
 end
 
--- 3. ILUMINACIÓN BASE
+-- Iluminación optimizada
 pcall(function()
     Lighting.GlobalShadows = false
     Lighting.FogEnd = 1e6
