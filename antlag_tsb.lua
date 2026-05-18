@@ -12,7 +12,7 @@ for _, gui in pairs(PlayerGui:GetChildren()) do
 end
 
 -- ============================================
--- BIENVENIDA (2 segundos)
+-- INTRODUCCIÓN MODO PATATA (3 segundos)
 -- ============================================
 pcall(function()
     local WelcomeGui = Instance.new("ScreenGui")
@@ -21,21 +21,21 @@ pcall(function()
     WelcomeGui.Parent = PlayerGui
 
     local CenterLabel = Instance.new("TextLabel")
-    CenterLabel.Size = UDim2.new(0, 200, 0, 30)
-    CenterLabel.Position = UDim2.new(0.5, -100, 0.4, -15)
+    CenterLabel.Size = UDim2.new(0, 300, 0, 50)
+    CenterLabel.Position = UDim2.new(0.5, -150, 0.4, -25)
     CenterLabel.BackgroundTransparency = 1
-    CenterLabel.Text = "ANTI-LAG ON"
-    CenterLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
-    CenterLabel.TextSize = 20
+    CenterLabel.Text = "🥔 MODO PATATA ACTIVADO 🥔"
+    CenterLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    CenterLabel.TextSize = 26
     CenterLabel.Font = Enum.Font.GothamBold
     CenterLabel.Parent = WelcomeGui
 
-    task.wait(2)
+    task.wait(3)
     WelcomeGui:Destroy()
 end)
 
 -- ============================================
--- PANEL DE ACTUALIZACIONES (Esquina derecha)
+-- PANEL DE ACTUALIZACIONES (ESQUINA INFERIOR IZQUIERDA - 8 segundos)
 -- ============================================
 pcall(function()
     local UpdateGui = Instance.new("ScreenGui")
@@ -44,8 +44,8 @@ pcall(function()
     UpdateGui.Parent = PlayerGui
 
     local UpdateFrame = Instance.new("Frame")
-    UpdateFrame.Size = UDim2.new(0, 150, 0, 130)
-    UpdateFrame.Position = UDim2.new(1, -160, 0.5, -65)
+    UpdateFrame.Size = UDim2.new(0, 150, 0, 100)
+    UpdateFrame.Position = UDim2.new(0, 10, 1, -110)
     UpdateFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
     UpdateFrame.BackgroundTransparency = 0.5
     UpdateFrame.BorderSizePixel = 0
@@ -66,44 +66,48 @@ pcall(function()
     TitleLabel.TextXAlignment = Enum.TextXAlignment.Center
     TitleLabel.Parent = UpdateFrame
 
-    local ScrollFrame = Instance.new("ScrollingFrame")
-    ScrollFrame.Size = UDim2.new(1, -10, 1, -35)
-    ScrollFrame.Position = UDim2.new(0, 5, 0, 30)
-    ScrollFrame.BackgroundTransparency = 1
-    ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
-    ScrollFrame.ScrollBarThickness = 3
-    ScrollFrame.Parent = UpdateFrame
-
-    local UIListLayout = Instance.new("UIListLayout")
-    UIListLayout.Parent = ScrollFrame
-    UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-    UIListLayout.Padding = UDim.new(0, 3)
-
     local actualizaciones = {
-        "✅ rocas eliminadas",
-        "✅ modo patata",
-        "✅ efectos reducidos",
-        "✅ arboles removidos"
+        "✔ rocas eliminadas",
+        "✔ modo patata",
+        "✔ efectos reducidos",
+        "✔ arboles removidos"
     }
 
+    local yPos = 30
     for _, update in pairs(actualizaciones) do
         local label = Instance.new("TextLabel")
         label.Size = UDim2.new(1, -10, 0, 16)
+        label.Position = UDim2.new(0, 5, 0, yPos)
         label.BackgroundTransparency = 1
         label.Text = update
         label.TextColor3 = Color3.fromRGB(200, 200, 200)
         label.TextSize = 10
         label.Font = Enum.Font.Gotham
         label.TextXAlignment = Enum.TextXAlignment.Left
-        label.Parent = ScrollFrame
+        label.Parent = UpdateFrame
+        yPos = yPos + 18
     end
 
-    task.wait()
-    ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, UIListLayout.AbsoluteContentSize.Y)
+    -- DESAPARECER DESPUÉS DE 8 SEGUNDOS
+    task.spawn(function()
+        task.wait(8)
+        for i = 1, 10 do
+            local alpha = i / 10
+            UpdateFrame.BackgroundTransparency = 0.5 + (alpha * 0.5)
+            TitleLabel.TextTransparency = alpha
+            for _, child in pairs(UpdateFrame:GetChildren()) do
+                if child:IsA("TextLabel") and child ~= TitleLabel then
+                    child.TextTransparency = alpha
+                end
+            end
+            task.wait(0.05)
+        end
+        UpdateGui:Destroy()
+    end)
 end)
 
 -- ============================================
--- MARCA DE AGUA (Esquina inferior derecha, chiquita)
+-- MARCA DE AGUA BLANCA (Esquina inferior derecha, permanente)
 -- ============================================
 pcall(function()
     local WatermarkGui = Instance.new("ScreenGui")
@@ -112,15 +116,14 @@ pcall(function()
     WatermarkGui.Parent = PlayerGui
 
     local WatermarkLabel = Instance.new("TextLabel")
-    WatermarkLabel.Size = UDim2.new(0, 120, 0, 15)
-    WatermarkLabel.Position = UDim2.new(1, -125, 1, -25)
+    WatermarkLabel.Size = UDim2.new(0, 130, 0, 15)
+    WatermarkLabel.Position = UDim2.new(1, -135, 1, -25)
     WatermarkLabel.BackgroundTransparency = 1
     WatermarkLabel.Text = "DanielSonrieScripts"
-    WatermarkLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
+    WatermarkLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     WatermarkLabel.TextSize = 10
     WatermarkLabel.Font = Enum.Font.Gotham
     WatermarkLabel.TextXAlignment = Enum.TextXAlignment.Right
-    WatermarkLabel.TextTransparency = 0.3
     WatermarkLabel.Parent = WatermarkGui
 end)
 
@@ -137,7 +140,7 @@ pcall(function()
 end)
 
 -- ============================================
--- ROCAS ELIMINADAS RÁPIDO
+-- ROCAS ELIMINADAS EN 0.0000000001s
 -- ============================================
 
 local function esRoca(obj)
@@ -177,7 +180,7 @@ Workspace.DescendantAdded:Connect(function(obj)
 end)
 
 -- ============================================
--- ELIMINAR EFECTOS
+-- ELIMINAR EFECTOS VISUALES (PERO CONSERVAR DASH GAROU)
 -- ============================================
 Workspace.DescendantAdded:Connect(function(obj)
     pcall(function()
@@ -192,7 +195,7 @@ Workspace.DescendantAdded:Connect(function(obj)
 end)
 
 -- ============================================
--- OPTIMIZACIÓN
+-- OPTIMIZACIÓN DE GRÁFICOS
 -- ============================================
 pcall(function()
     Lighting.GlobalShadows = false
