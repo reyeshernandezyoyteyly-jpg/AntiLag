@@ -1,17 +1,17 @@
--- DanielScript Ultimate Anti-Lag | TSB Bypasser Edition
+-- DanielScript Ultimate Anti-Lag | TSB Down Slam Edition
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 local TweenService = game:GetService("TweenService")
 local LocalPlayer = Players.LocalPlayer
 
-print("⚔️ TSB Anti-Lag Definitivo (UI Corregida) por DanielSonrie")
+print("⚔️ TSB Anti-Lag (Filtro Down Slam) por DanielSonrie")
 
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 if PlayerGui:FindFirstChild("DanielWelcomeGui") then PlayerGui.DanielWelcomeGui:Destroy() end
 if PlayerGui:FindFirstChild("DanielToastGui") then PlayerGui.DanielToastGui:Destroy() end
 
--- 1. TEXTO DE BIENVENIDA AL CENTRO MEJORADO (Efecto Neon/Fade y desaparece en 3s)
+-- 1. TEXTO DE BIENVENIDA AL CENTRO CON SUBTÍTULO (Desaparece en 3s)
 pcall(function()
     local WelcomeGui = Instance.new("ScreenGui")
     WelcomeGui.Name = "DanielWelcomeGui"
@@ -19,9 +19,17 @@ pcall(function()
     WelcomeGui.DisplayOrder = 99999
     WelcomeGui.Parent = PlayerGui
 
+    -- Contenedor transparente para centrar ambos textos perfectamente
+    local CenterFrame = Instance.new("Frame")
+    CenterFrame.Size = UDim2.new(0, 500, 0, 100)
+    CenterFrame.Position = UDim2.new(0.5, -250, 0.35, -50)
+    CenterFrame.BackgroundTransparency = 1
+    CenterFrame.Parent = WelcomeGui
+
+    -- Título Principal
     local CenterLabel = Instance.new("TextLabel")
-    CenterLabel.Size = UDim2.new(0, 500, 0, 60)
-    CenterLabel.Position = UDim2.new(0.5, -250, 0.35, -30)
+    CenterLabel.Size = UDim2.new(1, 0, 0, 40)
+    CenterLabel.Position = UDim2.new(0, 0, 0, 0)
     CenterLabel.BackgroundTransparency = 1
     CenterLabel.Text = "✨ Creado por DanielSonrie ✨"
     CenterLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -29,32 +37,49 @@ pcall(function()
     CenterLabel.Font = Enum.Font.GothamBold
     CenterLabel.TextStrokeTransparency = 0.2
     CenterLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-    CenterLabel.Parent = WelcomeGui
+    CenterLabel.Parent = CenterFrame
 
-    -- Efecto de parpadeo suave mientras está activo
+    -- Subtítulo (Más pequeño como me pediste)
+    local SubCenterLabel = Instance.new("TextLabel")
+    SubCenterLabel.Size = UDim2.new(1, 0, 0, 30)
+    SubCenterLabel.Position = UDim2.new(0, 0, 0, 45)
+    SubCenterLabel.BackgroundTransparency = 1
+    SubCenterLabel.Text = "este escript es fase beta"
+    SubCenterLabel.TextColor3 = Color3.fromRGB(220, 220, 220)
+    SubCenterLabel.TextSize = 18 -- Tamaño más pequeño tipo subtítulo
+    SubCenterLabel.Font = Enum.Font.Gotham
+    SubCenterLabel.TextStrokeTransparency = 0.3
+    SubCenterLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+    SubCenterLabel.Parent = CenterFrame
+
+    -- Efecto de parpadeo suave en el título y subtítulo
     local looping = true
     task.spawn(function()
         while looping do
             pcall(function()
                 TweenService:Create(CenterLabel, TweenInfo.new(0.5, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {TextColor3 = Color3.fromRGB(200, 200, 200)}):Play()
+                TweenService:Create(SubCenterLabel, TweenInfo.new(0.5, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {TextColor3 = Color3.fromRGB(180, 180, 180)}):Play()
                 task.wait(0.5)
                 TweenService:Create(CenterLabel, TweenInfo.new(0.5, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
+                TweenService:Create(SubCenterLabel, TweenInfo.new(0.5, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {TextColor3 = Color3.fromRGB(220, 220, 220)}):Play()
                 task.wait(0.5)
             end)
         end
     end)
 
-    -- Esperar 3 segundos y desvanecer por completo
+    -- Esperar 3 segundos y desvanecer todo el contenedor junto
     task.spawn(function()
         task.wait(3)
         looping = false
-        local t = TweenService:Create(CenterLabel, TweenInfo.new(0.5), {TextTransparency = 1, TextStrokeTransparency = 1})
-        t:Play() 
-        t.Completed:Connect(function() WelcomeGui:Destroy() end)
+        local t1 = TweenService:Create(CenterLabel, TweenInfo.new(0.5), {TextTransparency = 1, TextStrokeTransparency = 1})
+        local t2 = TweenService:Create(SubCenterLabel, TweenInfo.new(0.5), {TextTransparency = 1, TextStrokeTransparency = 1})
+        t1:Play()
+        t2:Play()
+        t1.Completed:Connect(function() WelcomeGui:Destroy() end)
     end)
 end)
 
--- 2. CARTEL CORREGIDO: AHORA SÍ EN LA ESQUINA (Libre del botón de saltar)
+-- 2. CARTEL EN LA ESQUINA (Libre del botón de saltar y desaparece en 6s)
 pcall(function()
     local ToastGui = Instance.new("ScreenGui")
     ToastGui.Name = "DanielToastGui"
@@ -64,9 +89,7 @@ pcall(function()
     
     local MainFrame = Instance.new("Frame")
     MainFrame.Size = UDim2.new(0, 170, 0, 45)
-    -- Lo acomodamos abajo a la derecha, pero lo metemos un poquito a la izquierda (-225) 
-    -- y arriba (-95) para que quede justo al lado del botón de saltar sin pisarlo.
-    MainFrame.Position = UDim2.new(1, -225, 1, -95) 
+    MainFrame.Position = UDim2.new(1, -185, 1, -60) 
     MainFrame.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
     MainFrame.BackgroundTransparency = 0.25
     MainFrame.BorderSizePixel = 0
@@ -98,7 +121,6 @@ pcall(function()
     SubLabel.TextXAlignment = Enum.TextXAlignment.Right
     SubLabel.Parent = MainFrame
 
-    -- Desaparece en 6 segundos
     task.spawn(function()
         task.wait(6)
         local ti = TweenInfo.new(0.5)
@@ -110,21 +132,19 @@ pcall(function()
     end)
 end)
 
--- 3. BYPASS ANTI-LAG (Ocultar Palmeras y esquivar físicas de Rocas del Servidor)
-local function BypassServerRocks(obj)
+-- 3. FILTRO EXCLUSIVO PARA ROCAS DE DOWN SLAM Y PALMERAS (Cero Plástico)
+local function CleanDownSlamRocks(obj)
     if string.find(string.lower(obj.Name), "dash") or string.find(string.lower(obj.Name), "blue") then return end
 
-    -- Eliminar Palmeras
     if string.find(string.lower(obj.Name), "tree") or string.find(string.lower(obj.Name), "palm") or string.find(string.lower(obj.Name), "palmera") then
         obj:Destroy()
         return
     end
 
-    -- Encoger e invisibilizar rocas de golpes del Servidor
     if obj:IsA("BasePart") then
         local parentName = obj.Parent and obj.Parent.Name or ""
         if parentName == "VisualEffects" or string.find(string.lower(parentName), "fx") or parentName == "Debris" or string.find(string.lower(obj.Name), "rock") or string.find(string.lower(obj.Name), "debris") then
-            if obj.Name ~= "Terrain" and obj.Size.Y < 30 then
+            if obj.Name ~= "Terrain" and obj.Size.Y < 30 and not obj:IsDescendantOf(Workspace:FindFirstChild("Map")) then
                 pcall(function()
                     obj.Transparency = 1
                     obj.Size = Vector3.new(0, 0, 0)
@@ -134,22 +154,7 @@ local function BypassServerRocks(obj)
             end
         end
     end
-
-    -- Modo Papa
-    if obj:IsA("ParticleEmitter") or obj:IsA("Trail") then
-        if not obj:IsDescendantOf(LocalPlayer.Character) then obj.Enabled = false end
-    elseif obj:IsA("Texture") or obj:IsA("Decal") then
-        obj:Destroy()
-    end
 end
 
-pcall(function()
-    Lighting.GlobalShadows = false
-    Lighting.FogEnd = 1e6
-    for _, effect in pairs(Lighting:GetChildren()) do
-        if effect:IsA("PostEffect") or effect:IsA("BloomEffect") or effect:IsA("BlurEffect") then effect.Enabled = false end
-    end
-end)
-
-for _, child in pairs(Workspace:GetDescendants()) do pcall(BypassServerRocks, child) end
-Workspace.DescendantAdded:Connect(function(descendant) pcall(BypassServerRocks, descendant) end)
+for _, child in pairs(Workspace:GetDescendants()) do pcall(CleanDownSlamRocks, child) end
+Workspace.DescendantAdded:Connect(function(descendant) pcall(CleanDownSlamRocks, descendant) end)
