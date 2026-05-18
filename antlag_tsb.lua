@@ -1,10 +1,10 @@
--- ANTI-LAG DEFINITIVO - PISO LISO + ROCAS INSTANTÁNEAS - DanielSonrieScripts
+-- ANTI-LAG DEFINITIVO - PISO LISO (SIN PLÁSTICO) - DanielSonrieScripts
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 local LocalPlayer = Players.LocalPlayer
 
-print("⚔️ ANTI-LAG - PISO LISO + ROCAS INSTANTÁNEAS")
+print("⚔️ ANTI-LAG - PISO LISO SIN PLÁSTICO")
 
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 for _, gui in pairs(PlayerGui:GetChildren()) do
@@ -127,15 +127,16 @@ pcall(function()
 end)
 
 -- ============================================
--- PISO LISO (Poner todo a plástico)
+-- PISO LISO (SIN PLÁSTICO - solo quitar texturas)
 -- ============================================
 pcall(function()
     for _, obj in pairs(Workspace:GetDescendants()) do
         if obj:IsA("BasePart") or obj:IsA("MeshPart") or obj:IsA("Part") then
-            -- No cambiar el terreno principal
             if obj.Name ~= "Terrain" then
                 pcall(function()
-                    obj.Material = Enum.Material.Plastic
+                    -- En lugar de plástico, solo quitamos las texturas cuadriculadas
+                    -- Dejamos el material original pero sin detalles
+                    obj.Material = Enum.Material.SmoothPlastic
                 end)
             end
         end
@@ -174,7 +175,7 @@ local function esDummy(obj)
 end
 
 -- ============================================
--- ELIMINAR ROCAS (GRANDES Y CHICAS - INSTANTÁNEO)
+-- ELIMINAR ROCAS (GRANDES Y CHICAS)
 -- ============================================
 
 local function esRoca(obj)
@@ -189,14 +190,12 @@ local function esRoca(obj)
     if obj:IsA("BasePart") or obj:IsA("MeshPart") then
         if obj.Name == "Terrain" then return false end
         
-        -- Por nombre
         if nombre:find("rock") or nombre:find("stone") or nombre:find("piedra") 
            or nombre:find("roca") or nombre:find("debris") or nombre:find("fragment")
            or nombre:find("slam") or nombre:find("down") then
             return true
         end
         
-        -- Por tamaño (AHORA también las GRANDES, límite subido a 50)
         local tamano = obj.Size.Magnitude
         if tamano < 50 and tamano > 0.5 then
             return true
@@ -205,14 +204,12 @@ local function esRoca(obj)
     return false
 end
 
--- Escaneo inicial
 for _, obj in pairs(Workspace:GetDescendants()) do
     pcall(function()
         if esRoca(obj) then obj:Destroy() end
     end)
 end
 
--- Escaneo instantáneo de nuevas rocas
 Workspace.DescendantAdded:Connect(function(obj)
     task.wait(0.0000000001)
     pcall(function()
@@ -220,7 +217,6 @@ Workspace.DescendantAdded:Connect(function(obj)
     end)
 end)
 
--- Escaneo periódico suave cada 0.5s (para asegurar piedras grandes)
 spawn(function()
     while wait(0.5) do
         pcall(function()
@@ -262,4 +258,4 @@ pcall(function()
     end
 end)
 
-print("✅ ANTI-LAG DEFINITIVO - PISO LISO + ROCAS INSTANTÁNEAS")
+print("✅ ANTI-LAG - PISO LISO (SIN PLÁSTICO) - DanielSonrieScripts")
