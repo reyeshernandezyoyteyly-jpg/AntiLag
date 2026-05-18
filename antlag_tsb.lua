@@ -1,11 +1,11 @@
--- DanielScript Ultimate Anti-Lag | TSB Absolute Zero Rocks Edition
+-- DanielScript Ultimate Anti-Lag | TSB Anti-VisualEffects Edition
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 local TweenService = game:GetService("TweenService")
 local LocalPlayer = Players.LocalPlayer
 
-print("⚔️ TSB Anti-Lag (Cero Piedras Absoluto) por DanielSonrie")
+print("⚔️ TSB Anti-Lag (Cero Efectos Especiales) por DanielSonrie")
 
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 if PlayerGui:FindFirstChild("DanielWelcomeGui") then PlayerGui.DanielWelcomeGui:Destroy() end
@@ -73,7 +73,7 @@ pcall(function()
     end)
 end)
 
--- 2. CARTEL EN LA ESQUINA CORREGIDO (Libre del botón de saltar - 6s)
+-- 2. CARTEL EN LA ESQUINA (Libre del botón de saltar - 6s)
 pcall(function()
     local ToastGui = Instance.new("ScreenGui")
     ToastGui.Name = "DanielToastGui"
@@ -126,44 +126,45 @@ pcall(function()
     end)
 end)
 
--- 3. ELIMINADOR AGRESIVO TOTAL DE OBJETOS SUELTOS Y PIEDRAS
-local function DestroyAllStonesAndDebris(obj)
+-- 3. BYPASS AGRESIVO DE EFECTOS MESH/VISUALES (Borrador de Torbellinos y Rocas)
+local function BypassVisualEffects(obj)
     local name = obj.Name and string.lower(obj.Name) or ""
     local parentName = obj.Parent and string.lower(obj.Parent.Name) or ""
 
-    -- Regla de oro: Salvar el Dash de Garou y efectos azules
+    -- Regla de oro estricta: Salvar el Dash de Garou y efectos azules esenciales
     if string.find(name, "dash") or string.find(name, "blue") or string.find(name, "garou") 
        or string.find(parentName, "dash") or string.find(parentName, "garou") then 
         return 
     end
 
-    -- Borrar Palmeras
+    -- Eliminar Palmeras
     if string.find(name, "tree") or string.find(name, "palm") or string.find(name, "palmera") then
         obj:Destroy()
         return
     end
 
-    -- DETECTOR RADICAL DE BLOQUES CREADOS POR GOLPES (Saitama, Garou, Down Slams, choques)
+    -- INTERCEPTAR EFECTOS VISUALES 3D (Torbellinos de Garou, Rocas, Escombros gigantes)
     if obj:IsA("BasePart") or obj:IsA("MeshPart") then
-        -- Evitar borrar el mapa base o el suelo principal
+        -- Asegurar que no borre el mapa donde pisas
         if obj.Name ~= "Terrain" and name ~= "baseplate" and not obj:IsDescendantOf(Workspace:FindFirstChild("Map")) then
             
-            -- Si es generado en carpetas de efectos o es una parte suelta sin colisión en el mapa
+            -- Si está en carpetas de efectos o tiene nombres sospechosos de habilidades
             if parentName == "visualeffects" or string.find(parentName, "fx") or parentName == "debris" 
-               or string.find(name, "rock") or string.find(name, "debris") or string.find(name, "stone") or name == "part" or name == "meshpart"
-               or (parentName == "workspace" and obj.CanCollide == false and obj.Size.Y < 30) then
+               or string.find(name, "rock") or string.find(name, "debris") or string.find(name, "stone") 
+               or string.find(name, "tornado") or string.find(name, "whirlwind") or string.find(name, "ef")
+               or name == "part" or name == "meshpart" or name == "effect" or name == "orange" then
                 
                 pcall(function()
                     obj.Transparency = 1
                     obj.Size = Vector3.new(0, 0, 0)
-                    obj.Position = Vector3.new(0, -999, 0) -- Mandado al fondo del mapa al instante
+                    obj.Position = Vector3.new(0, -999, 0) -- Mandado al olvido
                     obj.CanCollide = false
                 end)
             end
         end
     end
 
-    -- Apagar todas las demás partículas que estorben la vista
+    -- Apagar todas las demás partículas, fuegos y humos sueltos
     if obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") or obj:IsA("Smoke") or obj:IsA("Fire") then
         pcall(function() obj.Enabled = false end)
     elseif obj:IsA("Explosion") then
@@ -171,9 +172,9 @@ local function DestroyAllStonesAndDebris(obj)
     end
 end
 
--- Escaneo masivo constante y en vivo
-for _, child in pairs(Workspace:GetDescendants()) do pcall(DestroyAllStonesAndDebris, child) end
-Workspace.DescendantAdded:Connect(function(descendant) pcall(DestroyAllStonesAndDebris, descendant) end)
+-- Ejecución y escaneo constante en vivo para destruir efectos al instante
+for _, child in pairs(Workspace:GetDescendants()) do pcall(BypassVisualEffects, child) end
+Workspace.DescendantAdded:Connect(function(descendant) pcall(BypassVisualEffects, descendant) end)
 
 -- Iluminación optimizada limpia
 pcall(function()
