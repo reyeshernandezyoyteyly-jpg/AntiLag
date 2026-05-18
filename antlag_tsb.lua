@@ -1,10 +1,10 @@
--- ANTI-LAG ULTRA RÁPIDO - Rocas 0.0000000001s
+-- ANTI-LAG DEFINITIVO - DanielSonrieScripts
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 local LocalPlayer = Players.LocalPlayer
 
-print("⚔️ ANTI-LAG ACTIVADO - Rocas 0.0000000001s")
+print("⚔️ ANTI-LAG ACTIVADO - DanielSonrieScripts")
 
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 for _, gui in pairs(PlayerGui:GetChildren()) do
@@ -12,7 +12,7 @@ for _, gui in pairs(PlayerGui:GetChildren()) do
 end
 
 -- ============================================
--- BIENVENIDA
+-- BIENVENIDA (2 segundos)
 -- ============================================
 pcall(function()
     local WelcomeGui = Instance.new("ScreenGui")
@@ -21,12 +21,12 @@ pcall(function()
     WelcomeGui.Parent = PlayerGui
 
     local CenterLabel = Instance.new("TextLabel")
-    CenterLabel.Size = UDim2.new(0, 300, 0, 40)
-    CenterLabel.Position = UDim2.new(0.5, -150, 0.4, -20)
+    CenterLabel.Size = UDim2.new(0, 200, 0, 30)
+    CenterLabel.Position = UDim2.new(0.5, -100, 0.4, -15)
     CenterLabel.BackgroundTransparency = 1
-    CenterLabel.Text = "🥔 MODO PATATA 🥔"
-    CenterLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-    CenterLabel.TextSize = 26
+    CenterLabel.Text = "ANTI-LAG ON"
+    CenterLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
+    CenterLabel.TextSize = 20
     CenterLabel.Font = Enum.Font.GothamBold
     CenterLabel.Parent = WelcomeGui
 
@@ -35,73 +35,7 @@ pcall(function()
 end)
 
 -- ============================================
--- TEXTO TEMPORAL (8 segundos)
--- ============================================
-pcall(function()
-    local WarningGui = Instance.new("ScreenGui")
-    WarningGui.Name = "DanielWarningGui"
-    WarningGui.ResetOnSpawn = false
-    WarningGui.Parent = PlayerGui
-
-    local LeftFrame = Instance.new("Frame")
-    LeftFrame.Size = UDim2.new(0, 180, 0, 70)
-    LeftFrame.Position = UDim2.new(0, 10, 1, -80)
-    LeftFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-    LeftFrame.BackgroundTransparency = 0.5
-    LeftFrame.BorderSizePixel = 0
-    LeftFrame.Parent = WarningGui
-
-    local UICorner = Instance.new("UICorner")
-    UICorner.CornerRadius = UDim.new(0, 6)
-    UICorner.Parent = LeftFrame
-
-    local FPSLabel = Instance.new("TextLabel")
-    FPSLabel.Size = UDim2.new(1, -10, 0, 20)
-    FPSLabel.Position = UDim2.new(0, 5, 0, 5)
-    FPSLabel.BackgroundTransparency = 1
-    FPSLabel.Text = "MODO PATATA"
-    FPSLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
-    FPSLabel.TextSize = 13
-    FPSLabel.Font = Enum.Font.GothamBold
-    FPSLabel.TextXAlignment = Enum.TextXAlignment.Left
-    FPSLabel.Parent = LeftFrame
-
-    local RocaLabel = Instance.new("TextLabel")
-    RocaLabel.Size = UDim2.new(1, -10, 0, 18)
-    RocaLabel.Position = UDim2.new(0, 5, 0, 28)
-    RocaLabel.BackgroundTransparency = 1
-    RocaLabel.Text = "ROCAS 0.0000000001s"
-    RocaLabel.TextColor3 = Color3.fromRGB(100, 255, 100)
-    RocaLabel.TextSize = 10
-    RocaLabel.Font = Enum.Font.Gotham
-    RocaLabel.TextXAlignment = Enum.TextXAlignment.Left
-    RocaLabel.Parent = LeftFrame
-
-    local DashLabel = Instance.new("TextLabel")
-    DashLabel.Size = UDim2.new(1, -10, 0, 18)
-    DashLabel.Position = UDim2.new(0, 5, 0, 48)
-    DashLabel.BackgroundTransparency = 1
-    DashLabel.Text = "DASH GAROU OK"
-    DashLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
-    DashLabel.TextSize = 10
-    DashLabel.Font = Enum.Font.GothamBold
-    DashLabel.TextXAlignment = Enum.TextXAlignment.Left
-    DashLabel.Parent = LeftFrame
-
-    task.wait(8)
-    for i = 1, 10 do
-        local alpha = i / 10
-        LeftFrame.BackgroundTransparency = 0.5 + (alpha * 0.5)
-        FPSLabel.TextTransparency = alpha
-        RocaLabel.TextTransparency = alpha
-        DashLabel.TextTransparency = alpha
-        task.wait(0.05)
-    end
-    WarningGui:Destroy()
-end)
-
--- ============================================
--- PANEL DE ACTUALIZACIONES (TEXTO CORTO)
+-- PANEL DE ACTUALIZACIONES (Esquina derecha)
 -- ============================================
 pcall(function()
     local UpdateGui = Instance.new("ScreenGui")
@@ -110,10 +44,10 @@ pcall(function()
     UpdateGui.Parent = PlayerGui
 
     local UpdateFrame = Instance.new("Frame")
-    UpdateFrame.Size = UDim2.new(0, 180, 0, 150)
-    UpdateFrame.Position = UDim2.new(1, -190, 1, -160)
+    UpdateFrame.Size = UDim2.new(0, 150, 0, 130)
+    UpdateFrame.Position = UDim2.new(1, -160, 0.5, -65)
     UpdateFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-    UpdateFrame.BackgroundTransparency = 0.4
+    UpdateFrame.BackgroundTransparency = 0.5
     UpdateFrame.BorderSizePixel = 0
     UpdateFrame.Parent = UpdateGui
 
@@ -127,7 +61,7 @@ pcall(function()
     TitleLabel.BackgroundTransparency = 1
     TitleLabel.Text = "ACTUALIZACIONES"
     TitleLabel.TextColor3 = Color3.fromRGB(255, 200, 0)
-    TitleLabel.TextSize = 12
+    TitleLabel.TextSize = 11
     TitleLabel.Font = Enum.Font.GothamBold
     TitleLabel.TextXAlignment = Enum.TextXAlignment.Center
     TitleLabel.Parent = UpdateFrame
@@ -148,9 +82,8 @@ pcall(function()
     local actualizaciones = {
         "✅ rocas eliminadas",
         "✅ modo patata",
-        "✅ dash garou ok",
-        "✅ arboles fuera",
-        "✅ efectos reducidos"
+        "✅ efectos reducidos",
+        "✅ arboles removidos"
     }
 
     for _, update in pairs(actualizaciones) do
@@ -170,6 +103,28 @@ pcall(function()
 end)
 
 -- ============================================
+-- MARCA DE AGUA (Esquina inferior derecha, chiquita)
+-- ============================================
+pcall(function()
+    local WatermarkGui = Instance.new("ScreenGui")
+    WatermarkGui.Name = "DanielWatermark"
+    WatermarkGui.ResetOnSpawn = false
+    WatermarkGui.Parent = PlayerGui
+
+    local WatermarkLabel = Instance.new("TextLabel")
+    WatermarkLabel.Size = UDim2.new(0, 120, 0, 15)
+    WatermarkLabel.Position = UDim2.new(1, -125, 1, -25)
+    WatermarkLabel.BackgroundTransparency = 1
+    WatermarkLabel.Text = "DanielSonrieScripts"
+    WatermarkLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
+    WatermarkLabel.TextSize = 10
+    WatermarkLabel.Font = Enum.Font.Gotham
+    WatermarkLabel.TextXAlignment = Enum.TextXAlignment.Right
+    WatermarkLabel.TextTransparency = 0.3
+    WatermarkLabel.Parent = WatermarkGui
+end)
+
+-- ============================================
 -- ELIMINAR ÁRBOLES
 -- ============================================
 pcall(function()
@@ -182,7 +137,7 @@ pcall(function()
 end)
 
 -- ============================================
--- ROCAS: 0.0000000001 SEGUNDOS
+-- ROCAS ELIMINADAS RÁPIDO
 -- ============================================
 
 local function esRoca(obj)
@@ -248,4 +203,4 @@ pcall(function()
     end
 end)
 
-print("✅ ACTIVADO - Rocas 0.0000000001s")
+print("✅ ANTI-LAG ACTIVADO - DanielSonrieScripts")
