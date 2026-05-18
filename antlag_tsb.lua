@@ -1,4 +1,4 @@
--- ANTI-LAG DEFINITIVO - FPS BOOST BETA - DanielSonrieScripts
+-- ANTI-LAG DEFINITIVO - FPS BOOST BETA - CON FONDO NEGRO - DanielSonrieScripts
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
@@ -96,7 +96,7 @@ function ejecutarScriptPrincipal()
     Blur:Destroy()
     
     -- ============================================
-    -- TEXTO DE BIENVENIDA "MODO PATATA" (ABAJO - SIN FONDO)
+    -- TEXTO DE BIENVENIDA (CON FONDO NEGRO, ABAJO)
     -- ============================================
     pcall(function()
         local WelcomeGui = Instance.new("ScreenGui")
@@ -104,38 +104,48 @@ function ejecutarScriptPrincipal()
         WelcomeGui.ResetOnSpawn = false
         WelcomeGui.Parent = PlayerGui
 
+        local MainFrame = Instance.new("Frame")
+        MainFrame.Size = UDim2.new(0, 350, 0, 90)
+        MainFrame.Position = UDim2.new(0.5, -175, 1, 0)
+        MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+        MainFrame.BackgroundTransparency = 0.4
+        MainFrame.BorderSizePixel = 0
+        MainFrame.Parent = WelcomeGui
+
+        local MainCorner = Instance.new("UICorner")
+        MainCorner.CornerRadius = UDim.new(0, 15)
+        MainCorner.Parent = MainFrame
+
         local TitleLabel = Instance.new("TextLabel")
-        TitleLabel.Size = UDim2.new(0, 300, 0, 40)
-        TitleLabel.Position = UDim2.new(0.5, -150, 1, 0)
+        TitleLabel.Size = UDim2.new(1, 0, 0, 45)
+        TitleLabel.Position = UDim2.new(0, 0, 0, 5)
         TitleLabel.BackgroundTransparency = 1
         TitleLabel.Text = "🥔 MODO PATATA 🥔"
         TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-        TitleLabel.TextSize = 28
+        TitleLabel.TextSize = 26
         TitleLabel.Font = Enum.Font.GothamBold
-        TitleLabel.Parent = WelcomeGui
+        TitleLabel.Parent = MainFrame
 
         local SubLabel = Instance.new("TextLabel")
-        SubLabel.Size = UDim2.new(0, 300, 0, 20)
-        SubLabel.Position = UDim2.new(0.5, -150, 1, 0)
+        SubLabel.Size = UDim2.new(1, 0, 0, 25)
+        SubLabel.Position = UDim2.new(0, 0, 0, 55)
         SubLabel.BackgroundTransparency = 1
         SubLabel.Text = "Developed by DanielSonrieScripts"
-        SubLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+        SubLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
         SubLabel.TextSize = 12
         SubLabel.Font = Enum.Font.Gotham
-        SubLabel.Parent = WelcomeGui
+        SubLabel.Parent = MainFrame
 
-        -- Subir desde abajo y quedarse ABAJO (Y = 0.85)
-        local entrarTitle = TweenService:Create(TitleLabel, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, -150, 0.85, 0)})
-        local entrarSub = TweenService:Create(SubLabel, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, -150, 0.91, 0)})
-        entrarTitle:Play()
-        entrarSub:Play()
+        -- Animación: sube desde abajo y se queda ABAJO
+        local entrarAnim = TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, -175, 0.85, 0)})
+        entrarAnim:Play()
         
         task.wait(3)
         
-        local salirTitle = TweenService:Create(TitleLabel, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 1})
-        local salirSub = TweenService:Create(SubLabel, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 1})
-        salirTitle:Play()
-        salirSub:Play()
+        local salirAnim = TweenService:Create(MainFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Position = UDim2.new(0.5, -175, 1, 0), BackgroundTransparency = 1})
+        salirAnim:Play()
+        TweenService:Create(TitleLabel, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 1}):Play()
+        TweenService:Create(SubLabel, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 1}):Play()
         
         task.wait(0.5)
         WelcomeGui:Destroy()
@@ -218,7 +228,6 @@ function ejecutarScriptPrincipal()
         local entrarAnim = TweenService:Create(BoostFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0, 10, 1, -105)})
         entrarAnim:Play()
 
-        -- Título "FPS BOOST BETA" (BLANCO)
         local TitleLabel = Instance.new("TextLabel")
         TitleLabel.Size = UDim2.new(1, -10, 0, 22)
         TitleLabel.Position = UDim2.new(0, 5, 0, 5)
@@ -230,7 +239,6 @@ function ejecutarScriptPrincipal()
         TitleLabel.TextXAlignment = Enum.TextXAlignment.Center
         TitleLabel.Parent = BoostFrame
 
-        -- Textos en VERDE (como estaban antes)
         local mejoras = {
             {texto = "rocas eliminadas", color = Color3.fromRGB(0, 255, 0)},
             {texto = "modo patata", color = Color3.fromRGB(0, 255, 0)},
