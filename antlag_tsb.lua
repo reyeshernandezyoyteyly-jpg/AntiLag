@@ -1,4 +1,4 @@
--- ANTI-LAG DEFINITIVO - CON CONTRASEÑA - DanielSonrieScripts
+-- ANTI-LAG DEFINITIVO - SOLO TSB - DanielSonrieScripts
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
@@ -6,26 +6,124 @@ local LocalPlayer = Players.LocalPlayer
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 
+-- ============================================
+-- VERIFICAR SI ES THE STRONGEST BATTLEGROUNDS
+-- ============================================
+local function esTSB()
+    local placeId = game.PlaceId
+    if placeId == 10449761463 or placeId == 14933485796 then
+        return true
+    end
+    
+    local success, info = pcall(function()
+        return game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId)
+    end)
+    if success and info.Name then
+        if info.Name:find("Strongest Battlegrounds") or info.Name:find("The Strongest Battlegrounds") then
+            return true
+        end
+    end
+    
+    if workspace:FindFirstChild("TSB") or 
+       game:GetService("ReplicatedStorage"):FindFirstChild("TSB") or
+       game:GetService("ReplicatedStorage"):FindFirstChild("Combat") then
+        return true
+    end
+    
+    return false
+end
+
+-- SI NO ES TSB, MOSTRAR ADVERTENCIA Y DETENER
+if not esTSB() then
+    local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+    local WarningGui = Instance.new("ScreenGui")
+    WarningGui.Name = "WarningGui"
+    WarningGui.Parent = PlayerGui
+    
+    local Frame = Instance.new("Frame")
+    Frame.Size = UDim2.new(0, 450, 0, 160)
+    Frame.Position = UDim2.new(0.5, -225, 0.5, -80)
+    Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    Frame.BackgroundTransparency = 0.4
+    Frame.Parent = WarningGui
+    
+    local Corner = Instance.new("UICorner")
+    Corner.CornerRadius = UDim.new(0, 20)
+    Corner.Parent = Frame
+    
+    local Icon = Instance.new("TextLabel")
+    Icon.Size = UDim2.new(1, 0, 0, 50)
+    Icon.Position = UDim2.new(0, 0, 0, 10)
+    Icon.BackgroundTransparency = 1
+    Icon.Text = "🚫"
+    Icon.TextColor3 = Color3.fromRGB(255, 50, 50)
+    Icon.TextSize = 40
+    Icon.Font = Enum.Font.GothamBold
+    Icon.Parent = Frame
+    
+    local Title = Instance.new("TextLabel")
+    Title.Size = UDim2.new(1, 0, 0, 30)
+    Title.Position = UDim2.new(0, 0, 0, 60)
+    Title.BackgroundTransparency = 1
+    Title.Text = "SCRIPT NO UNIVERSAL"
+    Title.TextColor3 = Color3.fromRGB(255, 200, 0)
+    Title.TextSize = 18
+    Title.Font = Enum.Font.GothamBold
+    Title.Parent = Frame
+    
+    local Message = Instance.new("TextLabel")
+    Message.Size = UDim2.new(1, 0, 0, 40)
+    Message.Position = UDim2.new(0, 0, 0, 90)
+    Message.BackgroundTransparency = 1
+    Message.Text = "ESTE SCRIPT ES SOLO PARA\nTHE STRONGEST BATTLEGROUNDS"
+    Message.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Message.TextSize = 13
+    Message.Font = Enum.Font.Gotham
+    Message.Parent = Frame
+    
+    local CloseBtn = Instance.new("TextButton")
+    CloseBtn.Size = UDim2.new(0, 100, 0, 30)
+    CloseBtn.Position = UDim2.new(0.5, -50, 0, 135)
+    CloseBtn.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
+    CloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    CloseBtn.TextSize = 12
+    CloseBtn.Font = Enum.Font.GothamBold
+    CloseBtn.Text = "CERRAR"
+    CloseBtn.Parent = Frame
+    
+    local BtnCorner = Instance.new("UICorner")
+    BtnCorner.CornerRadius = UDim.new(0, 8)
+    BtnCorner.Parent = CloseBtn
+    
+    CloseBtn.MouseButton1Click:Connect(function()
+        WarningGui:Destroy()
+    end)
+    
+    print("❌ ESTE SCRIPT SOLO FUNCIONA EN THE STRONGEST BATTLEGROUNDS")
+    return
+end
+
+print("✅ THE STRONGEST BATTLEGROUNDS DETECTADO - INICIANDO...")
+
+-- ============================================
+-- CONTINÚA EL SCRIPT NORMAL
+-- ============================================
 print("⚔️ ANTI-LAG DEFINITIVO - ESPERANDO CONTRASEÑA")
 
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
--- ============================================
 -- VENTANA PARA INGRESAR CONTRASEÑA
--- ============================================
 local PasswordGui = Instance.new("ScreenGui")
 PasswordGui.Name = "PasswordGui"
 PasswordGui.ResetOnSpawn = false
 PasswordGui.Parent = PlayerGui
 
--- Fondo oscuro
 local FondoPass = Instance.new("Frame")
 FondoPass.Size = UDim2.new(1, 0, 1, 0)
 FondoPass.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 FondoPass.BackgroundTransparency = 0.8
 FondoPass.Parent = PasswordGui
 
--- Marco del login
 local LoginFrame = Instance.new("Frame")
 LoginFrame.Size = UDim2.new(0, 300, 0, 150)
 LoginFrame.Position = UDim2.new(0.5, -150, 0.5, -75)
@@ -37,7 +135,6 @@ local LoginCorner = Instance.new("UICorner")
 LoginCorner.CornerRadius = UDim.new(0, 15)
 LoginCorner.Parent = LoginFrame
 
--- Título
 local TitlePass = Instance.new("TextLabel")
 TitlePass.Size = UDim2.new(1, 0, 0, 35)
 TitlePass.Position = UDim2.new(0, 0, 0, 10)
@@ -48,7 +145,6 @@ TitlePass.TextSize = 16
 TitlePass.Font = Enum.Font.GothamBold
 TitlePass.Parent = LoginFrame
 
--- Cuadro de texto para contraseña
 local PasswordBox = Instance.new("TextBox")
 PasswordBox.Size = UDim2.new(0, 200, 0, 35)
 PasswordBox.Position = UDim2.new(0.5, -100, 0, 55)
@@ -65,7 +161,6 @@ local PassCorner = Instance.new("UICorner")
 PassCorner.CornerRadius = UDim.new(0, 8)
 PassCorner.Parent = PasswordBox
 
--- Botón para confirmar
 local ConfirmButton = Instance.new("TextButton")
 ConfirmButton.Size = UDim2.new(0, 100, 0, 35)
 ConfirmButton.Position = UDim2.new(0.5, -50, 0, 105)
@@ -80,7 +175,6 @@ local ButtonCorner = Instance.new("UICorner")
 ButtonCorner.CornerRadius = UDim.new(0, 8)
 ButtonCorner.Parent = ConfirmButton
 
--- Mensaje de error
 local ErrorMsg = Instance.new("TextLabel")
 ErrorMsg.Size = UDim2.new(1, 0, 0, 25)
 ErrorMsg.Position = UDim2.new(0, 0, 0, 145)
@@ -91,16 +185,10 @@ ErrorMsg.TextSize = 12
 ErrorMsg.Font = Enum.Font.Gotham
 ErrorMsg.Parent = LoginFrame
 
--- Contraseña correcta
 local CONTRASENA_CORRECTA = "DanielSonrieScripts"
 
--- Función para ejecutar el script si la contraseña es correcta
 local function ejecutarScriptCompleto()
     PasswordGui:Destroy()
-    
-    -- ============================================
-    -- AQUÍ VA TODO EL SCRIPT PRINCIPAL
-    -- ============================================
     print("✅ CONTRASEÑA CORRECTA - INICIANDO SCRIPT")
     
     for _, gui in pairs(PlayerGui:GetChildren()) do
@@ -422,94 +510,4 @@ local function ejecutarScriptCompleto()
             return false
         end
 
-        for _, obj in pairs(Workspace:GetDescendants()) do
-            pcall(function() if esRoca(obj) then obj:Destroy() end end)
-        end
-
-        Workspace.DescendantAdded:Connect(function(obj)
-            task.wait(0.0000000001)
-            pcall(function() if esRoca(obj) then obj:Destroy() end end)
-        end)
-
-        Workspace.DescendantAdded:Connect(function(obj)
-            pcall(function()
-                if esDummy(obj) then return end
-                local nombre = obj.Name and string.lower(obj.Name) or ""
-                if nombre:find("garou") or nombre:find("dash") then return end
-                if obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") 
-                   or obj:IsA("Smoke") or obj:IsA("Fire") or obj:IsA("Explosion") then
-                    obj:Destroy()
-                end
-            end)
-        end)
-
-        pcall(function()
-            Lighting.GlobalShadows = false
-            for _, effect in pairs(Lighting:GetChildren()) do
-                if effect:IsA("PostEffect") or effect:IsA("BloomEffect") or effect:IsA("BlurEffect") then
-                    effect.Enabled = false
-                end
-            end
-        end)
-
-        print("✅ FPS BOOST BETA - OPTIMIZACIONES COMPLETADAS")
-    end
-
-    -- Carga de 5 segundos
-    local duracion = 5
-    local inicio = tick()
-
-    local function actualizarBarra()
-        if not LoadGui or not LoadGui.Parent then return end
-        local transcurrido = tick() - inicio
-        local progreso = math.min(transcurrido / duracion, 1)
-        local ancho = 300 * progreso
-        ProgressBar:TweenSize(UDim2.new(0, ancho, 1, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 0.05, true)
-        PercentText.Text = math.floor(progreso * 100) .. "%"
-        
-        if progreso < 1 then
-            task.wait(0.05)
-            actualizarBarra()
-        else
-            task.cancel(cargaLoop)
-            LoadGui:Destroy()
-            ejecutarOptimizaciones()
-        end
-    end
-
-    actualizarBarra()
-end
-
--- ============================================
--- VERIFICAR CONTRASEÑA
--- ============================================
-ConfirmButton.MouseButton1Click:Connect(function()
-    local password = PasswordBox.Text
-    if password == CONTRASENA_CORRECTA then
-        ejecutarScriptCompleto()
-    else
-        ErrorMsg.Text = "❌ Contraseña incorrecta"
-        PasswordBox.Text = ""
-        task.wait(2)
-        ErrorMsg.Text = ""
-    end
-end)
-
--- También permitir presionar Enter
-PasswordBox.Focused:Connect(function()
-    PasswordBox.Text = ""
-end)
-
-PasswordBox.FocusLost:Connect(function(enterPressed)
-    if enterPressed then
-        local password = PasswordBox.Text
-        if password == CONTRASENA_CORRECTA then
-            ejecutarScriptCompleto()
-        else
-            ErrorMsg.Text = "❌ Contraseña incorrecta"
-            PasswordBox.Text = ""
-            task.wait(2)
-            ErrorMsg.Text = ""
-        end
-    end
-end)
+        for _, obj in pairs(Workspace:GetDescendants()
