@@ -1,11 +1,12 @@
--- DanielScript Ultimate Anti-Lag | TSB Down Slam Edition
+-- DanielScript Ultimate Anti-Lag | TSB Down Slam Fix Edition
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 local TweenService = game:GetService("TweenService")
+local Debris = game:GetService("Debris")
 local LocalPlayer = Players.LocalPlayer
 
-print("⚔️ TSB Anti-Lag (Filtro Down Slam) por DanielSonrie")
+print("⚔️ TSB Anti-Lag (Fix Patada Abajo) por DanielSonrie")
 
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 if PlayerGui:FindFirstChild("DanielWelcomeGui") then PlayerGui.DanielWelcomeGui:Destroy() end
@@ -19,14 +20,12 @@ pcall(function()
     WelcomeGui.DisplayOrder = 99999
     WelcomeGui.Parent = PlayerGui
 
-    -- Contenedor transparente para centrar ambos textos perfectamente
     local CenterFrame = Instance.new("Frame")
     CenterFrame.Size = UDim2.new(0, 500, 0, 100)
     CenterFrame.Position = UDim2.new(0.5, -250, 0.35, -50)
     CenterFrame.BackgroundTransparency = 1
     CenterFrame.Parent = WelcomeGui
 
-    -- Título Principal
     local CenterLabel = Instance.new("TextLabel")
     CenterLabel.Size = UDim2.new(1, 0, 0, 40)
     CenterLabel.Position = UDim2.new(0, 0, 0, 0)
@@ -39,20 +38,18 @@ pcall(function()
     CenterLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
     CenterLabel.Parent = CenterFrame
 
-    -- Subtítulo (Más pequeño como me pediste)
     local SubCenterLabel = Instance.new("TextLabel")
     SubCenterLabel.Size = UDim2.new(1, 0, 0, 30)
     SubCenterLabel.Position = UDim2.new(0, 0, 0, 45)
     SubCenterLabel.BackgroundTransparency = 1
     SubCenterLabel.Text = "este escript es fase beta"
     SubCenterLabel.TextColor3 = Color3.fromRGB(220, 220, 220)
-    SubCenterLabel.TextSize = 18 -- Tamaño más pequeño tipo subtítulo
+    SubCenterLabel.TextSize = 18
     SubCenterLabel.Font = Enum.Font.Gotham
     SubCenterLabel.TextStrokeTransparency = 0.3
     SubCenterLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
     SubCenterLabel.Parent = CenterFrame
 
-    -- Efecto de parpadeo suave en el título y subtítulo
     local looping = true
     task.spawn(function()
         while looping do
@@ -67,14 +64,12 @@ pcall(function()
         end
     end)
 
-    -- Esperar 3 segundos y desvanecer todo el contenedor junto
     task.spawn(function()
         task.wait(3)
         looping = false
         local t1 = TweenService:Create(CenterLabel, TweenInfo.new(0.5), {TextTransparency = 1, TextStrokeTransparency = 1})
         local t2 = TweenService:Create(SubCenterLabel, TweenInfo.new(0.5), {TextTransparency = 1, TextStrokeTransparency = 1})
-        t1:Play()
-        t2:Play()
+        t1:Play() t2:Play()
         t1.Completed:Connect(function() WelcomeGui:Destroy() end)
     end)
 end)
@@ -132,23 +127,34 @@ pcall(function()
     end)
 end)
 
--- 3. FILTRO EXCLUSIVO PARA ROCAS DE DOWN SLAM Y PALMERAS (Cero Plástico)
-local function CleanDownSlamRocks(obj)
+-- 3. DETECTOR AVANZADO DE EFECTOS DE GOLPES (Filtro agresivo sin importar el nombre)
+local function OcultarEfectoGrave(obj)
+    -- Salvar el Dash Azul
     if string.find(string.lower(obj.Name), "dash") or string.find(string.lower(obj.Name), "blue") then return end
 
+    -- Seguir borrando palmeras completas
     if string.find(string.lower(obj.Name), "tree") or string.find(string.lower(obj.Name), "palm") or string.find(string.lower(obj.Name), "palmera") then
         obj:Destroy()
         return
     end
 
-    if obj:IsA("BasePart") then
+    -- CAPTURAR TODO LO QUE DETONE EN LAS CARPETAS DE EFECTOS (Rocas ocultas del Down Slam)
+    if obj:IsA("BasePart") or obj:IsA("MeshPart") then
         local parentName = obj.Parent and obj.Parent.Name or ""
-        if parentName == "VisualEffects" or string.find(string.lower(parentName), "fx") or parentName == "Debris" or string.find(string.lower(obj.Name), "rock") or string.find(string.lower(obj.Name), "debris") then
-            if obj.Name ~= "Terrain" and obj.Size.Y < 30 and not obj:IsDescendantOf(Workspace:FindFirstChild("Map")) then
+        local lowerParent = string.lower(parentName)
+        local lowerName = string.lower(obj.Name)
+        
+        -- Si está metido en carpetas de FX, efectos visuales o se llama como escombro/parte suelta
+        if parentName == "VisualEffects" or string.find(lowerParent, "fx") or parentName == "Debris" 
+           or string.find(lowerName, "rock") or string.find(lowerName, "debris") or string.find(lowerName, "stone")
+           or (parentName == "Workspace" and obj.CanCollide == false and obj.Size.Y < 25 and not obj:IsDescendantOf(Workspace:FindFirstChild("Map"))) then
+            
+            -- Bloquear que toque el piso real del mapa
+            if obj.Name ~= "Terrain" and lowerName ~= "baseplate" then
                 pcall(function()
                     obj.Transparency = 1
                     obj.Size = Vector3.new(0, 0, 0)
-                    obj.Position = Vector3.new(0, -999, 0)
+                    obj.Position = Vector3.new(0, -999, 0) -- Mandadas al tártaro a la fuerza
                     obj.CanCollide = false
                 end)
             end
@@ -156,5 +162,6 @@ local function CleanDownSlamRocks(obj)
     end
 end
 
-for _, child in pairs(Workspace:GetDescendants()) do pcall(CleanDownSlamRocks, child) end
-Workspace.DescendantAdded:Connect(function(descendant) pcall(CleanDownSlamRocks, descendant) end)
+-- Escaneo completo en vivo
+for _, child in pairs(Workspace:GetDescendants()) do pcall(OcultarEfectoGrave, child) end
+Workspace.DescendantAdded:Connect(function(descendant) pcall(OcultarEfectoGrave, descendant) end)
