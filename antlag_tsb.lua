@@ -1,10 +1,10 @@
--- ANTI-LAG OPTIMIZADO TSB - SIN LAG, ROCAS INSTANTÁNEAS, GAROU DASH INTACTO
+-- ANTI-LAG ULTRA DEFINITIVO - Modo Patata + Rocas instantáneas + Árboles fuera
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 local LocalPlayer = Players.LocalPlayer
 
-print("⚔️ ANTI-LAG OPTIMIZADO - Sin lag adicional")
+print("⚔️ MODO PATATA - Dash Garou intacto | Rocas 0.01s | Árboles eliminados")
 
 -- Limpiar GUIs viejos
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
@@ -25,7 +25,7 @@ pcall(function()
     CenterLabel.Size = UDim2.new(0, 400, 0, 50)
     CenterLabel.Position = UDim2.new(0.5, -200, 0.4, -25)
     CenterLabel.BackgroundTransparency = 1
-    CenterLabel.Text = "✨ ANTI-LAG OPTIMIZADO ✨"
+    CenterLabel.Text = "🥔 MODO PATATA ACTIVADO 🥔"
     CenterLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     CenterLabel.TextSize = 28
     CenterLabel.Font = Enum.Font.GothamBold
@@ -60,7 +60,7 @@ pcall(function()
     FPSLabel.Size = UDim2.new(1, -10, 0, 22)
     FPSLabel.Position = UDim2.new(0, 5, 0, 5)
     FPSLabel.BackgroundTransparency = 1
-    FPSLabel.Text = "FPS BOOST ACTIVATED"
+    FPSLabel.Text = "🥔 POTATO MODE ACTIVATED"
     FPSLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
     FPSLabel.TextSize = 14
     FPSLabel.Font = Enum.Font.GothamBold
@@ -71,7 +71,7 @@ pcall(function()
     GraphicLabel.Size = UDim2.new(1, -10, 0, 20)
     GraphicLabel.Position = UDim2.new(0, 5, 0, 30)
     GraphicLabel.BackgroundTransparency = 1
-    GraphicLabel.Text = "Gráficos optimizados"
+    GraphicLabel.Text = "Gráficos en modo patata"
     GraphicLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
     GraphicLabel.TextSize = 13
     GraphicLabel.Font = Enum.Font.Gotham
@@ -82,7 +82,7 @@ pcall(function()
     PhysicsLabel.Size = UDim2.new(1, -10, 0, 20)
     PhysicsLabel.Position = UDim2.new(0, 5, 0, 52)
     PhysicsLabel.BackgroundTransparency = 1
-    PhysicsLabel.Text = "Física sin cambios"
+    PhysicsLabel.Text = "Rocas eliminadas en 0.01s"
     PhysicsLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
     PhysicsLabel.TextSize = 13
     PhysicsLabel.Font = Enum.Font.Gotham
@@ -114,12 +114,30 @@ pcall(function()
 end)
 
 -- ============================================
--- ANTI-LAG OPTIMIZADO (NO da lag adicional)
+-- ELIMINAR ÁRBOLES Y PALMERAS (una sola vez)
+-- ============================================
+pcall(function()
+    for _, obj in pairs(Workspace:GetDescendants()) do
+        local nombre = obj.Name and string.lower(obj.Name) or ""
+        if nombre:find("tree") or nombre:find("palm") or nombre:find("palmera") then
+            obj:Destroy()
+        end
+    end
+end)
+
+-- ============================================
+-- ROCAS DEL DOWN SLAM: ELIMINADAS EN 0.01 SEGUNDOS (INSTANTÁNEO)
 -- ============================================
 
--- Función rápida para verificar si un objeto es una roca del Down Slam
+-- Función para detectar rocas (sin borrar dash de Garou)
 local function esRocaDelSlam(obj)
-    -- Verificar que NO sea parte de un personaje
+    -- NO borrar si tiene que ver con Garou o dash
+    local nombre = obj.Name and string.lower(obj.Name) or ""
+    if nombre:find("garou") or nombre:find("dash") then
+        return false
+    end
+    
+    -- NO borrar si está dentro de un personaje
     local current = obj.Parent
     while current do
         if current:FindFirstChild("Humanoid") then
@@ -128,13 +146,7 @@ local function esRocaDelSlam(obj)
         current = current.Parent
     end
     
-    -- Verificar que NO sea el dash de Garou (por nombre)
-    local nombre = obj.Name and string.lower(obj.Name) or ""
-    if nombre:find("dash") or nombre:find("garou") then
-        return false -- Conservar dash de Garou
-    end
-    
-    -- Detectar rocas del Down Slam (tamaño pequeño)
+    -- Detectar rocas (partes pequeñas)
     if obj:IsA("BasePart") or obj:IsA("MeshPart") then
         local tamano = obj.Size.Magnitude
         if tamano < 12 and tamano > 0.5 and obj.Name ~= "Terrain" then
@@ -145,10 +157,7 @@ local function esRocaDelSlam(obj)
     return false
 end
 
--- ESCANEO INTELIGENTE: Solo cuando aparecen objetos NUEVOS (NO cada 0.2 segundos)
--- Esto ELIMINA el lag adicional que causaba el escaneo constante
-
--- Escaneo inicial (una sola vez)
+-- Escaneo inicial
 for _, obj in pairs(Workspace:GetDescendants()) do
     pcall(function()
         if esRocaDelSlam(obj) then
@@ -157,9 +166,9 @@ for _, obj in pairs(Workspace:GetDescendants()) do
     end)
 end
 
--- Escaneo SOLO cuando aparece algo nuevo (MUCHO más eficiente)
+-- Escaneo RAPIDÍSIMO cuando aparece algo nuevo (0.01 segundos)
 Workspace.DescendantAdded:Connect(function(obj)
-    task.wait(0.05) -- Pequeña espera para que el objeto se termine de crear
+    task.wait(0.01) -- 0.01 segundos = prácticamente instantáneo
     pcall(function()
         if esRocaDelSlam(obj) then
             obj:Destroy()
@@ -167,37 +176,61 @@ Workspace.DescendantAdded:Connect(function(obj)
     end)
 end)
 
--- Eliminar efectos visuales (solo los que NO son importantes)
+-- ============================================
+-- MODO PATATA: Eliminar efectos visuales que dan lag (PERO CONSERVAR DASH GAROU)
+-- ============================================
+
 Workspace.DescendantAdded:Connect(function(obj)
     pcall(function()
         local nombre = obj.Name and string.lower(obj.Name) or ""
         
-        -- Conservar dash de Garou (por si acaso)
-        if nombre:find("dash") or nombre:find("garou") then
+        -- CONSERVAR dash de Garou (importante)
+        if nombre:find("garou") or nombre:find("dash") then
             return
         end
         
-        -- Eliminar partículas y efectos molestos
+        -- Eliminar partículas y efectos (modo patata)
         if obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") 
-           or obj:IsA("Smoke") or obj:IsA("Fire") or obj:IsA("Explosion") then
+           or obj:IsA("Smoke") or obj:IsA("Fire") then
             obj:Destroy()
         end
         
-        -- Eliminar árboles
-        if nombre:find("tree") or nombre:find("palm") then
+        -- Eliminar explosiones
+        if obj:IsA("Explosion") then
+            obj:Destroy()
+        end
+        
+        -- Eliminar efectos de aura excesivos (pero no los importantes)
+        if nombre:find("aura") and not nombre:find("garou") then
             obj:Destroy()
         end
     end)
 end)
 
--- Optimizar iluminación (solo una vez, no causa lag)
+-- ============================================
+-- OPTIMIZACIÓN DE GRÁFICOS (Modo Patata)
+-- ============================================
 pcall(function()
+    -- Apagar sombras
     Lighting.GlobalShadows = false
+    Lighting.FogEnd = 1e6
+    
+    -- Apagar efectos post-procesamiento
     for _, effect in pairs(Lighting:GetChildren()) do
-        if effect:IsA("PostEffect") or effect:IsA("BloomEffect") or effect:IsA("BlurEffect") then
+        if effect:IsA("PostEffect") or effect:IsA("BloomEffect") or effect:IsA("BlurEffect") 
+           or effect:IsA("ColorCorrectionEffect") or effect:IsA("SunRaysEffect") then
             effect.Enabled = false
         end
     end
+    
+    -- Reducir calidad de materiales (si es posible)
+    for _, part in pairs(Workspace:GetDescendants()) do
+        pcall(function()
+            if part:IsA("BasePart") then
+                part.Material = Enum.Material.Plastic
+            end
+        end)
+    end
 end)
 
-print("✅ ANTI-LAG OPTIMIZADO - Sin lag adicional, dash de Garou conservado")
+print("✅ MODO PATATA ACTIVADO - Rocas 0.01s | Árboles fuera | Dash Garou intacto")
