@@ -1,4 +1,4 @@
--- DanielScript Ultimate Anti-Lag | TSB Safe Body Clean V3
+-- DanielScript Ultimate Anti-Lag | TSB Safe Body Clean V3 - CON TEXTOS DE ADVERTENCIA PERMANENTES
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
@@ -10,8 +10,11 @@ print("⚔️ TSB Anti-Lag (Escudo de Avatar Activo) por DanielSonrie")
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 if PlayerGui:FindFirstChild("DanielWelcomeGui") then PlayerGui.DanielWelcomeGui:Destroy() end
 if PlayerGui:FindFirstChild("DanielToastGui") then PlayerGui.DanielToastGui:Destroy() end
+if PlayerGui:FindFirstChild("DanielStatusGui") then PlayerGui.DanielStatusGui:Destroy() end
 
--- 1. TEXTO DE BIENVENIDA AL CENTRO CON SUBTÍTULO (Desaparece en 3s)
+-- ============================================
+-- 1. TEXTO DE BIENVENIDA AL CENTRO (Original, 3 segundos)
+-- ============================================
 pcall(function()
     local WelcomeGui = Instance.new("ScreenGui")
     WelcomeGui.Name = "DanielWelcomeGui"
@@ -73,14 +76,16 @@ pcall(function()
     end)
 end)
 
--- 2. CARTEL EN LA ESQUINA (Libre del botón de saltar - 6s)
+-- ============================================
+-- 2. CARTEL TEMPORAL EN LA ESQUINA (Original, 6 segundos)
+-- ============================================
 pcall(function()
     local ToastGui = Instance.new("ScreenGui")
     ToastGui.Name = "DanielToastGui"
     ToastGui.ResetOnSpawn = false
     ToastGui.DisplayOrder = 99998
     ToastGui.Parent = PlayerGui
-    
+
     local MainFrame = Instance.new("Frame")
     MainFrame.Size = UDim2.new(0, 170, 0, 45)
     MainFrame.Position = UDim2.new(1, -185, 1, -60) 
@@ -88,11 +93,11 @@ pcall(function()
     MainFrame.BackgroundTransparency = 0.25
     MainFrame.BorderSizePixel = 0
     MainFrame.Parent = ToastGui
-    
+
     local UICorner = Instance.new("UICorner")
     UICorner.CornerRadius = UDim.new(0, 8)
     UICorner.Parent = MainFrame
-    
+
     local TitleLabel = Instance.new("TextLabel")
     TitleLabel.Size = UDim2.new(1, -15, 0, 18)
     TitleLabel.Position = UDim2.new(0, 0, 0, 5)
@@ -103,7 +108,7 @@ pcall(function()
     TitleLabel.Font = Enum.Font.GothamBold
     TitleLabel.TextXAlignment = Enum.TextXAlignment.Right
     TitleLabel.Parent = MainFrame
-    
+
     local SubLabel = Instance.new("TextLabel")
     SubLabel.Size = UDim2.new(1, -15, 0, 15)
     SubLabel.Position = UDim2.new(0, 0, 0, 22)
@@ -126,71 +131,152 @@ pcall(function()
     end)
 end)
 
--- 3. FILTRO CORREGIDO CON ESCUDO TOTAL PARA PERSONAJES
-local function CleanMapOnly(obj)
-    -- ESCUDO SUPREMO: Si el objeto está dentro de cualquier personaje (tú o enemigos), IGNÓRALO
-    if obj:IsDescendantOf(Workspace) then
-        local model = obj:FindFirstAncestorOfClass("Model")
-        if model and (model:FindFirstChild("Humanoid") or Players:GetPlayerFromCharacter(model)) then
-            return
-        end
-    end
+-- ============================================
+-- 3. TEXTOS DE ADVERTENCIA/ESTADO PERMANENTES (NUEVO, como en la imagen)
+-- ============================================
+pcall(function()
+    local StatusGui = Instance.new("ScreenGui")
+    StatusGui.Name = "DanielStatusGui"
+    StatusGui.ResetOnSpawn = false
+    StatusGui.DisplayOrder = 99997
+    StatusGui.Parent = PlayerGui
 
+    -- Marco semitransparente en esquina inferior izquierda
+    local LeftFrame = Instance.new("Frame")
+    LeftFrame.Size = UDim2.new(0, 180, 0, 80)
+    LeftFrame.Position = UDim2.new(0, 10, 1, -90)
+    LeftFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    LeftFrame.BackgroundTransparency = 0.5
+    LeftFrame.BorderSizePixel = 0
+    LeftFrame.Parent = StatusGui
+
+    local LeftCorner = Instance.new("UICorner")
+    LeftCorner.CornerRadius = UDim.new(0, 6)
+    LeftCorner.Parent = LeftFrame
+
+    -- Texto "FPS BOOST ACTIVATED"
+    local FPSLabel = Instance.new("TextLabel")
+    FPSLabel.Size = UDim2.new(1, -10, 0, 20)
+    FPSLabel.Position = UDim2.new(0, 5, 0, 5)
+    FPSLabel.BackgroundTransparency = 1
+    FPSLabel.Text = "FPS BOOST ACTIVATED"
+    FPSLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
+    FPSLabel.TextSize = 14
+    FPSLabel.Font = Enum.Font.GothamBold
+    FPSLabel.TextXAlignment = Enum.TextXAlignment.Left
+    FPSLabel.Parent = LeftFrame
+
+    -- Texto "Графика оптимизирована"
+    local GraphicLabel = Instance.new("TextLabel")
+    GraphicLabel.Size = UDim2.new(1, -10, 0, 18)
+    GraphicLabel.Position = UDim2.new(0, 5, 0, 28)
+    GraphicLabel.BackgroundTransparency = 1
+    GraphicLabel.Text = "Графика оптимизирована"
+    GraphicLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+    GraphicLabel.TextSize = 12
+    GraphicLabel.Font = Enum.Font.Gotham
+    GraphicLabel.TextXAlignment = Enum.TextXAlignment.Left
+    GraphicLabel.Parent = LeftFrame
+
+    -- Texto "Физика не изменена"
+    local PhysicsLabel = Instance.new("TextLabel")
+    PhysicsLabel.Size = UDim2.new(1, -10, 0, 18)
+    PhysicsLabel.Position = UDim2.new(0, 5, 0, 48)
+    PhysicsLabel.BackgroundTransparency = 1
+    PhysicsLabel.Text = "Физика не изменена"
+    PhysicsLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+    PhysicsLabel.TextSize = 12
+    PhysicsLabel.Font = Enum.Font.Gotham
+    PhysicsLabel.TextXAlignment = Enum.TextXAlignment.Left
+    PhysicsLabel.Parent = LeftFrame
+
+    -- Texto "DanielloScript" en esquina inferior derecha
+    local RightLabel = Instance.new("TextLabel")
+    RightLabel.Size = UDim2.new(0, 150, 0, 20)
+    RightLabel.Position = UDim2.new(1, -160, 1, -30)
+    RightLabel.BackgroundTransparency = 1
+    RightLabel.Text = "DanielloScript"
+    RightLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    RightLabel.TextSize = 12
+    RightLabel.Font = Enum.Font.GothamBold
+    RightLabel.TextXAlignment = Enum.TextXAlignment.Right
+    RightLabel.TextTransparency = 0.3
+    RightLabel.Parent = StatusGui
+end)
+
+-- ============================================
+-- 4. FILTRO ANTI-LAG MODIFICADO (Elimina piedras y efectos)
+-- ============================================
+local function CleanMapWithoutShield(obj)
     local name = obj.Name and string.lower(obj.Name) or ""
     local parentName = obj.Parent and string.lower(obj.Parent.Name) or ""
+    local className = obj.ClassName
 
-    -- Regla de oro intocable: Salvar Garou Dash y auras azules
-    if string.find(name, "dash") or string.find(name, "blue") or string.find(name, "garou") 
-       or string.find(parentName, "dash") or string.find(parentName, "garou") then 
-        return 
+    -- Piedras del Down Slam
+    if string.find(name, "slam") or string.find(name, "down") or string.find(name, "piedra") 
+       or string.find(name, "rock") or string.find(name, "stone") or string.find(name, "debris") 
+       or string.find(name, "fragment") or string.find(name, "escombro") or string.find(name, "roca")
+       or string.find(parentName, "slam") or string.find(parentName, "downslam") then
+        obj:Destroy()
+        return
+    end
+    
+    -- Efectos visuales
+    if string.find(name, "effect") or string.find(name, "aura") or string.find(name, "tornado") 
+       or string.find(name, "whirlwind") or string.find(name, "slash") or string.find(name, "orange") 
+       or string.find(name, "hit") or string.find(name, "explosion") or string.find(name, "blast")
+       or string.find(parentName, "visualeffects") or string.find(parentName, "fx") then
+        obj:Destroy()
+        return
     end
 
-    -- Borrar Palmeras
+    -- Árboles
     if string.find(name, "tree") or string.find(name, "palm") or string.find(name, "palmera") then
         obj:Destroy()
         return
     end
 
-    -- ELIMINAR EFECTOS VISUALES Y PIEDRAS DEL MAPA
-    if obj:IsA("BasePart") or obj:IsA("MeshPart") or obj:IsA("SpecialMesh") or obj:IsA("Decal") or obj:IsA("Texture") then
-        if obj.Name ~= "Terrain" and name ~= "baseplate" and not obj:IsDescendantOf(Workspace:FindFirstChild("Map")) then
-            
-            if parentName == "visualeffects" or string.find(parentName, "fx") or parentName == "debris" 
-               or string.find(name, "rock") or string.find(name, "debris") or string.find(name, "stone") 
-               or string.find(name, "tornado") or string.find(name, "whirlwind") or string.find(name, "effect")
-               or string.find(name, "orange") or string.find(name, "hit") or string.find(name, "slash")
-               or (obj:IsA("BasePart") and obj.CanCollide == false and not obj:IsA("MeshPart") and obj.Size.Y < 40)
-               or (obj:IsA("MeshPart") and obj.CanCollide == false) then
-                
-                pcall(function()
-                    obj.Transparency = 1
-                    if obj:IsA("BasePart") or obj:IsA("MeshPart") then
-                        obj.Size = Vector3.new(0, 0, 0)
-                        obj.Position = Vector3.new(0, -999, 0)
-                        obj.CanCollide = false
-                    end
-                end)
-            end
-        end
+    -- Partículas
+    if className == "ParticleEmitter" or className == "Trail" or className == "Beam" 
+       or className == "Smoke" or className == "Fire" or className == "Explosion" then
+        obj:Destroy()
+        return
     end
 
-    -- Apagar partículas
-    if obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") or obj:IsA("Smoke") or obj:IsA("Fire") then
-        pcall(function() obj.Enabled = false end)
-    elseif obj:IsA("Explosion") then
-        pcall(function() obj.Visible = false end)
+    -- Partes pequeñas sin colisión
+    if (className == "BasePart" or className == "MeshPart" or className == "Part") then
+        if obj.CanCollide == false or obj.Size.Magnitude < 5 then
+            obj:Destroy()
+            return
+        end
     end
 end
 
--- Escaneo en vivo super rápido
-for _, child in pairs(Workspace:GetDescendants()) do pcall(CleanMapOnly, child) end
-Workspace.DescendantAdded:Connect(function(descendant) pcall(CleanMapOnly, descendant) end)
+-- Escaneo inicial y en vivo
+for _, child in pairs(Workspace:GetDescendants()) do 
+    pcall(CleanMapWithoutShield, child) 
+end
+Workspace.DescendantAdded:Connect(function(descendant) 
+    pcall(CleanMapWithoutShield, descendant) 
+end)
 
--- Iluminación limpia
+spawn(function()
+    while wait(0.5) do
+        for _, obj in pairs(Workspace:GetDescendants()) do
+            pcall(CleanMapWithoutShield, obj)
+        end
+    end
+end)
+
+-- ============================================
+-- 5. ILUMINACIÓN LIMPIA
+-- ============================================
 pcall(function()
     Lighting.GlobalShadows = false
     Lighting.FogEnd = 1e6
     for _, effect in pairs(Lighting:GetChildren()) do
-        if effect:IsA("PostEffect") or effect:IsA("BloomEffect") or effect:IsA("BlurEffect") then effect.Enabled = false end
+        if effect:IsA("PostEffect") or effect:IsA("BloomEffect") or effect:IsA("BlurEffect") then 
+            effect.Enabled = false 
+        end
     end
 end)
