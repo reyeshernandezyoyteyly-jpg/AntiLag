@@ -19,6 +19,7 @@ pcall(function()
     local WelcomeGui = Instance.new("ScreenGui")
     WelcomeGui.Name = "DanielWelcomeGui"
     WelcomeGui.ResetOnSpawn = false
+    WelcomeGui.ZIndex = 1000
     WelcomeGui.Parent = PlayerGui
     
     -- Marco principal centrado
@@ -28,6 +29,7 @@ pcall(function()
     MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
     MainFrame.BackgroundTransparency = 0.15
     MainFrame.BorderSizePixel = 0
+    MainFrame.ZIndex = 1000
     MainFrame.Parent = WelcomeGui
     
     local UICorner = Instance.new("UICorner")
@@ -43,6 +45,7 @@ pcall(function()
     TitleLabel.TextColor3 = Color3.fromRGB(0, 255, 120) -- Verde neón
     TitleLabel.TextSize = 36
     TitleLabel.Font = Enum.Font.GothamBold
+    TitleLabel.ZIndex = 1000
     TitleLabel.Parent = MainFrame
     
     -- Subtítulo
@@ -54,6 +57,7 @@ pcall(function()
     SubLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
     SubLabel.TextSize = 16
     SubLabel.Font = Enum.Font.Gotham
+    SubLabel.ZIndex = 1000
     SubLabel.Parent = MainFrame
     
     -- Animación de desaparición después de 3 segundos
@@ -74,7 +78,7 @@ pcall(function()
     end)
 end)
 
--- 2. NOTIFICACIÓN FPS BOOST (Esquina inferior derecha)
+-- 2. NOTIFICACIÓN FPS BOOST (Esquina inferior derecha - VISIBLE)
 local FpsNotificationGui = nil
 local function CreateFpsNotification()
     local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
@@ -86,54 +90,60 @@ local function CreateFpsNotification()
     FpsNotificationGui = Instance.new("ScreenGui")
     FpsNotificationGui.Name = "DanielFpsGui"
     FpsNotificationGui.ResetOnSpawn = false
+    FpsNotificationGui.ZIndex = 9999 -- MUY ALTO PARA QUE SE VEA
     FpsNotificationGui.Parent = PlayerGui
     
     local MainFrame = Instance.new("Frame")
-    MainFrame.Size = UDim2.new(0, 280, 0, 110)
-    MainFrame.Position = UDim2.new(1, -295, 1, -125)
-    MainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    MainFrame.BackgroundTransparency = 0.2
-    MainFrame.BorderSizePixel = 0
+    MainFrame.Size = UDim2.new(0, 350, 0, 140)
+    MainFrame.Position = UDim2.new(1, -370, 1, -160)
+    MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    MainFrame.BackgroundTransparency = 0.1
+    MainFrame.BorderSizePixel = 2
+    MainFrame.BorderColor3 = Color3.fromRGB(0, 255, 120)
+    MainFrame.ZIndex = 9999
     MainFrame.Parent = FpsNotificationGui
     
     local UICorner = Instance.new("UICorner")
-    UICorner.CornerRadius = UDim.new(0, 8)
+    UICorner.CornerRadius = UDim.new(0, 12)
     UICorner.Parent = MainFrame
     
     -- Título Principal
     local TitleLabel = Instance.new("TextLabel")
-    TitleLabel.Size = UDim2.new(1, 0, 0, 35)
-    TitleLabel.Position = UDim2.new(0, 10, 0, 8)
+    TitleLabel.Size = UDim2.new(1, 0, 0, 40)
+    TitleLabel.Position = UDim2.new(0, 15, 0, 10)
     TitleLabel.BackgroundTransparency = 1
     TitleLabel.Text = "DanielSonrieScript"
     TitleLabel.TextColor3 = Color3.fromRGB(0, 255, 120)
-    TitleLabel.TextSize = 18
+    TitleLabel.TextSize = 22
     TitleLabel.Font = Enum.Font.GothamBold
     TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
+    TitleLabel.ZIndex = 9999
     TitleLabel.Parent = MainFrame
     
     -- Subtexto FPS
     local FpsLabel = Instance.new("TextLabel")
-    FpsLabel.Size = UDim2.new(1, 0, 0, 25)
-    FpsLabel.Position = UDim2.new(0, 10, 0, 40)
+    FpsLabel.Size = UDim2.new(1, 0, 0, 30)
+    FpsLabel.Position = UDim2.new(0, 15, 0, 50)
     FpsLabel.BackgroundTransparency = 1
-    FpsLabel.Text = "FPS BOOST ACTIVATED"
+    FpsLabel.Text = "✓ FPS BOOST ACTIVATED"
     FpsLabel.TextColor3 = Color3.fromRGB(0, 255, 150)
-    FpsLabel.TextSize = 14
+    FpsLabel.TextSize = 16
     FpsLabel.Font = Enum.Font.Gotham
     FpsLabel.TextXAlignment = Enum.TextXAlignment.Left
+    FpsLabel.ZIndex = 9999
     FpsLabel.Parent = MainFrame
     
     -- Subtexto respuesta
     local ResponseLabel = Instance.new("TextLabel")
     ResponseLabel.Size = UDim2.new(1, 0, 0, 25)
-    ResponseLabel.Position = UDim2.new(0, 10, 0, 65)
+    ResponseLabel.Position = UDim2.new(0, 15, 0, 85)
     ResponseLabel.BackgroundTransparency = 1
     ResponseLabel.Text = "Escribe: Si Dad UwU para cerrar"
-    ResponseLabel.TextColor3 = Color3.fromRGB(180, 180, 180)
-    ResponseLabel.TextSize = 12
+    ResponseLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
+    ResponseLabel.TextSize = 13
     ResponseLabel.Font = Enum.Font.Gotham
     ResponseLabel.TextXAlignment = Enum.TextXAlignment.Left
+    ResponseLabel.ZIndex = 9999
     ResponseLabel.Parent = MainFrame
     
     return FpsNotificationGui
@@ -248,4 +258,4 @@ Workspace.DescendantAdded:Connect(function(descendant)
     end)
 end)
 
-print("🚀 Modo Papa Extremo Activo - DanielSonrie v6")
+print("🚀 Modo Papa Extremo Activo - DanielSonrie v7")
