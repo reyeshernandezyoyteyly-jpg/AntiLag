@@ -22,12 +22,10 @@ LoadGui.ResetOnSpawn = false
 LoadGui.Parent = PlayerGui
 LoadGui.DisplayOrder = 999999
 
--- Efecto borroso
 local Blur = Instance.new("BlurEffect")
 Blur.Size = 12
 Blur.Parent = Lighting
 
--- Fondo semitransparente
 local Fondo = Instance.new("Frame")
 Fondo.Size = UDim2.new(2, 0, 2, 0)
 Fondo.Position = UDim2.new(-0.5, 0, -0.5, 0)
@@ -36,7 +34,6 @@ Fondo.BackgroundTransparency = 0.2
 Fondo.BorderSizePixel = 0
 Fondo.Parent = LoadGui
 
--- Marco de la barra
 local BarFrame = Instance.new("Frame")
 BarFrame.Size = UDim2.new(0, 300, 0, 30)
 BarFrame.Position = UDim2.new(0.5, -150, 0.5, -15)
@@ -49,7 +46,6 @@ local BarCorner = Instance.new("UICorner")
 BarCorner.CornerRadius = UDim.new(0, 15)
 BarCorner.Parent = BarFrame
 
--- Barra de progreso
 local ProgressBar = Instance.new("Frame")
 ProgressBar.Size = UDim2.new(0, 0, 1, 0)
 ProgressBar.BackgroundColor3 = Color3.fromRGB(255, 200, 0)
@@ -60,7 +56,6 @@ local ProgressCorner = Instance.new("UICorner")
 ProgressCorner.CornerRadius = UDim.new(0, 15)
 ProgressCorner.Parent = ProgressBar
 
--- Texto "Cargando..." (BLANCO)
 local LoadText = Instance.new("TextLabel")
 LoadText.Size = UDim2.new(0, 200, 0, 30)
 LoadText.Position = UDim2.new(0.5, -100, 0.5, -60)
@@ -71,7 +66,6 @@ LoadText.TextSize = 20
 LoadText.Font = Enum.Font.GothamBold
 LoadText.Parent = LoadGui
 
--- Porcentaje (BLANCO)
 local PercentText = Instance.new("TextLabel")
 PercentText.Size = UDim2.new(0, 100, 0, 30)
 PercentText.Position = UDim2.new(0.5, -50, 0.5, 25)
@@ -82,7 +76,6 @@ PercentText.TextSize = 18
 PercentText.Font = Enum.Font.GothamBold
 PercentText.Parent = LoadGui
 
--- Animación de puntos suspensivos
 local puntos = 0
 local cargaLoop = task.spawn(function()
     while LoadGui and LoadGui.Parent do
@@ -103,7 +96,7 @@ function ejecutarScriptPrincipal()
     Blur:Destroy()
     
     -- ============================================
-    -- TEXTO DE BIENVENIDA
+    -- TEXTO DE BIENVENIDA (ABAJO - SIN FONDO NEGRO)
     -- ============================================
     pcall(function()
         local WelcomeGui = Instance.new("ScreenGui")
@@ -111,48 +104,40 @@ function ejecutarScriptPrincipal()
         WelcomeGui.ResetOnSpawn = false
         WelcomeGui.Parent = PlayerGui
 
-        local MainFrame = Instance.new("Frame")
-        MainFrame.Size = UDim2.new(0, 380, 0, 110)
-        MainFrame.Position = UDim2.new(0.5, -190, 0.5, -55)
-        MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-        MainFrame.BackgroundTransparency = 0.4
-        MainFrame.BorderSizePixel = 0
-        MainFrame.Parent = WelcomeGui
-
-        local MainCorner = Instance.new("UICorner")
-        MainCorner.CornerRadius = UDim.new(0, 15)
-        MainCorner.Parent = MainFrame
-
+        -- Solo el texto, sin fondo
         local TitleLabel = Instance.new("TextLabel")
-        TitleLabel.Size = UDim2.new(1, 0, 0, 45)
-        TitleLabel.Position = UDim2.new(0, 0, 0, 5)
+        TitleLabel.Size = UDim2.new(0, 300, 0, 40)
+        TitleLabel.Position = UDim2.new(0.5, -150, 1, 0)  -- Empieza abajo del todo
         TitleLabel.BackgroundTransparency = 1
         TitleLabel.Text = "🥔 MODO PATATA 🥔"
         TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
         TitleLabel.TextSize = 28
         TitleLabel.Font = Enum.Font.GothamBold
-        TitleLabel.Parent = MainFrame
+        TitleLabel.Parent = WelcomeGui
 
         local SubLabel = Instance.new("TextLabel")
-        SubLabel.Size = UDim2.new(1, 0, 0, 25)
-        SubLabel.Position = UDim2.new(0, 0, 0, 70)
+        SubLabel.Size = UDim2.new(0, 300, 0, 20)
+        SubLabel.Position = UDim2.new(0.5, -150, 1, 0)
         SubLabel.BackgroundTransparency = 1
         SubLabel.Text = "Developed by DanielSonrieScripts"
         SubLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
         SubLabel.TextSize = 12
         SubLabel.Font = Enum.Font.Gotham
-        SubLabel.Parent = MainFrame
+        SubLabel.Parent = WelcomeGui
 
-        MainFrame.Position = UDim2.new(0.5, -190, 1, 0)
-        local entrarAnim = TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, -190, 0.5, -55)})
-        entrarAnim:Play()
+        -- Animación: suben desde abajo y se quedan abajo
+        local entrarTitle = TweenService:Create(TitleLabel, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, -150, 0.85, 0)})
+        local entrarSub = TweenService:Create(SubLabel, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, -150, 0.91, 0)})
+        entrarTitle:Play()
+        entrarSub:Play()
         
         task.wait(3)
         
-        local salirAnim = TweenService:Create(MainFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Position = UDim2.new(0.5, -190, 1, 0), BackgroundTransparency = 1})
-        salirAnim:Play()
-        TweenService:Create(TitleLabel, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 1}):Play()
-        TweenService:Create(SubLabel, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 1}):Play()
+        -- Salida: se desvanecen
+        local salirTitle = TweenService:Create(TitleLabel, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 1})
+        local salirSub = TweenService:Create(SubLabel, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 1})
+        salirTitle:Play()
+        salirSub:Play()
         
         task.wait(0.5)
         WelcomeGui:Destroy()
@@ -212,7 +197,7 @@ function ejecutarScriptPrincipal()
     end)
 
     -- ============================================
-    -- PANEL "FPS BOOST BETA" (ABJO - TOPE INFERIOR)
+    -- PANEL "FPS BOOST BETA" (Título blanco, texto normal)
     -- ============================================
     pcall(function()
         local BoostGui = Instance.new("ScreenGui")
@@ -222,7 +207,7 @@ function ejecutarScriptPrincipal()
 
         local BoostFrame = Instance.new("Frame")
         BoostFrame.Size = UDim2.new(0, 160, 0, 95)
-        BoostFrame.Position = UDim2.new(0, 10, 1, 0)  -- Empieza abajo del todo
+        BoostFrame.Position = UDim2.new(0, 10, 1, 0)
         BoostFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
         BoostFrame.BackgroundTransparency = 0.5
         BoostFrame.BorderSizePixel = 0
@@ -232,7 +217,6 @@ function ejecutarScriptPrincipal()
         BoostCorner.CornerRadius = UDim.new(0, 8)
         BoostCorner.Parent = BoostFrame
 
-        -- Animación de entrada (sube hasta tope inferior)
         local entrarAnim = TweenService:Create(BoostFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0, 10, 1, -105)})
         entrarAnim:Play()
 
@@ -248,12 +232,12 @@ function ejecutarScriptPrincipal()
         TitleLabel.TextXAlignment = Enum.TextXAlignment.Center
         TitleLabel.Parent = BoostFrame
 
-        -- Lista de mejoras (BLANCO)
+        -- Lista de mejoras (con colores originales)
         local mejoras = {
-            {texto = "rocas eliminadas", color = Color3.fromRGB(255, 255, 255)},
-            {texto = "modo patata", color = Color3.fromRGB(255, 255, 255)},
-            {texto = "efectos reducidos", color = Color3.fromRGB(255, 255, 255)},
-            {texto = "arboles removidos", color = Color3.fromRGB(255, 255, 255)}
+            {texto = "rocas eliminadas", color = Color3.fromRGB(0, 255, 0)},
+            {texto = "modo patata", color = Color3.fromRGB(0, 255, 0)},
+            {texto = "efectos reducidos", color = Color3.fromRGB(0, 255, 0)},
+            {texto = "arboles removidos", color = Color3.fromRGB(0, 255, 0)}
         }
 
         local yPos = 30
@@ -271,7 +255,6 @@ function ejecutarScriptPrincipal()
             yPos = yPos + 18
         end
 
-        -- Salir después de 8 segundos
         task.spawn(function()
             task.wait(8)
             local salirAnim = TweenService:Create(BoostFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Position = UDim2.new(0, 10, 1, 0), BackgroundTransparency = 1})
