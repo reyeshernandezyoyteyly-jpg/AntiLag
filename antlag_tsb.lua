@@ -1,11 +1,11 @@
--- DanielScript Ultimate Anti-Lag | TSB No Particles Edition
+-- DanielScript Ultimate Anti-Lag | Universal Hybrid Edition
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 local TweenService = game:GetService("TweenService")
 local LocalPlayer = Players.LocalPlayer
 
-print("⚔️ TSB Anti-Lag (Sin Partículas - Salvar Garou Dash) por DanielSonrie")
+print("⚔️ TSB Hybrid Anti-Lag por DanielSonrie")
 
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 if PlayerGui:FindFirstChild("DanielWelcomeGui") then PlayerGui.DanielWelcomeGui:Destroy() end
@@ -73,7 +73,7 @@ pcall(function()
     end)
 end)
 
--- 2. CARTEL EN LA ESQUINA (Libre del botón de saltar y desaparece en 6s)
+-- 2. CARTEL EN LA ESQUINA CORREGIDO (Libre del botón de saltar - 6s)
 pcall(function()
     local ToastGui = Instance.new("ScreenGui")
     ToastGui.Name = "DanielToastGui"
@@ -126,49 +126,74 @@ pcall(function()
     end)
 end)
 
--- 3. FILTRO ULTRA AGRESIVO: ELIMINA TODAS LAS PARTÍCULAS MENOS EL DASH DE GAROU
-local function CleanAllParticles(obj)
-    -- Verificar si pertenece al Dash de Garou o efectos azules esenciales
-    local lowerName = string.lower(obj.Name)
-    local parentName = obj.Parent and string.lower(obj.Parent.Name) or ""
-    
-    if string.find(lowerName, "dash") or string.find(lowerName, "blue") or string.find(lowerName, "garou") 
-       or string.find(parentName, "dash") or string.find(parentName, "garou") then 
-        return 
+-- 3. INTERCEPTOR MAESTRO DE RAÍZ (Método del script que me pasaste)
+local rawget, rawset = rawget, rawset
+local type, pcall = type, pcall
+local string_lower = string.lower
+local string_find = string.find
+
+local function CleanObject(obj)
+    local name = obj.Name and string_lower(obj.Name) or ""
+    local parentName = obj.Parent and string_lower(obj.Parent.Name) or ""
+
+    -- REGLA DE ORO: Salvar Garou Dash y efectos azules esenciales
+    if string_find(name, "dash") or string_find(name, "blue") or string_find(name, "garou") 
+       or string_find(parentName, "dash") or string_find(parentName, "garou") then 
+        return obj 
     end
 
-    -- Eliminar Palmeras por defecto (Siguen dando lag)
-    if string.find(lowerName, "tree") or string.find(lowerName, "palm") or string.find(lowerName, "palmera") then
+    -- Borrar Palmeras
+    if string_find(name, "tree") or string_find(name, "palm") or string_find(name, "palmera") then
         obj:Destroy()
-        return
+        return nil
     end
 
-    -- Filtro de Rocas Down Slam (Invisibles y al subsuelo)
-    if obj:IsA("BasePart") then
-        if parentName == "visualeffects" or string.find(parentName, "fx") or parentName == "debris" or string.find(lowerName, "rock") or string.find(lowerName, "debris") then
-            if obj.Name ~= "Terrain" and obj.Size.Y < 30 and not obj:IsDescendantOf(Workspace:FindFirstChild("Map")) then
-                pcall(function()
-                    obj.Transparency = 1
-                    obj.Size = Vector3.new(0, 0, 0)
-                    obj.Position = Vector3.new(0, -999, 0)
-                    obj.CanCollide = false
-                end)
+    -- Desaparecer Rocas (Saitama Normal y Down Slams) de forma instantánea
+    if obj:IsA("BasePart") or obj:IsA("MeshPart") then
+        if parentName == "visualeffects" or string_find(parentName, "fx") or parentName == "debris" 
+           or string_find(name, "rock") or string_find(name, "debris") or string_find(name, "stone") then
+            if obj.Name ~= "Terrain" and name ~= "baseplate" and obj.Size.Y < 30 then
+                obj.Transparency = 1
+                obj.Size = Vector3.new(0, 0, 0)
+                obj.Position = Vector3.new(0, -999, 0)
+                obj.CanCollide = false
+                return obj
             end
         end
     end
 
-    -- APAGAR LITERALMENTE TODAS LAS PARTÍCULAS DEL JUEGO
+    -- Apagar todas las demás partículas pesadas
     if obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") or obj:IsA("Smoke") or obj:IsA("Fire") then
-        pcall(function()
-            obj.Enabled = false
-        end)
+        obj.Enabled = false
     elseif obj:IsA("Explosion") then
-        pcall(function()
-            obj.Visible = false
-        end)
+        obj.Visible = false
     end
+
+    return obj
 end
 
--- Ejecución en vivo y escaneo inicial
-for _, child in pairs(Workspace:GetDescendants()) do pcall(CleanAllParticles, child) end
-Workspace.DescendantAdded:Connect(function(descendant) pcall(CleanAllParticles, descendant) end)
+-- Hook/Intercepción en la creación de instancias (La magia del script FPS UP)
+local oldNew = Instance.new
+if typeof(hookfunction) == "function" then
+    hookfunction(Instance.new, function(className, parent)
+        local obj = oldNew(className, parent)
+        if obj then
+            local success, result = pcall(CleanObject, obj)
+            if success and result == nil then return nil end
+        end
+        return obj
+    end)
+end
+
+-- Escaneo en vivo tradicional para asegurar doble protección
+for _, child in pairs(Workspace:GetDescendants()) do pcall(CleanObject, child) end
+Workspace.DescendantAdded:Connect(function(descendant) pcall(CleanObject, descendant) end)
+
+-- Iluminación optimizada
+pcall(function()
+    Lighting.GlobalShadows = false
+    Lighting.FogEnd = 1e6
+    for _, effect in pairs(Lighting:GetChildren()) do
+        if effect:IsA("PostEffect") or effect:IsA("BloomEffect") or effect:IsA("BlurEffect") then effect.Enabled = false end
+    end
+end)
