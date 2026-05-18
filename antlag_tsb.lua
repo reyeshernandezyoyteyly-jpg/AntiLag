@@ -1,11 +1,11 @@
--- DanielScript Ultimate Anti-Lag | TSB Hybrid Core V2
+-- DanielScript Ultimate Anti-Lag | TSB Safe Body Clean V3
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 local TweenService = game:GetService("TweenService")
 local LocalPlayer = Players.LocalPlayer
 
-print("⚔️ TSB Hybrid V2 (Anti Down-Slam Absoluto) por DanielSonrie")
+print("⚔️ TSB Anti-Lag (Escudo de Avatar Activo) por DanielSonrie")
 
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 if PlayerGui:FindFirstChild("DanielWelcomeGui") then PlayerGui.DanielWelcomeGui:Destroy() end
@@ -73,7 +73,7 @@ pcall(function()
     end)
 end)
 
--- 2. CARTEL EN LA ESQUINA CORREGIDO (Libre del botón de saltar - 6s)
+-- 2. CARTEL EN LA ESQUINA (Libre del botón de saltar - 6s)
 pcall(function()
     local ToastGui = Instance.new("ScreenGui")
     ToastGui.Name = "DanielToastGui"
@@ -126,69 +126,67 @@ pcall(function()
     end)
 end)
 
--- 3. LIMPIADOR MAESTRO INTERNO
-local function CleanObject(obj)
+-- 3. FILTRO CORREGIDO CON ESCUDO TOTAL PARA PERSONAJES
+local function CleanMapOnly(obj)
+    -- ESCUDO SUPREMO: Si el objeto está dentro de cualquier personaje (tú o enemigos), IGNÓRALO
+    if obj:IsDescendantOf(Workspace) then
+        local model = obj:FindFirstAncestorOfClass("Model")
+        if model and (model:FindFirstChild("Humanoid") or Players:GetPlayerFromCharacter(model)) then
+            return
+        end
+    end
+
     local name = obj.Name and string.lower(obj.Name) or ""
     local parentName = obj.Parent and string.lower(obj.Parent.Name) or ""
 
-    -- Regla de oro: Salvar Garou Dash y efectos azules
+    -- Regla de oro intocable: Salvar Garou Dash y auras azules
     if string.find(name, "dash") or string.find(name, "blue") or string.find(name, "garou") 
        or string.find(parentName, "dash") or string.find(parentName, "garou") then 
-        return obj 
+        return 
     end
 
     -- Borrar Palmeras
     if string.find(name, "tree") or string.find(name, "palm") or string.find(name, "palmera") then
         obj:Destroy()
-        return nil
+        return
     end
 
-    -- ELIMINACIÓN TOTAL DE ROCAS (Gancho + Detección agresiva de Down Slam)
-    if obj:IsA("BasePart") or obj:IsA("MeshPart") then
-        if parentName == "visualeffects" or string.find(parentName, "fx") or parentName == "debris" 
-           or string.find(name, "rock") or string.find(name, "debris") or string.find(name, "stone") or name == "part"
-           or (parentName == "workspace" and obj.CanCollide == false and obj.Size.Y < 25 and not obj:IsDescendantOf(Workspace:FindFirstChild("Map"))) then
+    -- ELIMINAR EFECTOS VISUALES Y PIEDRAS DEL MAPA
+    if obj:IsA("BasePart") or obj:IsA("MeshPart") or obj:IsA("SpecialMesh") or obj:IsA("Decal") or obj:IsA("Texture") then
+        if obj.Name ~= "Terrain" and name ~= "baseplate" and not obj:IsDescendantOf(Workspace:FindFirstChild("Map")) then
             
-            if obj.Name ~= "Terrain" and name ~= "baseplate" then
+            if parentName == "visualeffects" or string.find(parentName, "fx") or parentName == "debris" 
+               or string.find(name, "rock") or string.find(name, "debris") or string.find(name, "stone") 
+               or string.find(name, "tornado") or string.find(name, "whirlwind") or string.find(name, "effect")
+               or string.find(name, "orange") or string.find(name, "hit") or string.find(name, "slash")
+               or (obj:IsA("BasePart") and obj.CanCollide == false and not obj:IsA("MeshPart") and obj.Size.Y < 40)
+               or (obj:IsA("MeshPart") and obj.CanCollide == false) then
+                
                 pcall(function()
                     obj.Transparency = 1
-                    obj.Size = Vector3.new(0, 0, 0)
-                    obj.Position = Vector3.new(0, -999, 0)
-                    obj.CanCollide = false
+                    if obj:IsA("BasePart") or obj:IsA("MeshPart") then
+                        obj.Size = Vector3.new(0, 0, 0)
+                        obj.Position = Vector3.new(0, -999, 0)
+                        obj.CanCollide = false
+                    end
                 end)
-                return obj
             end
         end
     end
 
-    -- Desactivar partículas pesadas
+    -- Apagar partículas
     if obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") or obj:IsA("Smoke") or obj:IsA("Fire") then
-        obj.Enabled = false
+        pcall(function() obj.Enabled = false end)
     elseif obj:IsA("Explosion") then
-        obj.Visible = false
+        pcall(function() obj.Visible = false end)
     end
-
-    return obj
 end
 
--- Hook/Intercepción en la creación de instancias (Doble método)
-local oldNew = Instance.new
-if typeof(hookfunction) == "function" then
-    hookfunction(Instance.new, function(className, parent)
-        local obj = oldNew(className, parent)
-        if obj then
-            local success, result = pcall(CleanObject, obj)
-            if success and result == nil then return nil end
-        end
-        return obj
-    end)
-end
+-- Escaneo en vivo super rápido
+for _, child in pairs(Workspace:GetDescendants()) do pcall(CleanMapOnly, child) end
+Workspace.DescendantAdded:Connect(function(descendant) pcall(CleanMapOnly, descendant) end)
 
--- Escaneo masivo inicial y en vivo por si falla el hook en celular
-for _, child in pairs(Workspace:GetDescendants()) do pcall(CleanObject, child) end
-Workspace.DescendantAdded:Connect(function(descendant) pcall(CleanObject, descendant) end)
-
--- Optimizador de Iluminación
+-- Iluminación limpia
 pcall(function()
     Lighting.GlobalShadows = false
     Lighting.FogEnd = 1e6
