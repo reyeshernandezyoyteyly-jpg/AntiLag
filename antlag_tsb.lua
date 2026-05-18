@@ -5,9 +5,8 @@ local Workspace = game:GetService("Workspace")
 local TweenService = game:GetService("TweenService")
 local LocalPlayer = Players.LocalPlayer
 
-print("⚔️ TSB Anti-Lag v7 (Tiempos de UI Corregidos) por Daniel")
+print("⚔️ TSB Anti-Lag Definitivo por DanielSonrie")
 
--- Limpiar UIs anteriores si existen
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 if PlayerGui:FindFirstChild("DanielWelcomeGui") then PlayerGui.DanielWelcomeGui:Destroy() end
 if PlayerGui:FindFirstChild("DanielToastGui") then PlayerGui.DanielToastGui:Destroy() end
@@ -28,10 +27,9 @@ pcall(function()
     CenterLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     CenterLabel.TextSize = 28
     CenterLabel.Font = Enum.Font.GothamBold
-    CenterLabel.TextStrokeTransparency = 0.5 -- Sombra para que se lea chido
+    CenterLabel.TextStrokeTransparency = 0.5
     CenterLabel.Parent = WelcomeGui
 
-    -- Esperar 3 segundos y desvanecer
     task.spawn(function()
         task.wait(3)
         local tweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Linear)
@@ -43,7 +41,7 @@ pcall(function()
     end)
 end)
 
--- 2. CARTEL NEGRO DE LA ESQUINA (Desaparece en 6 segundos)
+-- 2. CARTEL CON FONDO NEGRO EN LA ESQUINA (Desaparece en 6 segundos y libre del botón)
 pcall(function()
     local ToastGui = Instance.new("ScreenGui")
     ToastGui.Name = "DanielToastGui"
@@ -53,7 +51,8 @@ pcall(function()
     
     local MainFrame = Instance.new("Frame")
     MainFrame.Size = UDim2.new(0, 180, 0, 50)
-    MainFrame.Position = UDim2.new(1, -240, 1, -150) -- Alejado del botón de saltar
+    -- Movido más a la izquierda para que dejes libre el botón de saltar
+    MainFrame.Position = UDim2.new(1, -240, 1, -150) 
     MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
     MainFrame.BackgroundTransparency = 0.3
     MainFrame.BorderSizePixel = 0
@@ -85,7 +84,6 @@ pcall(function()
     SubLabel.TextXAlignment = Enum.TextXAlignment.Right
     SubLabel.Parent = MainFrame
 
-    -- Esperar 6 segundos y desvanecer todo junto
     task.spawn(function()
         task.wait(6)
         local tweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Linear)
@@ -99,8 +97,9 @@ pcall(function()
     end)
 end)
 
--- 3. FILTRO SUPREMO (Borra Palmeras y Rocas de Golpes)
+-- 3. ELIMINACIÓN DE LAG REAL (Palmeras, Rocas del mapa y de Golpes)
 local function CleanLaggyThings(obj)
+    -- Respetar tu Dash Azul
     local isDash = false
     pcall(function()
         local n = string.lower(obj.Name)
@@ -110,7 +109,7 @@ local function CleanLaggyThings(obj)
     end)
     if isDash then return end
 
-    -- Eliminar Palmeras
+    -- BORRAR PALMERAS POR COMPLETO
     local isTree = false
     pcall(function()
         local n = string.lower(obj.Name)
@@ -123,15 +122,17 @@ local function CleanLaggyThings(obj)
         return
     end
 
-    -- Eliminar Rocas de golpes
+    -- BORRAR ROCAS (Tanto las del mapa roto como las generadas por golpes de jugadores)
     local isRockDebris = false
     pcall(function()
         if obj:IsA("BasePart") then
             local n = string.lower(obj.Name)
             if obj.Parent and (obj.Parent.Name == "VisualEffects" or string.find(string.lower(obj.Parent.Name), "fx") or obj.Parent.Name == "Debris") then
                 isRockDebris = true
-            elseif not obj.Parent:FindFirstChild("Humanoid") and (string.find(n, "rock") or string.find(n, "debris") or string.find(n, "stone") or n == "part") then
-                if obj.Name ~= "Terrain" and obj.Size.Y < 30 then
+            elseif not obj.Parent:FindFirstChild("Humanoid") and (string.find(n, "rock") or string.find(n, "debris") or string.find(n, "stone") or n == "part" or obj.Name == "MeshPart") then
+                if obj.Name ~= "Terrain" and obj.Size.Y < 30 and not obj:IsDescendantOf(Workspace:FindFirstChild("Map")) then
+                    isRockDebris = true
+                elseif obj.CanCollide == false or obj.Velocity.Magnitude > 0 then
                     isRockDebris = true
                 end
             end
@@ -145,7 +146,7 @@ local function CleanLaggyThings(obj)
         return
     end
 
-    -- Modo Papa
+    -- Texturas y partículas pesadas al mínimo (Modo Papa)
     if obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") then
         if not obj:IsDescendantOf(LocalPlayer.Character) then
             obj.Enabled = false
@@ -159,7 +160,7 @@ local function CleanLaggyThings(obj)
     end
 end
 
--- Iluminación optimizada
+-- Optimizar Iluminación
 pcall(function()
     Lighting.GlobalShadows = false
     Lighting.FogEnd = 1e6
