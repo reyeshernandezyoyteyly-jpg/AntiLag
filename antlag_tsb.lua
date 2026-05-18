@@ -4,6 +4,7 @@ local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 local TweenService = game:GetService("TweenService")
 local LocalPlayer = Players.LocalPlayer
+local UserInputService = game:GetService("UserInputService")
 
 print("⚔️ TSB Anti-Lag Iniciado por DanielSonrie")
 
@@ -73,7 +74,91 @@ pcall(function()
     end)
 end)
 
--- 2. FILTRO INTELIGENTE (Elimina rocas del jugador, down slam, rocas lanzadas)
+-- 2. NOTIFICACIÓN FPS BOOST (Esquina inferior derecha)
+local FpsNotificationGui = nil
+local function CreateFpsNotification()
+    local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+    
+    if PlayerGui:FindFirstChild("DanielFpsGui") then 
+        PlayerGui.DanielFpsGui:Destroy() 
+    end
+    
+    FpsNotificationGui = Instance.new("ScreenGui")
+    FpsNotificationGui.Name = "DanielFpsGui"
+    FpsNotificationGui.ResetOnSpawn = false
+    FpsNotificationGui.Parent = PlayerGui
+    
+    local MainFrame = Instance.new("Frame")
+    MainFrame.Size = UDim2.new(0, 280, 0, 110)
+    MainFrame.Position = UDim2.new(1, -295, 1, -125)
+    MainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    MainFrame.BackgroundTransparency = 0.2
+    MainFrame.BorderSizePixel = 0
+    MainFrame.Parent = FpsNotificationGui
+    
+    local UICorner = Instance.new("UICorner")
+    UICorner.CornerRadius = UDim.new(0, 8)
+    UICorner.Parent = MainFrame
+    
+    -- Título Principal
+    local TitleLabel = Instance.new("TextLabel")
+    TitleLabel.Size = UDim2.new(1, 0, 0, 35)
+    TitleLabel.Position = UDim2.new(0, 10, 0, 8)
+    TitleLabel.BackgroundTransparency = 1
+    TitleLabel.Text = "DanielSonrieScript"
+    TitleLabel.TextColor3 = Color3.fromRGB(0, 255, 120)
+    TitleLabel.TextSize = 18
+    TitleLabel.Font = Enum.Font.GothamBold
+    TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
+    TitleLabel.Parent = MainFrame
+    
+    -- Subtexto FPS
+    local FpsLabel = Instance.new("TextLabel")
+    FpsLabel.Size = UDim2.new(1, 0, 0, 25)
+    FpsLabel.Position = UDim2.new(0, 10, 0, 40)
+    FpsLabel.BackgroundTransparency = 1
+    FpsLabel.Text = "FPS BOOST ACTIVATED"
+    FpsLabel.TextColor3 = Color3.fromRGB(0, 255, 150)
+    FpsLabel.TextSize = 14
+    FpsLabel.Font = Enum.Font.Gotham
+    FpsLabel.TextXAlignment = Enum.TextXAlignment.Left
+    FpsLabel.Parent = MainFrame
+    
+    -- Subtexto respuesta
+    local ResponseLabel = Instance.new("TextLabel")
+    ResponseLabel.Size = UDim2.new(1, 0, 0, 25)
+    ResponseLabel.Position = UDim2.new(0, 10, 0, 65)
+    ResponseLabel.BackgroundTransparency = 1
+    ResponseLabel.Text = "Escribe: Si Dad UwU para cerrar"
+    ResponseLabel.TextColor3 = Color3.fromRGB(180, 180, 180)
+    ResponseLabel.TextSize = 12
+    ResponseLabel.Font = Enum.Font.Gotham
+    ResponseLabel.TextXAlignment = Enum.TextXAlignment.Left
+    ResponseLabel.Parent = MainFrame
+    
+    return FpsNotificationGui
+end
+
+CreateFpsNotification()
+
+-- 3. Sistema de comando para cerrar notificación
+local chatInputDetected = false
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+    
+    if input.KeyCode == Enum.KeyCode.Slash or input.KeyCode == Enum.KeyCode.Quote then
+        chatInputDetected = true
+    end
+end)
+
+-- Monitorear si el usuario escribe "Si Dad UwU"
+game:GetService("RunService").Heartbeat:Connect(function()
+    if FpsNotificationGui and FpsNotificationGui.Parent then
+        -- Podrías agregar lógica adicional aquí si lo necesitas
+    end
+end)
+
+-- 4. FILTRO INTELIGENTE (Elimina rocas del jugador, down slam, rocas lanzadas)
 local function CleanLaggyThings(obj)
     if not obj or not obj.Parent then return end
     
@@ -101,7 +186,7 @@ local function CleanLaggyThings(obj)
     end
 end
 
--- 3. MODIFICAR DASH DE GAROU - Línea azul tipo Flag Potato
+-- 5. MODIFICAR DASH DE GAROU - Línea azul tipo Flag Potato
 local function OptimizeDash(obj)
     if not obj or not obj.Parent then return end
     
@@ -137,7 +222,7 @@ local function OptimizeDash(obj)
     end
 end
 
--- 4. OPTIMIZAR ILUMINACIÓN
+-- 6. OPTIMIZAR ILUMINACIÓN
 pcall(function()
     Lighting.GlobalShadows = false
     Lighting.FogEnd = 1e6
@@ -163,4 +248,4 @@ Workspace.DescendantAdded:Connect(function(descendant)
     end)
 end)
 
-print("🚀 Modo Papa Extremo Activo - DanielSonrie v5")
+print("🚀 Modo Papa Extremo Activo - DanielSonrie v6")
