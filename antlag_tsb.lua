@@ -1,10 +1,10 @@
--- ANTI-LAG DEFINITIVO - CON DUMMY 100% PROTEGIDO
+-- ANTI-LAG FINAL - SIN CAMBIAR TEXTURAS - DanielSonrieScripts
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 local LocalPlayer = Players.LocalPlayer
 
-print("⚔️ ANTI-LAG - DUMMY PROTEGIDO")
+print("⚔️ ANTI-LAG FINAL - DanielSonrieScripts")
 
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 for _, gui in pairs(PlayerGui:GetChildren()) do
@@ -127,26 +127,29 @@ pcall(function()
 end)
 
 -- ============================================
--- LISTA DE NOMBRES PROHIBIDOS (NO ELIMINAR)
+-- ELIMINAR ÁRBOLES
 -- ============================================
-local nombresProtegidos = {
-    "punetazo", "golpes", "empujar", "corte", "superior", "sucesivos",
-    "dummy", "training", "target", "humanoid", "modo serio",
-    "puñetazo", "normal", "1", "2", "3", "4", "si", "no"
-}
-
-local function esProtegido(obj)
-    local nombre = obj.Name and string.lower(obj.Name) or ""
-    for _, protegido in pairs(nombresProtegidos) do
-        if nombre:find(protegido) then
-            return true
+pcall(function()
+    for _, obj in pairs(Workspace:GetDescendants()) do
+        local nombre = obj.Name and string.lower(obj.Name) or ""
+        if nombre:find("tree") or nombre:find("palm") or nombre:find("palmera") then
+            obj:Destroy()
         end
     end
-    
-    -- Proteger cualquier cosa con Humanoid
+end)
+
+-- ============================================
+-- PROTECCIÓN DE DUMMY
+-- ============================================
+
+local function esDummy(obj)
     local current = obj.Parent
     while current do
         if current:FindFirstChild("Humanoid") then
+            return true
+        end
+        local nombre = current.Name and string.lower(current.Name) or ""
+        if nombre:find("dummy") or nombre:find("training") or nombre:find("target") then
             return true
         end
         current = current.Parent
@@ -155,30 +158,14 @@ local function esProtegido(obj)
 end
 
 -- ============================================
--- ELIMINAR ÁRBOLES (solo árboles)
--- ============================================
-pcall(function()
-    for _, obj in pairs(Workspace:GetDescendants()) do
-        local nombre = obj.Name and string.lower(obj.Name) or ""
-        if (nombre:find("tree") or nombre:find("palm") or nombre:find("palmera")) and not esProtegido(obj) then
-            obj:Destroy()
-        end
-    end
-end)
-
--- ============================================
 -- ELIMINAR ROCAS (SIN TOCAR DUMMY)
 -- ============================================
 
 local function esRoca(obj)
-    -- NUNCA eliminar cosas protegidas
-    if esProtegido(obj) then
-        return false
-    end
+    if esDummy(obj) then return false end
     
     local nombre = obj.Name and string.lower(obj.Name) or ""
     
-    -- Conservar dash de Garou
     if nombre:find("garou") or nombre:find("dash") then
         return false
     end
@@ -186,16 +173,14 @@ local function esRoca(obj)
     if obj:IsA("BasePart") or obj:IsA("MeshPart") then
         if obj.Name == "Terrain" then return false end
         
-        -- Detectar por nombre
         if nombre:find("rock") or nombre:find("stone") or nombre:find("piedra") 
            or nombre:find("roca") or nombre:find("debris") or nombre:find("fragment")
            or nombre:find("slam") or nombre:find("down") then
             return true
         end
         
-        -- Detectar por tamaño (solo cosas MUY pequeñas)
         local tamano = obj.Size.Magnitude
-        if tamano < 8 and tamano > 0.5 then
+        if tamano < 10 and tamano > 0.5 then
             return true
         end
     end
@@ -205,28 +190,24 @@ end
 -- Escaneo inicial
 for _, obj in pairs(Workspace:GetDescendants()) do
     pcall(function()
-        if esRoca(obj) then 
-            obj:Destroy()
-        end
+        if esRoca(obj) then obj:Destroy() end
     end)
 end
 
--- Escaneo SOLO cuando aparecen objetos nuevos
+-- Escaneo de nuevas rocas
 Workspace.DescendantAdded:Connect(function(obj)
     task.wait(0.0000000001)
     pcall(function()
-        if esRoca(obj) then 
-            obj:Destroy()
-        end
+        if esRoca(obj) then obj:Destroy() end
     end)
 end)
 
 -- ============================================
--- ELIMINAR EFECTOS (SIN TOCAR DUMMY)
+-- ELIMINAR EFECTOS
 -- ============================================
 Workspace.DescendantAdded:Connect(function(obj)
     pcall(function()
-        if esProtegido(obj) then return end
+        if esDummy(obj) then return end
         
         local nombre = obj.Name and string.lower(obj.Name) or ""
         if nombre:find("garou") or nombre:find("dash") then return end
@@ -239,10 +220,11 @@ Workspace.DescendantAdded:Connect(function(obj)
 end)
 
 -- ============================================
--- OPTIMIZACIÓN
+-- OPTIMIZACIÓN (SIN CAMBIAR TEXTURAS)
 -- ============================================
 pcall(function()
-    Lighting.GlobalShadows = false
+    -- SOLO apagar efectos post-procesamiento (Bloom, Blur, etc.)
+    -- NO tocamos GlobalShadows para que las texturas se vean normales
     for _, effect in pairs(Lighting:GetChildren()) do
         if effect:IsA("PostEffect") or effect:IsA("BloomEffect") or effect:IsA("BlurEffect") then
             effect.Enabled = false
@@ -250,4 +232,4 @@ pcall(function()
     end
 end)
 
-print("✅ ANTI-LAG - DUMMY 100% PROTEGIDO")
+print("✅ ANTI-LAG FINAL - SIN CAMBIAR TEXTURAS - DanielSonrieScripts")
