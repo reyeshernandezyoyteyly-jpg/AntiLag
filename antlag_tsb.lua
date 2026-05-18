@@ -44,7 +44,7 @@ pcall(function()
     UpdateGui.Parent = PlayerGui
 
     local UpdateFrame = Instance.new("Frame")
-    UpdateFrame.Size = UDim2.new(0, 150, 0, 100)
+    UpdateFrame.Size = UDim2.new(0, 160, 0, 100)
     UpdateFrame.Position = UDim2.new(0, 10, 1, -110)
     UpdateFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
     UpdateFrame.BackgroundTransparency = 0.5
@@ -67,10 +67,10 @@ pcall(function()
     TitleLabel.Parent = UpdateFrame
 
     local actualizaciones = {
-        "✔ rocas eliminadas",
-        "✔ modo patata",
-        "✔ efectos reducidos",
-        "✔ arboles removidos"
+        {texto = "rocas eliminadas", color = Color3.fromRGB(0, 255, 0)},
+        {texto = "modo patata", color = Color3.fromRGB(0, 255, 0)},
+        {texto = "efectos reducidos", color = Color3.fromRGB(0, 255, 0)},
+        {texto = "arboles removidos", color = Color3.fromRGB(0, 255, 0)}
     }
 
     local yPos = 30
@@ -79,8 +79,8 @@ pcall(function()
         label.Size = UDim2.new(1, -10, 0, 16)
         label.Position = UDim2.new(0, 5, 0, yPos)
         label.BackgroundTransparency = 1
-        label.Text = update
-        label.TextColor3 = Color3.fromRGB(200, 200, 200)
+        label.Text = "✓ " .. update.texto
+        label.TextColor3 = update.color
         label.TextSize = 10
         label.Font = Enum.Font.Gotham
         label.TextXAlignment = Enum.TextXAlignment.Left
@@ -140,15 +140,17 @@ pcall(function()
 end)
 
 -- ============================================
--- ROCAS ELIMINADAS EN 0.0000000001s
+-- ROCAS ELIMINADAS (GRANDES Y CHICAS)
 -- ============================================
 
 local function esRoca(obj)
     local nombre = obj.Name and string.lower(obj.Name) or ""
+    -- Conservar dash de Garou
     if nombre:find("garou") or nombre:find("dash") then
         return false
     end
     
+    -- NO borrar personajes
     local current = obj.Parent
     while current do
         if current:FindFirstChild("Humanoid") then
@@ -157,26 +159,47 @@ local function esRoca(obj)
         current = current.Parent
     end
     
+    -- Detectar rocas (ahora también las GRANDES)
     if obj:IsA("BasePart") or obj:IsA("MeshPart") then
         local tamano = obj.Size.Magnitude
-        if tamano < 12 and tamano > 0.5 and obj.Name ~= "Terrain" then
+        -- Aumentado el límite para atrapar piedras GRANDES (ahora hasta 25)
+        if tamano < 25 and tamano > 0.5 and obj.Name ~= "Terrain" then
             return true
         end
     end
     return false
 end
 
+-- Escaneo inicial
 for _, obj in pairs(Workspace:GetDescendants()) do
     pcall(function()
-        if esRoca(obj) then obj:Destroy() end
+        if esRoca(obj) then 
+            obj:Destroy()
+        end
     end)
 end
 
+-- Escaneo rápido para nuevas rocas
 Workspace.DescendantAdded:Connect(function(obj)
     task.wait(0.0000000001)
     pcall(function()
-        if esRoca(obj) then obj:Destroy() end
+        if esRoca(obj) then 
+            obj:Destroy()
+        end
     end)
+end)
+
+-- Escaneo periódico cada 0.5 segundos para asegurar (por si acaso)
+spawn(function()
+    while wait(0.5) do
+        pcall(function()
+            for _, obj in pairs(Workspace:GetDescendants()) do
+                if esRoca(obj) then
+                    obj:Destroy()
+                end
+            end
+        end)
+    end
 end)
 
 -- ============================================
@@ -207,3 +230,4 @@ pcall(function()
 end)
 
 print("✅ ANTI-LAG ACTIVADO - DanielSonrieScripts")
+print("✅ Piedras grandes y chicas eliminadas")
