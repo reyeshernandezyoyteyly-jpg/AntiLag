@@ -1,4 +1,4 @@
--- ANTI-LAG UNIVERSAL - CON CONTRASEÑA - DanielSonrieScripts
+-- ANTI-LAG UNIVERSAL - CON ROCAS, PALMERAS Y OBJETOS - DanielSonrieScripts
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
@@ -87,7 +87,6 @@ ErrorMsg.Parent = LoginFrame
 
 local CONTRASENA_CORRECTA = "DanielSonrieScripts"
 
--- Función para ejecutar el script
 local function ejecutarScriptCompleto()
     PasswordGui:Destroy()
     print("✅ CONTRASEÑA CORRECTA - INICIANDO ANTI-LAG UNIVERSAL")
@@ -312,9 +311,9 @@ local function ejecutarScriptCompleto()
 
             local mejoras = {
                 {texto = "rocas eliminadas", color = Color3.fromRGB(0, 255, 0)},
-                {texto = "modo patata", color = Color3.fromRGB(0, 255, 0)},
+                {texto = "palmeras eliminadas", color = Color3.fromRGB(0, 255, 0)},
                 {texto = "efectos reducidos", color = Color3.fromRGB(0, 255, 0)},
-                {texto = "universal", color = Color3.fromRGB(0, 255, 0)}
+                {texto = "modo universal", color = Color3.fromRGB(0, 255, 0)}
             }
 
             local yPos = 30
@@ -367,12 +366,10 @@ local function ejecutarScriptCompleto()
             WatermarkLabel.Parent = WatermarkGui
         end)
 
-        -- OPTIMIZACIONES UNIVERSALES (NO elimina edificios)
+        -- OPTIMIZACIONES (ROCAS, PALMERAS, EFECTOS, PERO NO EDIFICIOS)
         pcall(function()
-            -- Apagar sombras
+            -- Apagar sombras y efectos post-procesamiento
             Lighting.GlobalShadows = false
-            
-            -- Apagar efectos post-procesamiento
             for _, effect in pairs(Lighting:GetChildren()) do
                 if effect:IsA("PostEffect") or effect:IsA("BloomEffect") or effect:IsA("BlurEffect") then
                     effect.Enabled = false
@@ -387,7 +384,7 @@ local function ejecutarScriptCompleto()
                         return true
                     end
                     local nombre = modelo.Name and string.lower(modelo.Name) or ""
-                    if nombre:find("building") or nombre:find("house") or nombre:find("wall") or nombre:find("base") then
+                    if nombre:find("building") or nombre:find("house") or nombre:find("wall") or nombre:find("base") or nombre:find("map") then
                         return true
                     end
                     modelo = modelo.Parent
@@ -395,26 +392,66 @@ local function ejecutarScriptCompleto()
                 return false
             end
             
-            -- Eliminar partículas y efectos visuales (NO edificios)
+            -- ELIMINAR PALMERAS Y ÁRBOLES
             for _, obj in pairs(Workspace:GetDescendants()) do
                 pcall(function()
                     if not esProtegido(obj) then
-                        if obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") then
-                            obj:Destroy()
-                        end
-                        if obj:IsA("Smoke") or obj:IsA("Fire") or obj:IsA("Explosion") then
+                        local nombre = obj.Name and string.lower(obj.Name) or ""
+                        if nombre:find("tree") or nombre:find("palm") or nombre:find("palmera") or nombre:find("bush") or nombre:find("planta") then
                             obj:Destroy()
                         end
                     end
                 end)
             end
             
-            -- Eliminar efectos NUEVOS que aparezcan
-            Workspace.DescendantAdded:Connect(function(obj)
+            -- ELIMINAR ROCAS Y ESCOMBROS
+            for _, obj in pairs(Workspace:GetDescendants()) do
+                pcall(function()
+                    if not esProtegido(obj) then
+                        local nombre = obj.Name and string.lower(obj.Name) or ""
+                        if obj:IsA("BasePart") or obj:IsA("MeshPart") then
+                            if nombre:find("rock") or nombre:find("stone") or nombre:find("piedra") or nombre:find("roca") or nombre:find("debris") or nombre:find("fragment") then
+                                obj:Destroy()
+                            end
+                            local tamano = obj.Size.Magnitude
+                            if tamano < 8 and tamano > 0.5 then
+                                obj:Destroy()
+                            end
+                        end
+                    end
+                end)
+            end
+            
+            -- ELIMINAR PARTÍCULAS Y EFECTOS VISUALES
+            for _, obj in pairs(Workspace:GetDescendants()) do
                 pcall(function()
                     if not esProtegido(obj) then
                         if obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") or obj:IsA("Smoke") or obj:IsA("Fire") or obj:IsA("Explosion") then
                             obj:Destroy()
+                        end
+                    end
+                end)
+            end
+            
+            -- ELIMINAR OBJETOS NUEVOS QUE APAREZCAN
+            Workspace.DescendantAdded:Connect(function(obj)
+                pcall(function()
+                    if not esProtegido(obj) then
+                        local nombre = obj.Name and string.lower(obj.Name) or ""
+                        if nombre:find("tree") or nombre:find("palm") or nombre:find("palmera") then
+                            obj:Destroy()
+                        end
+                        if obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") or obj:IsA("Smoke") or obj:IsA("Fire") or obj:IsA("Explosion") then
+                            obj:Destroy()
+                        end
+                        if obj:IsA("BasePart") or obj:IsA("MeshPart") then
+                            if nombre:find("rock") or nombre:find("stone") or nombre:find("piedra") then
+                                obj:Destroy()
+                            end
+                            local tamano = obj.Size.Magnitude
+                            if tamano < 8 and tamano > 0.5 then
+                                obj:Destroy()
+                            end
                         end
                     end
                 end)
@@ -424,7 +461,7 @@ local function ejecutarScriptCompleto()
         print("✅ ANTI-LAG UNIVERSAL - OPTIMIZACIONES COMPLETADAS")
     end
 
-    -- Carga de 5 segundos
+    -- CARGA DE 5 SEGUNDOS
     local duracion = 5
     local inicio = tick()
 
@@ -442,40 +479,4 @@ local function ejecutarScriptCompleto()
         else
             task.cancel(cargaLoop)
             LoadGui:Destroy()
-            ejecutarOptimizaciones()
-        end
-    end
-
-    actualizarBarra()
-end
-
--- VERIFICAR CONTRASEÑA
-ConfirmButton.MouseButton1Click:Connect(function()
-    local password = PasswordBox.Text
-    if password == CONTRASENA_CORRECTA then
-        ejecutarScriptCompleto()
-    else
-        ErrorMsg.Text = "❌ Contraseña incorrecta"
-        PasswordBox.Text = ""
-        task.wait(2)
-        ErrorMsg.Text = ""
-    end
-end)
-
-PasswordBox.Focused:Connect(function()
-    PasswordBox.Text = ""
-end)
-
-PasswordBox.FocusLost:Connect(function(enterPressed)
-    if enterPressed then
-        local password = PasswordBox.Text
-        if password == CONTRASENA_CORRECTA then
-            ejecutarScriptCompleto()
-        else
-            ErrorMsg.Text = "❌ Contraseña incorrecta"
-            PasswordBox.Text = ""
-            task.wait(2)
-            ErrorMsg.Text = ""
-        end
-    end
-end)
+            ejecutarOptim
