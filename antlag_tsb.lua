@@ -1,11 +1,11 @@
--- DanielScript Ultimate Anti-Lag | Universal Hybrid Edition
+-- DanielScript Ultimate Anti-Lag | TSB Absolute Zero Rocks Edition
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 local TweenService = game:GetService("TweenService")
 local LocalPlayer = Players.LocalPlayer
 
-print("⚔️ TSB Hybrid Anti-Lag por DanielSonrie")
+print("⚔️ TSB Anti-Lag (Cero Piedras Absoluto) por DanielSonrie")
 
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 if PlayerGui:FindFirstChild("DanielWelcomeGui") then PlayerGui.DanielWelcomeGui:Destroy() end
@@ -126,70 +126,56 @@ pcall(function()
     end)
 end)
 
--- 3. INTERCEPTOR MAESTRO DE RAÍZ (Método del script que me pasaste)
-local rawget, rawset = rawget, rawset
-local type, pcall = type, pcall
-local string_lower = string.lower
-local string_find = string.find
+-- 3. ELIMINADOR AGRESIVO TOTAL DE OBJETOS SUELTOS Y PIEDRAS
+local function DestroyAllStonesAndDebris(obj)
+    local name = obj.Name and string.lower(obj.Name) or ""
+    local parentName = obj.Parent and string.lower(obj.Parent.Name) or ""
 
-local function CleanObject(obj)
-    local name = obj.Name and string_lower(obj.Name) or ""
-    local parentName = obj.Parent and string_lower(obj.Parent.Name) or ""
-
-    -- REGLA DE ORO: Salvar Garou Dash y efectos azules esenciales
-    if string_find(name, "dash") or string_find(name, "blue") or string_find(name, "garou") 
-       or string_find(parentName, "dash") or string_find(parentName, "garou") then 
-        return obj 
+    -- Regla de oro: Salvar el Dash de Garou y efectos azules
+    if string.find(name, "dash") or string.find(name, "blue") or string.find(name, "garou") 
+       or string.find(parentName, "dash") or string.find(parentName, "garou") then 
+        return 
     end
 
     -- Borrar Palmeras
-    if string_find(name, "tree") or string_find(name, "palm") or string_find(name, "palmera") then
+    if string.find(name, "tree") or string.find(name, "palm") or string.find(name, "palmera") then
         obj:Destroy()
-        return nil
+        return
     end
 
-    -- Desaparecer Rocas (Saitama Normal y Down Slams) de forma instantánea
+    -- DETECTOR RADICAL DE BLOQUES CREADOS POR GOLPES (Saitama, Garou, Down Slams, choques)
     if obj:IsA("BasePart") or obj:IsA("MeshPart") then
-        if parentName == "visualeffects" or string_find(parentName, "fx") or parentName == "debris" 
-           or string_find(name, "rock") or string_find(name, "debris") or string_find(name, "stone") then
-            if obj.Name ~= "Terrain" and name ~= "baseplate" and obj.Size.Y < 30 then
-                obj.Transparency = 1
-                obj.Size = Vector3.new(0, 0, 0)
-                obj.Position = Vector3.new(0, -999, 0)
-                obj.CanCollide = false
-                return obj
+        -- Evitar borrar el mapa base o el suelo principal
+        if obj.Name ~= "Terrain" and name ~= "baseplate" and not obj:IsDescendantOf(Workspace:FindFirstChild("Map")) then
+            
+            -- Si es generado en carpetas de efectos o es una parte suelta sin colisión en el mapa
+            if parentName == "visualeffects" or string.find(parentName, "fx") or parentName == "debris" 
+               or string.find(name, "rock") or string.find(name, "debris") or string.find(name, "stone") or name == "part" or name == "meshpart"
+               or (parentName == "workspace" and obj.CanCollide == false and obj.Size.Y < 30) then
+                
+                pcall(function()
+                    obj.Transparency = 1
+                    obj.Size = Vector3.new(0, 0, 0)
+                    obj.Position = Vector3.new(0, -999, 0) -- Mandado al fondo del mapa al instante
+                    obj.CanCollide = false
+                end)
             end
         end
     end
 
-    -- Apagar todas las demás partículas pesadas
+    -- Apagar todas las demás partículas que estorben la vista
     if obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") or obj:IsA("Smoke") or obj:IsA("Fire") then
-        obj.Enabled = false
+        pcall(function() obj.Enabled = false end)
     elseif obj:IsA("Explosion") then
-        obj.Visible = false
+        pcall(function() obj.Visible = false end)
     end
-
-    return obj
 end
 
--- Hook/Intercepción en la creación de instancias (La magia del script FPS UP)
-local oldNew = Instance.new
-if typeof(hookfunction) == "function" then
-    hookfunction(Instance.new, function(className, parent)
-        local obj = oldNew(className, parent)
-        if obj then
-            local success, result = pcall(CleanObject, obj)
-            if success and result == nil then return nil end
-        end
-        return obj
-    end)
-end
+-- Escaneo masivo constante y en vivo
+for _, child in pairs(Workspace:GetDescendants()) do pcall(DestroyAllStonesAndDebris, child) end
+Workspace.DescendantAdded:Connect(function(descendant) pcall(DestroyAllStonesAndDebris, descendant) end)
 
--- Escaneo en vivo tradicional para asegurar doble protección
-for _, child in pairs(Workspace:GetDescendants()) do pcall(CleanObject, child) end
-Workspace.DescendantAdded:Connect(function(descendant) pcall(CleanObject, descendant) end)
-
--- Iluminación optimizada
+-- Iluminación optimizada limpia
 pcall(function()
     Lighting.GlobalShadows = false
     Lighting.FogEnd = 1e6
