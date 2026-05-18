@@ -1,4 +1,4 @@
--- ANTI-LAG DEFINITIVO - CON CONTRASEÑA - DanielSonrieScripts
+-- ANTI-LAG UNIVERSAL - CON CONTRASEÑA - DanielSonrieScripts
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
@@ -6,7 +6,7 @@ local LocalPlayer = Players.LocalPlayer
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 
-print("⚔️ ANTI-LAG DEFINITIVO - ESPERANDO CONTRASEÑA")
+print("⚔️ ANTI-LAG UNIVERSAL - ESPERANDO CONTRASEÑA")
 
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
@@ -18,14 +18,12 @@ PasswordGui.Name = "PasswordGui"
 PasswordGui.ResetOnSpawn = false
 PasswordGui.Parent = PlayerGui
 
--- Fondo oscuro
 local FondoPass = Instance.new("Frame")
 FondoPass.Size = UDim2.new(1, 0, 1, 0)
 FondoPass.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 FondoPass.BackgroundTransparency = 0.8
 FondoPass.Parent = PasswordGui
 
--- Marco del login
 local LoginFrame = Instance.new("Frame")
 LoginFrame.Size = UDim2.new(0, 300, 0, 150)
 LoginFrame.Position = UDim2.new(0.5, -150, 0.5, -75)
@@ -37,7 +35,6 @@ local LoginCorner = Instance.new("UICorner")
 LoginCorner.CornerRadius = UDim.new(0, 15)
 LoginCorner.Parent = LoginFrame
 
--- Título
 local TitlePass = Instance.new("TextLabel")
 TitlePass.Size = UDim2.new(1, 0, 0, 35)
 TitlePass.Position = UDim2.new(0, 0, 0, 10)
@@ -48,7 +45,6 @@ TitlePass.TextSize = 16
 TitlePass.Font = Enum.Font.GothamBold
 TitlePass.Parent = LoginFrame
 
--- Cuadro de texto para contraseña
 local PasswordBox = Instance.new("TextBox")
 PasswordBox.Size = UDim2.new(0, 200, 0, 35)
 PasswordBox.Position = UDim2.new(0.5, -100, 0, 55)
@@ -65,7 +61,6 @@ local PassCorner = Instance.new("UICorner")
 PassCorner.CornerRadius = UDim.new(0, 8)
 PassCorner.Parent = PasswordBox
 
--- Botón para confirmar
 local ConfirmButton = Instance.new("TextButton")
 ConfirmButton.Size = UDim2.new(0, 100, 0, 35)
 ConfirmButton.Position = UDim2.new(0.5, -50, 0, 105)
@@ -80,7 +75,6 @@ local ButtonCorner = Instance.new("UICorner")
 ButtonCorner.CornerRadius = UDim.new(0, 8)
 ButtonCorner.Parent = ConfirmButton
 
--- Mensaje de error
 local ErrorMsg = Instance.new("TextLabel")
 ErrorMsg.Size = UDim2.new(1, 0, 0, 25)
 ErrorMsg.Position = UDim2.new(0, 0, 0, 145)
@@ -91,17 +85,12 @@ ErrorMsg.TextSize = 12
 ErrorMsg.Font = Enum.Font.Gotham
 ErrorMsg.Parent = LoginFrame
 
--- Contraseña correcta
 local CONTRASENA_CORRECTA = "DanielSonrieScripts"
 
--- Función para ejecutar el script si la contraseña es correcta
+-- Función para ejecutar el script
 local function ejecutarScriptCompleto()
     PasswordGui:Destroy()
-    
-    -- ============================================
-    -- AQUÍ VA TODO EL SCRIPT PRINCIPAL
-    -- ============================================
-    print("✅ CONTRASEÑA CORRECTA - INICIANDO SCRIPT")
+    print("✅ CONTRASEÑA CORRECTA - INICIANDO ANTI-LAG UNIVERSAL")
     
     for _, gui in pairs(PlayerGui:GetChildren()) do
         if gui.Name:find("Daniel") then gui:Destroy() end
@@ -180,10 +169,10 @@ local function ejecutarScriptCompleto()
     end)
 
     function ejecutarOptimizaciones()
-        print("✅ OPTIMIZACIONES INICIANDO")
+        print("✅ ANTI-LAG UNIVERSAL INICIANDO")
         Blur:Destroy()
         
-        -- Bienvenida
+        -- BIENVENIDA
         pcall(function()
             local WelcomeGui = Instance.new("ScreenGui")
             WelcomeGui.Name = "DanielWelcomeGui"
@@ -237,7 +226,7 @@ local function ejecutarScriptCompleto()
             WelcomeGui:Destroy()
         end)
 
-        -- FPS Counter
+        -- FPS COUNTER
         pcall(function()
             local FpsGui = Instance.new("ScreenGui")
             FpsGui.Name = "DanielFpsGui"
@@ -288,7 +277,7 @@ local function ejecutarScriptCompleto()
             end)
         end)
 
-        -- Panel FPS BOOST BETA
+        -- PANEL FPS BOOST BETA
         pcall(function()
             local BoostGui = Instance.new("ScreenGui")
             BoostGui.Name = "DanielBoostGui"
@@ -325,7 +314,7 @@ local function ejecutarScriptCompleto()
                 {texto = "rocas eliminadas", color = Color3.fromRGB(0, 255, 0)},
                 {texto = "modo patata", color = Color3.fromRGB(0, 255, 0)},
                 {texto = "efectos reducidos", color = Color3.fromRGB(0, 255, 0)},
-                {texto = "arboles removidos", color = Color3.fromRGB(0, 255, 0)}
+                {texto = "universal", color = Color3.fromRGB(0, 255, 0)}
             }
 
             local yPos = 30
@@ -358,7 +347,7 @@ local function ejecutarScriptCompleto()
             end)
         end)
 
-        -- Marca de agua
+        -- MARCA DE AGUA
         pcall(function()
             local WatermarkGui = Instance.new("ScreenGui")
             WatermarkGui.Name = "DanielWatermark"
@@ -378,81 +367,61 @@ local function ejecutarScriptCompleto()
             WatermarkLabel.Parent = WatermarkGui
         end)
 
-        -- Optimizaciones
+        -- OPTIMIZACIONES UNIVERSALES (NO elimina edificios)
         pcall(function()
-            for _, obj in pairs(Workspace:GetDescendants()) do
-                local nombre = obj.Name and string.lower(obj.Name) or ""
-                if nombre:find("tree") or nombre:find("palm") or nombre:find("palmera") then
-                    obj:Destroy()
-                end
-            end
-        end)
-
-        local function esDummy(obj)
-            local current = obj.Parent
-            while current do
-                if current:FindFirstChild("Humanoid") then
-                    return true
-                end
-                local nombre = current.Name and string.lower(current.Name) or ""
-                if nombre:find("dummy") or nombre:find("training") or nombre:find("target") or nombre:find("weakest") then
-                    return true
-                end
-                current = current.Parent
-            end
-            return false
-        end
-
-        local function esRoca(obj)
-            if esDummy(obj) then return false end
-            local nombre = obj.Name and string.lower(obj.Name) or ""
-            if nombre:find("garou") or nombre:find("dash") then return false end
-            if obj:IsA("BasePart") or obj:IsA("MeshPart") then
-                if obj.Name == "Terrain" then return false end
-                if nombre:find("rock") or nombre:find("stone") or nombre:find("piedra") 
-                   or nombre:find("roca") or nombre:find("debris") or nombre:find("fragment")
-                   or nombre:find("slam") or nombre:find("down") then
-                    return true
-                end
-                local tamano = obj.Size.Magnitude
-                if tamano < 50 and tamano > 0.5 then
-                    return true
-                end
-            end
-            return false
-        end
-
-        for _, obj in pairs(Workspace:GetDescendants()) do
-            pcall(function() if esRoca(obj) then obj:Destroy() end end)
-        end
-
-        Workspace.DescendantAdded:Connect(function(obj)
-            task.wait(0.0000000001)
-            pcall(function() if esRoca(obj) then obj:Destroy() end end)
-        end)
-
-        Workspace.DescendantAdded:Connect(function(obj)
-            pcall(function()
-                if esDummy(obj) then return end
-                local nombre = obj.Name and string.lower(obj.Name) or ""
-                if nombre:find("garou") or nombre:find("dash") then return end
-                if obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") 
-                   or obj:IsA("Smoke") or obj:IsA("Fire") or obj:IsA("Explosion") then
-                    obj:Destroy()
-                end
-            end)
-        end)
-
-        pcall(function()
+            -- Apagar sombras
             Lighting.GlobalShadows = false
+            
+            -- Apagar efectos post-procesamiento
             for _, effect in pairs(Lighting:GetChildren()) do
                 if effect:IsA("PostEffect") or effect:IsA("BloomEffect") or effect:IsA("BlurEffect") then
                     effect.Enabled = false
                 end
             end
+            
+            -- PROTECCIÓN: No eliminar edificios, NPCs ni jugadores
+            local function esProtegido(obj)
+                local modelo = obj.Parent
+                while modelo do
+                    if modelo:FindFirstChild("Humanoid") then
+                        return true
+                    end
+                    local nombre = modelo.Name and string.lower(modelo.Name) or ""
+                    if nombre:find("building") or nombre:find("house") or nombre:find("wall") or nombre:find("base") then
+                        return true
+                    end
+                    modelo = modelo.Parent
+                end
+                return false
+            end
+            
+            -- Eliminar partículas y efectos visuales (NO edificios)
+            for _, obj in pairs(Workspace:GetDescendants()) do
+                pcall(function()
+                    if not esProtegido(obj) then
+                        if obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") then
+                            obj:Destroy()
+                        end
+                        if obj:IsA("Smoke") or obj:IsA("Fire") or obj:IsA("Explosion") then
+                            obj:Destroy()
+                        end
+                    end
+                end)
+            end
+            
+            -- Eliminar efectos NUEVOS que aparezcan
+            Workspace.DescendantAdded:Connect(function(obj)
+                pcall(function()
+                    if not esProtegido(obj) then
+                        if obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") or obj:IsA("Smoke") or obj:IsA("Fire") or obj:IsA("Explosion") then
+                            obj:Destroy()
+                        end
+                    end
+                end)
+            end)
         end)
 
-        print("✅ FPS BOOST BETA - OPTIMIZACIONES COMPLETADAS")
+        print("✅ ANTI-LAG UNIVERSAL - OPTIMIZACIONES COMPLETADAS")
     end
 
     -- Carga de 5 segundos
@@ -480,9 +449,7 @@ local function ejecutarScriptCompleto()
     actualizarBarra()
 end
 
--- ============================================
 -- VERIFICAR CONTRASEÑA
--- ============================================
 ConfirmButton.MouseButton1Click:Connect(function()
     local password = PasswordBox.Text
     if password == CONTRASENA_CORRECTA then
@@ -495,7 +462,6 @@ ConfirmButton.MouseButton1Click:Connect(function()
     end
 end)
 
--- También permitir presionar Enter
 PasswordBox.Focused:Connect(function()
     PasswordBox.Text = ""
 end)
