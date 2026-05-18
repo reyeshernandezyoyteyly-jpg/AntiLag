@@ -1,4 +1,4 @@
--- ANTI-LAG DEFINITIVO - CARGA NEGRA COMPLETA - DanielSonrieScripts
+-- ANTI-LAG DEFINITIVO - FONDO BORROSO - DanielSonrieScripts
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
@@ -14,7 +14,7 @@ for _, gui in pairs(PlayerGui:GetChildren()) do
 end
 
 -- ============================================
--- PANTALLA DE CARGA NEGRA (TAPA TODO)
+-- PANTALLA DE CARGA CON FONDO BORROSO (Aparece de inmediato)
 -- ============================================
 local LoadGui = Instance.new("ScreenGui")
 LoadGui.Name = "DanielLoadGui"
@@ -22,14 +22,19 @@ LoadGui.ResetOnSpawn = false
 LoadGui.Parent = PlayerGui
 LoadGui.DisplayOrder = 999999
 
--- Fondo NEGRO COMPLETO (tapa absolutamente todo)
-local FondoNegro = Instance.new("Frame")
-FondoNegro.Size = UDim2.new(2, 0, 2, 0)  -- Más grande que la pantalla por si acaso
-FondoNegro.Position = UDim2.new(-0.5, 0, -0.5, 0)
-FondoNegro.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-FondoNegro.BackgroundTransparency = 0
-FondoNegro.BorderSizePixel = 0
-FondoNegro.Parent = LoadGui
+-- Efecto borroso
+local Blur = Instance.new("BlurEffect")
+Blur.Size = 12
+Blur.Parent = Lighting
+
+-- Fondo oscuro semitransparente (para que se vea el blur)
+local Fondo = Instance.new("Frame")
+Fondo.Size = UDim2.new(2, 0, 2, 0)
+Fondo.Position = UDim2.new(-0.5, 0, -0.5, 0)
+Fondo.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Fondo.BackgroundTransparency = 0.2
+Fondo.BorderSizePixel = 0
+Fondo.Parent = LoadGui
 
 -- Marco de la barra
 local BarFrame = Instance.new("Frame")
@@ -44,7 +49,7 @@ local BarCorner = Instance.new("UICorner")
 BarCorner.CornerRadius = UDim.new(0, 15)
 BarCorner.Parent = BarFrame
 
--- Barra de progreso (se llena)
+-- Barra de progreso
 local ProgressBar = Instance.new("Frame")
 ProgressBar.Size = UDim2.new(0, 0, 1, 0)
 ProgressBar.BackgroundColor3 = Color3.fromRGB(255, 200, 0)
@@ -55,24 +60,24 @@ local ProgressCorner = Instance.new("UICorner")
 ProgressCorner.CornerRadius = UDim.new(0, 15)
 ProgressCorner.Parent = ProgressBar
 
--- Texto "Cargando..."
+-- Texto "Cargando..." (BLANCO)
 local LoadText = Instance.new("TextLabel")
 LoadText.Size = UDim2.new(0, 200, 0, 30)
 LoadText.Position = UDim2.new(0.5, -100, 0.5, -60)
 LoadText.BackgroundTransparency = 1
 LoadText.Text = "Cargando"
-LoadText.TextColor3 = Color3.fromRGB(255, 255, 255)
+LoadText.TextColor3 = Color3.fromRGB(255, 255, 255)  -- BLANCO
 LoadText.TextSize = 20
 LoadText.Font = Enum.Font.GothamBold
 LoadText.Parent = LoadGui
 
--- Porcentaje
+-- Porcentaje (BLANCO)
 local PercentText = Instance.new("TextLabel")
 PercentText.Size = UDim2.new(0, 100, 0, 30)
 PercentText.Position = UDim2.new(0.5, -50, 0.5, 25)
 PercentText.BackgroundTransparency = 1
 PercentText.Text = "0%"
-PercentText.TextColor3 = Color3.fromRGB(255, 200, 0)
+PercentText.TextColor3 = Color3.fromRGB(255, 255, 255)  -- BLANCO
 PercentText.TextSize = 18
 PercentText.Font = Enum.Font.GothamBold
 PercentText.Parent = LoadGui
@@ -95,8 +100,11 @@ end)
 function ejecutarScriptPrincipal()
     print("✅ OPTIMIZACIONES INICIANDO")
     
+    -- Eliminar el efecto blur
+    Blur:Destroy()
+    
     -- ============================================
-    -- TEXTO DE BIENVENIDA "MODO PATATA" (CON SUBTÍTULO VISIBLE)
+    -- TEXTO DE BIENVENIDA "MODO PATATA"
     -- ============================================
     pcall(function()
         local WelcomeGui = Instance.new("ScreenGui")
@@ -105,8 +113,8 @@ function ejecutarScriptPrincipal()
         WelcomeGui.Parent = PlayerGui
 
         local MainFrame = Instance.new("Frame")
-        MainFrame.Size = UDim2.new(0, 380, 0, 100)
-        MainFrame.Position = UDim2.new(0.5, -190, 0.5, -50)
+        MainFrame.Size = UDim2.new(0, 380, 0, 110)
+        MainFrame.Position = UDim2.new(0.5, -190, 0.5, -55)
         MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
         MainFrame.BackgroundTransparency = 0.4
         MainFrame.BorderSizePixel = 0
@@ -126,20 +134,20 @@ function ejecutarScriptPrincipal()
         TitleLabel.Font = Enum.Font.GothamBold
         TitleLabel.Parent = MainFrame
 
-        -- Subtítulo (bien visible)
+        -- Subtítulo BLANCO y más abajo (tope inferior)
         local SubLabel = Instance.new("TextLabel")
         SubLabel.Size = UDim2.new(1, 0, 0, 25)
-        SubLabel.Position = UDim2.new(0, 0, 0, 55)
+        SubLabel.Position = UDim2.new(0, 0, 0, 70)  -- Más abajo
         SubLabel.BackgroundTransparency = 1
         SubLabel.Text = "Developed by DanielSonrieScripts"
-        SubLabel.TextColor3 = Color3.fromRGB(255, 200, 0)
-        SubLabel.TextSize = 13
+        SubLabel.TextColor3 = Color3.fromRGB(255, 255, 255)  -- BLANCO
+        SubLabel.TextSize = 12
         SubLabel.Font = Enum.Font.Gotham
         SubLabel.Parent = MainFrame
 
-        -- Animación de entrada (desde abajo)
+        -- Animación de entrada
         MainFrame.Position = UDim2.new(0.5, -190, 1, 0)
-        local entrarAnim = TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, -190, 0.5, -50)})
+        local entrarAnim = TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, -190, 0.5, -55)})
         entrarAnim:Play()
         
         task.wait(3)
@@ -394,9 +402,8 @@ function ejecutarScriptPrincipal()
 end
 
 -- ============================================
--- INICIAR CARGA (DESPUÉS DE 2 SEGUNDOS)
+-- INICIAR CARGA INMEDIATAMENTE
 -- ============================================
-task.wait(2)
 
 -- ANIMACIÓN DE LA BARRA (5 SEGUNDOS)
 local duracion = 5
