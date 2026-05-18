@@ -1,10 +1,10 @@
--- ANTI-LAG - SIN CAMBIAR TEXTURAS (CUADRADOS NORMALES) - DanielSonrieScripts
+-- ANTI-LAG FINAL - TEXTURAS NORMALES - DanielSonrieScripts
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 local LocalPlayer = Players.LocalPlayer
 
-print("⚔️ ANTI-LAG - SIN CAMBIAR TEXTURAS")
+print("⚔️ ANTI-LAG FINAL - TEXTURAS NORMALES")
 
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 for _, gui in pairs(PlayerGui:GetChildren()) do
@@ -44,8 +44,8 @@ pcall(function()
     UpdateGui.Parent = PlayerGui
 
     local UpdateFrame = Instance.new("Frame")
-    UpdateFrame.Size = UDim2.new(0, 160, 0, 100)
-    UpdateFrame.Position = UDim2.new(0, 10, 1, -110)
+    UpdateFrame.Size = UDim2.new(0, 160, 0, 85)
+    UpdateFrame.Position = UDim2.new(0, 10, 1, -95)
     UpdateFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
     UpdateFrame.BackgroundTransparency = 0.5
     UpdateFrame.BorderSizePixel = 0
@@ -148,7 +148,7 @@ local function esDummy(obj)
             return true
         end
         local nombre = current.Name and string.lower(current.Name) or ""
-        if nombre:find("dummy") or nombre:find("training") or nombre:find("target") then
+        if nombre:find("dummy") or nombre:find("training") or nombre:find("target") or nombre:find("weakest") then
             return true
         end
         current = current.Parent
@@ -157,7 +157,7 @@ local function esDummy(obj)
 end
 
 -- ============================================
--- ELIMINAR ROCAS
+-- ELIMINAR ROCAS (SIN TOCAR MATERIALES)
 -- ============================================
 
 local function esRoca(obj)
@@ -229,7 +229,7 @@ Workspace.DescendantAdded:Connect(function(obj)
 end)
 
 -- ============================================
--- OPTIMIZACIÓN
+-- OPTIMIZACIÓN (SIN CAMBIAR TEXTURAS)
 -- ============================================
 pcall(function()
     Lighting.GlobalShadows = false
@@ -240,4 +240,4 @@ pcall(function()
     end
 end)
 
-print("✅ ANTI-LAG - SIN CAMBIAR TEXTURAS - DanielSonrieScripts")
+print("✅ ANTI-LAG FINAL - TEXTURAS NORMALES - DanielSonrieScripts")
