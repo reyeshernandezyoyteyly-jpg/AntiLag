@@ -1,4 +1,4 @@
--- ANTI-LAG DEFINITIVO - FPS BOOST BETA - CON FONDO NEGRO - DanielSonrieScripts
+-- ANTI-LAG DEFINITIVO - CON BURBUJA NEGRA - DanielSonrieScripts
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
@@ -96,7 +96,7 @@ function ejecutarScriptPrincipal()
     Blur:Destroy()
     
     -- ============================================
-    -- TEXTO DE BIENVENIDA (CON FONDO NEGRO, ABAJO)
+    -- TEXTO DE BIENVENIDA "MODO PATATA" (CON BURBUJA NEGRA, ABAJO)
     -- ============================================
     pcall(function()
         local WelcomeGui = Instance.new("ScreenGui")
@@ -104,18 +104,20 @@ function ejecutarScriptPrincipal()
         WelcomeGui.ResetOnSpawn = false
         WelcomeGui.Parent = PlayerGui
 
-        local MainFrame = Instance.new("Frame")
-        MainFrame.Size = UDim2.new(0, 350, 0, 90)
-        MainFrame.Position = UDim2.new(0.5, -175, 1, 0)
-        MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-        MainFrame.BackgroundTransparency = 0.4
-        MainFrame.BorderSizePixel = 0
-        MainFrame.Parent = WelcomeGui
+        -- Burbuja negra (fondo redondeado)
+        local Bubble = Instance.new("Frame")
+        Bubble.Size = UDim2.new(0, 350, 0, 90)
+        Bubble.Position = UDim2.new(0.5, -175, 1, 0)
+        Bubble.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+        Bubble.BackgroundTransparency = 0.5
+        Bubble.BorderSizePixel = 0
+        Bubble.Parent = WelcomeGui
 
-        local MainCorner = Instance.new("UICorner")
-        MainCorner.CornerRadius = UDim.new(0, 15)
-        MainCorner.Parent = MainFrame
+        local BubbleCorner = Instance.new("UICorner")
+        BubbleCorner.CornerRadius = UDim.new(0, 20)
+        BubbleCorner.Parent = Bubble
 
+        -- Texto principal
         local TitleLabel = Instance.new("TextLabel")
         TitleLabel.Size = UDim2.new(1, 0, 0, 45)
         TitleLabel.Position = UDim2.new(0, 0, 0, 5)
@@ -124,8 +126,9 @@ function ejecutarScriptPrincipal()
         TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
         TitleLabel.TextSize = 26
         TitleLabel.Font = Enum.Font.GothamBold
-        TitleLabel.Parent = MainFrame
+        TitleLabel.Parent = Bubble
 
+        -- Subtítulo
         local SubLabel = Instance.new("TextLabel")
         SubLabel.Size = UDim2.new(1, 0, 0, 25)
         SubLabel.Position = UDim2.new(0, 0, 0, 55)
@@ -134,15 +137,16 @@ function ejecutarScriptPrincipal()
         SubLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
         SubLabel.TextSize = 12
         SubLabel.Font = Enum.Font.Gotham
-        SubLabel.Parent = MainFrame
+        SubLabel.Parent = Bubble
 
         -- Animación: sube desde abajo y se queda ABAJO
-        local entrarAnim = TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, -175, 0.85, 0)})
+        local entrarAnim = TweenService:Create(Bubble, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, -175, 0.85, 0)})
         entrarAnim:Play()
         
         task.wait(3)
         
-        local salirAnim = TweenService:Create(MainFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Position = UDim2.new(0.5, -175, 1, 0), BackgroundTransparency = 1})
+        -- Animación de salida
+        local salirAnim = TweenService:Create(Bubble, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Position = UDim2.new(0.5, -175, 1, 0), BackgroundTransparency = 1})
         salirAnim:Play()
         TweenService:Create(TitleLabel, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 1}):Play()
         TweenService:Create(SubLabel, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 1}):Play()
@@ -205,7 +209,7 @@ function ejecutarScriptPrincipal()
     end)
 
     -- ============================================
-    -- PANEL "FPS BOOST BETA" (Título BLANCO, textos VERDES)
+    -- PANEL "FPS BOOST BETA"
     -- ============================================
     pcall(function()
         local BoostGui = Instance.new("ScreenGui")
