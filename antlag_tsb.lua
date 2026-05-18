@@ -1,4 +1,4 @@
--- ANTI-LAG DEFINITIVO - CON CARGA COMPLETA - DanielSonrieScripts
+-- ANTI-LAG DEFINITIVO - CARGA NEGRA COMPLETA - DanielSonrieScripts
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
@@ -14,7 +14,7 @@ for _, gui in pairs(PlayerGui:GetChildren()) do
 end
 
 -- ============================================
--- PANTALLA DE CARGA (TAPA TODA LA PANTALLA - NEGRA)
+-- PANTALLA DE CARGA NEGRA (TAPA TODO)
 -- ============================================
 local LoadGui = Instance.new("ScreenGui")
 LoadGui.Name = "DanielLoadGui"
@@ -22,20 +22,20 @@ LoadGui.ResetOnSpawn = false
 LoadGui.Parent = PlayerGui
 LoadGui.DisplayOrder = 999999
 
--- Fondo NEGRO que tapa TODO
-local Background = Instance.new("Frame")
-Background.Size = UDim2.new(1, 0, 1, 0)
-Background.Position = UDim2.new(0, 0, 0, 0)
-Background.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-Background.BackgroundTransparency = 0 -- NEGRO COMPLETO
-Background.BorderSizePixel = 0
-Background.Parent = LoadGui
+-- Fondo NEGRO COMPLETO (tapa absolutamente todo)
+local FondoNegro = Instance.new("Frame")
+FondoNegro.Size = UDim2.new(2, 0, 2, 0)  -- Más grande que la pantalla por si acaso
+FondoNegro.Position = UDim2.new(-0.5, 0, -0.5, 0)
+FondoNegro.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+FondoNegro.BackgroundTransparency = 0
+FondoNegro.BorderSizePixel = 0
+FondoNegro.Parent = LoadGui
 
 -- Marco de la barra
 local BarFrame = Instance.new("Frame")
 BarFrame.Size = UDim2.new(0, 300, 0, 30)
 BarFrame.Position = UDim2.new(0.5, -150, 0.5, -15)
-BarFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
+BarFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
 BarFrame.BackgroundTransparency = 0
 BarFrame.BorderSizePixel = 0
 BarFrame.Parent = LoadGui
@@ -44,7 +44,7 @@ local BarCorner = Instance.new("UICorner")
 BarCorner.CornerRadius = UDim.new(0, 15)
 BarCorner.Parent = BarFrame
 
--- Barra de progreso
+-- Barra de progreso (se llena)
 local ProgressBar = Instance.new("Frame")
 ProgressBar.Size = UDim2.new(0, 0, 1, 0)
 ProgressBar.BackgroundColor3 = Color3.fromRGB(255, 200, 0)
@@ -66,14 +66,14 @@ LoadText.TextSize = 20
 LoadText.Font = Enum.Font.GothamBold
 LoadText.Parent = LoadGui
 
--- Texto del porcentaje
+-- Porcentaje
 local PercentText = Instance.new("TextLabel")
 PercentText.Size = UDim2.new(0, 100, 0, 30)
 PercentText.Position = UDim2.new(0.5, -50, 0.5, 25)
 PercentText.BackgroundTransparency = 1
 PercentText.Text = "0%"
 PercentText.TextColor3 = Color3.fromRGB(255, 200, 0)
-PercentText.TextSize = 16
+PercentText.TextSize = 18
 PercentText.Font = Enum.Font.GothamBold
 PercentText.Parent = LoadGui
 
@@ -89,34 +89,15 @@ local cargaLoop = task.spawn(function()
     end
 end)
 
--- Animar la barra durante 5 segundos
-local duracion = 5
-local inicio = tick()
-local function actualizarBarra()
-    if not LoadGui or not LoadGui.Parent then return end
-    local transcurrido = tick() - inicio
-    local progreso = math.min(transcurrido / duracion, 1)
-    local ancho = 300 * progreso
-    ProgressBar:TweenSize(UDim2.new(0, ancho, 1, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 0.05, true)
-    PercentText.Text = math.floor(progreso * 100) .. "%"
-    
-    if progreso < 1 then
-        task.wait(0.05)
-        actualizarBarra()
-    else
-        task.cancel(cargaLoop)
-        LoadGui:Destroy()
-        ejecutarScriptPrincipal()
-    end
-end
-
 -- ============================================
--- FUNCIÓN PRINCIPAL (se ejecuta DESPUÉS de la carga)
+-- FUNCIÓN PRINCIPAL (se ejecuta después de la carga)
 -- ============================================
 function ejecutarScriptPrincipal()
     print("✅ OPTIMIZACIONES INICIANDO")
     
-    -- TEXTO DE BIENVENIDA "MODO PATATA" (centro - no abajo)
+    -- ============================================
+    -- TEXTO DE BIENVENIDA "MODO PATATA" (CON SUBTÍTULO VISIBLE)
+    -- ============================================
     pcall(function()
         local WelcomeGui = Instance.new("ScreenGui")
         WelcomeGui.Name = "DanielWelcomeGui"
@@ -124,8 +105,8 @@ function ejecutarScriptPrincipal()
         WelcomeGui.Parent = PlayerGui
 
         local MainFrame = Instance.new("Frame")
-        MainFrame.Size = UDim2.new(0, 350, 0, 90)
-        MainFrame.Position = UDim2.new(0.5, -175, 0.5, -45)
+        MainFrame.Size = UDim2.new(0, 380, 0, 100)
+        MainFrame.Position = UDim2.new(0.5, -190, 0.5, -50)
         MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
         MainFrame.BackgroundTransparency = 0.4
         MainFrame.BorderSizePixel = 0
@@ -136,35 +117,35 @@ function ejecutarScriptPrincipal()
         MainCorner.Parent = MainFrame
 
         local TitleLabel = Instance.new("TextLabel")
-        TitleLabel.Size = UDim2.new(1, 0, 0, 40)
+        TitleLabel.Size = UDim2.new(1, 0, 0, 45)
         TitleLabel.Position = UDim2.new(0, 0, 0, 5)
         TitleLabel.BackgroundTransparency = 1
         TitleLabel.Text = "🥔 MODO PATATA 🥔"
         TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-        TitleLabel.TextSize = 26
+        TitleLabel.TextSize = 28
         TitleLabel.Font = Enum.Font.GothamBold
         TitleLabel.Parent = MainFrame
 
-        -- Subtítulo "Developed by DanielSonrieScripts" (ahora visible)
+        -- Subtítulo (bien visible)
         local SubLabel = Instance.new("TextLabel")
         SubLabel.Size = UDim2.new(1, 0, 0, 25)
-        SubLabel.Position = UDim2.new(0, 0, 0, 50)
+        SubLabel.Position = UDim2.new(0, 0, 0, 55)
         SubLabel.BackgroundTransparency = 1
         SubLabel.Text = "Developed by DanielSonrieScripts"
         SubLabel.TextColor3 = Color3.fromRGB(255, 200, 0)
-        SubLabel.TextSize = 12
+        SubLabel.TextSize = 13
         SubLabel.Font = Enum.Font.Gotham
         SubLabel.Parent = MainFrame
 
-        -- Animación de entrada (desde abajo hacia el centro)
-        MainFrame.Position = UDim2.new(0.5, -175, 1, 0)
-        local entrarAnim = TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, -175, 0.5, -45)})
+        -- Animación de entrada (desde abajo)
+        MainFrame.Position = UDim2.new(0.5, -190, 1, 0)
+        local entrarAnim = TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, -190, 0.5, -50)})
         entrarAnim:Play()
         
         task.wait(3)
         
         -- Animación de salida
-        local salirAnim = TweenService:Create(MainFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Position = UDim2.new(0.5, -175, 1, 0), BackgroundTransparency = 1})
+        local salirAnim = TweenService:Create(MainFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Position = UDim2.new(0.5, -190, 1, 0), BackgroundTransparency = 1})
         salirAnim:Play()
         TweenService:Create(TitleLabel, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 1}):Play()
         TweenService:Create(SubLabel, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 1}):Play()
@@ -173,7 +154,9 @@ function ejecutarScriptPrincipal()
         WelcomeGui:Destroy()
     end)
 
+    -- ============================================
     -- CONTADOR DE FPS
+    -- ============================================
     pcall(function()
         local FpsGui = Instance.new("ScreenGui")
         FpsGui.Name = "DanielFpsGui"
@@ -224,7 +207,9 @@ function ejecutarScriptPrincipal()
         end)
     end)
 
+    -- ============================================
     -- PANEL DE ACTUALIZACIONES
+    -- ============================================
     pcall(function()
         local UpdateGui = Instance.new("ScreenGui")
         UpdateGui.Name = "DanielUpdateGui"
@@ -294,7 +279,9 @@ function ejecutarScriptPrincipal()
         end)
     end)
 
+    -- ============================================
     -- MARCA DE AGUA
+    -- ============================================
     pcall(function()
         local WatermarkGui = Instance.new("ScreenGui")
         WatermarkGui.Name = "DanielWatermark"
@@ -302,8 +289,8 @@ function ejecutarScriptPrincipal()
         WatermarkGui.Parent = PlayerGui
 
         local WatermarkLabel = Instance.new("TextLabel")
-        WatermarkLabel.Size = UDim2.new(0, 140, 0, 18)
-        WatermarkLabel.Position = UDim2.new(1, -150, 1, -30)
+        WatermarkLabel.Size = UDim2.new(0, 150, 0, 18)
+        WatermarkLabel.Position = UDim2.new(1, -160, 1, -30)
         WatermarkLabel.BackgroundTransparency = 1
         WatermarkLabel.Text = "DanielSonrieScripts"
         WatermarkLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -314,7 +301,9 @@ function ejecutarScriptPrincipal()
         WatermarkLabel.Parent = WatermarkGui
     end)
 
+    -- ============================================
     -- OPTIMIZACIONES
+    -- ============================================
     pcall(function()
         for _, obj in pairs(Workspace:GetDescendants()) do
             local nombre = obj.Name and string.lower(obj.Name) or ""
@@ -404,5 +393,31 @@ function ejecutarScriptPrincipal()
     print("✅ ANTI-LAG DEFINITIVO - OPTIMIZACIONES COMPLETADAS")
 end
 
--- INICIAR CARGA
+-- ============================================
+-- INICIAR CARGA (DESPUÉS DE 2 SEGUNDOS)
+-- ============================================
+task.wait(2)
+
+-- ANIMACIÓN DE LA BARRA (5 SEGUNDOS)
+local duracion = 5
+local inicio = tick()
+
+local function actualizarBarra()
+    if not LoadGui or not LoadGui.Parent then return end
+    local transcurrido = tick() - inicio
+    local progreso = math.min(transcurrido / duracion, 1)
+    local ancho = 300 * progreso
+    ProgressBar:TweenSize(UDim2.new(0, ancho, 1, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 0.05, true)
+    PercentText.Text = math.floor(progreso * 100) .. "%"
+    
+    if progreso < 1 then
+        task.wait(0.05)
+        actualizarBarra()
+    else
+        task.cancel(cargaLoop)
+        LoadGui:Destroy()
+        ejecutarScriptPrincipal()
+    end
+end
+
 actualizarBarra()
