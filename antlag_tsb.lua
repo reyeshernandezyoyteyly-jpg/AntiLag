@@ -1,11 +1,11 @@
--- DanielScript Ultimate Anti-Lag | TSB Safe Body Clean V3 - CON TEXTOS DE ADVERTENCIA PERMANENTES
+-- DANIEL SCRIPT - ANTI LAG CONTROLADO (No borra jugadores)
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 local TweenService = game:GetService("TweenService")
 local LocalPlayer = Players.LocalPlayer
 
-print("⚔️ TSB Anti-Lag (Escudo de Avatar Activo) por DanielSonrie")
+print("⚔️ TSB Anti-Lag Activado - Modo Seguro")
 
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 if PlayerGui:FindFirstChild("DanielWelcomeGui") then PlayerGui.DanielWelcomeGui:Destroy() end
@@ -13,7 +13,7 @@ if PlayerGui:FindFirstChild("DanielToastGui") then PlayerGui.DanielToastGui:Dest
 if PlayerGui:FindFirstChild("DanielStatusGui") then PlayerGui.DanielStatusGui:Destroy() end
 
 -- ============================================
--- 1. TEXTO DE BIENVENIDA AL CENTRO (Original, 3 segundos)
+-- 1. TEXTO DE BIENVENIDA (Original, 3 segundos)
 -- ============================================
 pcall(function()
     local WelcomeGui = Instance.new("ScreenGui")
@@ -44,7 +44,7 @@ pcall(function()
     SubCenterLabel.Size = UDim2.new(1, 0, 0, 30)
     SubCenterLabel.Position = UDim2.new(0, 0, 0, 45)
     SubCenterLabel.BackgroundTransparency = 1
-    SubCenterLabel.Text = "este escript es fase beta"
+    SubCenterLabel.Text = "este script es fase beta"
     SubCenterLabel.TextColor3 = Color3.fromRGB(220, 220, 220)
     SubCenterLabel.TextSize = 18
     SubCenterLabel.Font = Enum.Font.Gotham
@@ -77,7 +77,7 @@ pcall(function()
 end)
 
 -- ============================================
--- 2. CARTEL TEMPORAL EN LA ESQUINA (Original, 6 segundos)
+-- 2. CARTEL TEMPORAL EN ESQUINA (Original, 6 segundos)
 -- ============================================
 pcall(function()
     local ToastGui = Instance.new("ScreenGui")
@@ -132,31 +132,31 @@ pcall(function()
 end)
 
 -- ============================================
--- 3. TEXTOS DE ADVERTENCIA/ESTADO PERMANENTES (NUEVO, como en la imagen)
+-- 3. ADVERTENCIAS NO PERMANENTES (8 segundos y desaparecen)
 -- ============================================
 pcall(function()
-    local StatusGui = Instance.new("ScreenGui")
-    StatusGui.Name = "DanielStatusGui"
-    StatusGui.ResetOnSpawn = false
-    StatusGui.DisplayOrder = 99997
-    StatusGui.Parent = PlayerGui
+    local WarningGui = Instance.new("ScreenGui")
+    WarningGui.Name = "DanielWarningGui"
+    WarningGui.ResetOnSpawn = false
+    WarningGui.DisplayOrder = 99997
+    WarningGui.Parent = PlayerGui
 
-    -- Marco semitransparente en esquina inferior izquierda
+    -- Marco en esquina inferior izquierda
     local LeftFrame = Instance.new("Frame")
-    LeftFrame.Size = UDim2.new(0, 180, 0, 80)
-    LeftFrame.Position = UDim2.new(0, 10, 1, -90)
+    LeftFrame.Size = UDim2.new(0, 200, 0, 95)
+    LeftFrame.Position = UDim2.new(0, 10, 1, -105)
     LeftFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
     LeftFrame.BackgroundTransparency = 0.5
     LeftFrame.BorderSizePixel = 0
-    LeftFrame.Parent = StatusGui
+    LeftFrame.Parent = WarningGui
 
     local LeftCorner = Instance.new("UICorner")
-    LeftCorner.CornerRadius = UDim.new(0, 6)
+    LeftCorner.CornerRadius = UDim.new(0, 8)
     LeftCorner.Parent = LeftFrame
 
-    -- Texto "FPS BOOST ACTIVATED"
+    -- Texto "FPS BOOST ACTIVATED" (Verde)
     local FPSLabel = Instance.new("TextLabel")
-    FPSLabel.Size = UDim2.new(1, -10, 0, 20)
+    FPSLabel.Size = UDim2.new(1, -10, 0, 22)
     FPSLabel.Position = UDim2.new(0, 5, 0, 5)
     FPSLabel.BackgroundTransparency = 1
     FPSLabel.Text = "FPS BOOST ACTIVATED"
@@ -166,29 +166,41 @@ pcall(function()
     FPSLabel.TextXAlignment = Enum.TextXAlignment.Left
     FPSLabel.Parent = LeftFrame
 
-    -- Texto "Графика оптимизирована"
+    -- Texto "Gráficos optimizados" (ya no ruso)
     local GraphicLabel = Instance.new("TextLabel")
-    GraphicLabel.Size = UDim2.new(1, -10, 0, 18)
-    GraphicLabel.Position = UDim2.new(0, 5, 0, 28)
+    GraphicLabel.Size = UDim2.new(1, -10, 0, 20)
+    GraphicLabel.Position = UDim2.new(0, 5, 0, 30)
     GraphicLabel.BackgroundTransparency = 1
-    GraphicLabel.Text = "Графика оптимизирована"
+    GraphicLabel.Text = "Gráficos optimizados"
     GraphicLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
-    GraphicLabel.TextSize = 12
+    GraphicLabel.TextSize = 13
     GraphicLabel.Font = Enum.Font.Gotham
     GraphicLabel.TextXAlignment = Enum.TextXAlignment.Left
     GraphicLabel.Parent = LeftFrame
 
-    -- Texto "Физика не изменена"
+    -- Texto "Física sin cambios"
     local PhysicsLabel = Instance.new("TextLabel")
-    PhysicsLabel.Size = UDim2.new(1, -10, 0, 18)
-    PhysicsLabel.Position = UDim2.new(0, 5, 0, 48)
+    PhysicsLabel.Size = UDim2.new(1, -10, 0, 20)
+    PhysicsLabel.Position = UDim2.new(0, 5, 0, 52)
     PhysicsLabel.BackgroundTransparency = 1
-    PhysicsLabel.Text = "Физика не изменена"
+    PhysicsLabel.Text = "Física sin cambios"
     PhysicsLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
-    PhysicsLabel.TextSize = 12
+    PhysicsLabel.TextSize = 13
     PhysicsLabel.Font = Enum.Font.Gotham
     PhysicsLabel.TextXAlignment = Enum.TextXAlignment.Left
     PhysicsLabel.Parent = LeftFrame
+
+    -- Texto "Modo serio activado" (nuevo, como en tu imagen)
+    local SeriousLabel = Instance.new("TextLabel")
+    SeriousLabel.Size = UDim2.new(1, -10, 0, 20)
+    SeriousLabel.Position = UDim2.new(0, 5, 0, 74)
+    SeriousLabel.BackgroundTransparency = 1
+    SeriousLabel.Text = "Modo serio activado"
+    SeriousLabel.TextColor3 = Color3.fromRGB(255, 170, 0)
+    SeriousLabel.TextSize = 13
+    SeriousLabel.Font = Enum.Font.GothamBold
+    SeriousLabel.TextXAlignment = Enum.TextXAlignment.Left
+    SeriousLabel.Parent = LeftFrame
 
     -- Texto "DanielloScript" en esquina inferior derecha
     local RightLabel = Instance.new("TextLabel")
@@ -201,71 +213,79 @@ pcall(function()
     RightLabel.Font = Enum.Font.GothamBold
     RightLabel.TextXAlignment = Enum.TextXAlignment.Right
     RightLabel.TextTransparency = 0.3
-    RightLabel.Parent = StatusGui
+    RightLabel.Parent = WarningGui
+
+    -- HACER QUE DESAPAREZCA TODO DESPUÉS DE 8 SEGUNDOS
+    task.spawn(function()
+        task.wait(8)
+        local tweenInfo = TweenInfo.new(0.8, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+        local fadeOut = {BackgroundTransparency = 1}
+        local textFade = {TextTransparency = 1}
+        
+        TweenService:Create(LeftFrame, tweenInfo, fadeOut):Play()
+        TweenService:Create(FPSLabel, tweenInfo, textFade):Play()
+        TweenService:Create(GraphicLabel, tweenInfo, textFade):Play()
+        TweenService:Create(PhysicsLabel, tweenInfo, textFade):Play()
+        TweenService:Create(SeriousLabel, tweenInfo, textFade):Play()
+        TweenService:Create(RightLabel, tweenInfo, textFade):Play()
+        
+        task.wait(1)
+        WarningGui:Destroy()
+    end)
 end)
 
 -- ============================================
--- 4. FILTRO ANTI-LAG MODIFICADO (Elimina piedras y efectos)
+-- 4. FILTRO ANTI-LAG (NO borra jugadores)
 -- ============================================
-local function CleanMapWithoutShield(obj)
+local function CleanMapOnly(obj)
+    -- 🔴 IMPORTANTE: NUNCA borrar personajes
+    if obj:IsDescendantOf(Workspace) then
+        local model = obj:FindFirstAncestorOfClass("Model")
+        if model and (model:FindFirstChild("Humanoid") or Players:GetPlayerFromCharacter(model)) then
+            return  -- No tocar personajes
+        end
+    end
+
     local name = obj.Name and string.lower(obj.Name) or ""
     local parentName = obj.Parent and string.lower(obj.Parent.Name) or ""
-    local className = obj.ClassName
 
     -- Piedras del Down Slam
     if string.find(name, "slam") or string.find(name, "down") or string.find(name, "piedra") 
        or string.find(name, "rock") or string.find(name, "stone") or string.find(name, "debris") 
-       or string.find(name, "fragment") or string.find(name, "escombro") or string.find(name, "roca")
-       or string.find(parentName, "slam") or string.find(parentName, "downslam") then
+       or string.find(name, "fragment") or string.find(parentName, "slam") then
         obj:Destroy()
         return
     end
     
-    -- Efectos visuales
-    if string.find(name, "effect") or string.find(name, "aura") or string.find(name, "tornado") 
-       or string.find(name, "whirlwind") or string.find(name, "slash") or string.find(name, "orange") 
-       or string.find(name, "hit") or string.find(name, "explosion") or string.find(name, "blast")
-       or string.find(parentName, "visualeffects") or string.find(parentName, "fx") then
+    -- Efectos visuales (pero NO auras de personajes)
+    if string.find(name, "effect") or string.find(name, "tornado") or string.find(name, "whirlwind") 
+       or string.find(name, "slash") or string.find(name, "hit") or string.find(name, "explosion") 
+       or string.find(name, "blast") or string.find(parentName, "visualeffects") then
         obj:Destroy()
         return
     end
 
-    -- Árboles
+    -- Árboles del mapa
     if string.find(name, "tree") or string.find(name, "palm") or string.find(name, "palmera") then
         obj:Destroy()
         return
     end
 
-    -- Partículas
-    if className == "ParticleEmitter" or className == "Trail" or className == "Beam" 
-       or className == "Smoke" or className == "Fire" or className == "Explosion" then
+    -- Partículas y efectos visuales
+    if obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") 
+       or obj:IsA("Smoke") or obj:IsA("Fire") or obj:IsA("Explosion") then
         obj:Destroy()
         return
-    end
-
-    -- Partes pequeñas sin colisión
-    if (className == "BasePart" or className == "MeshPart" or className == "Part") then
-        if obj.CanCollide == false or obj.Size.Magnitude < 5 then
-            obj:Destroy()
-            return
-        end
     end
 end
 
 -- Escaneo inicial y en vivo
 for _, child in pairs(Workspace:GetDescendants()) do 
-    pcall(CleanMapWithoutShield, child) 
+    pcall(CleanMapOnly, child) 
 end
-Workspace.DescendantAdded:Connect(function(descendant) 
-    pcall(CleanMapWithoutShield, descendant) 
-end)
 
-spawn(function()
-    while wait(0.5) do
-        for _, obj in pairs(Workspace:GetDescendants()) do
-            pcall(CleanMapWithoutShield, obj)
-        end
-    end
+Workspace.DescendantAdded:Connect(function(descendant) 
+    pcall(CleanMapOnly, descendant) 
 end)
 
 -- ============================================
@@ -280,3 +300,5 @@ pcall(function()
         end
     end
 end)
+
+print("✅ Anti-Lag activado - Personajes visibles - Advertencias temporales")
