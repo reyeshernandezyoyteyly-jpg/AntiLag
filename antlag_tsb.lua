@@ -1,16 +1,109 @@
--- ANTI-LAG FINAL - CON FPS COUNTER - DanielSonrieScripts
+-- ANTI-LAG DEFINITIVO - CON ANIMACIONES CHIDAS - DanielSonrieScripts
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 local LocalPlayer = Players.LocalPlayer
 local RunService = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
 
-print("⚔️ ANTI-LAG - CON FPS COUNTER - DanielSonrieScripts")
+print("⚔️ ANTI-LAG DEFINITIVO - CON ANIMACIONES CHIDAS")
 
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 for _, gui in pairs(PlayerGui:GetChildren()) do
     if gui.Name:find("Daniel") then gui:Destroy() end
 end
+
+-- ============================================
+-- ANIMACIÓN DE ENTRADA CHIDA (CON REBOTE)
+-- ============================================
+pcall(function()
+    local WelcomeGui = Instance.new("ScreenGui")
+    WelcomeGui.Name = "DanielWelcomeGui"
+    WelcomeGui.ResetOnSpawn = false
+    WelcomeGui.Parent = PlayerGui
+
+    -- Marco principal
+    local MainFrame = Instance.new("Frame")
+    MainFrame.Size = UDim2.new(0, 400, 0, 120)
+    MainFrame.Position = UDim2.new(0.5, -200, 0.5, -60)
+    MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+    MainFrame.BackgroundTransparency = 0.2
+    MainFrame.BorderSizePixel = 0
+    MainFrame.Parent = WelcomeGui
+
+    local MainCorner = Instance.new("UICorner")
+    MainCorner.CornerRadius = UDim.new(0, 20)
+    MainCorner.Parent = MainFrame
+
+    -- Efecto de brillo (gradiente)
+    local Gradient = Instance.new("UIGradient")
+    Gradient.Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 200, 0)),
+        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 100, 0)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 200, 0))
+    })
+    Gradient.Rotation = 45
+    Gradient.Parent = MainFrame
+
+    -- Texto principal
+    local TitleLabel = Instance.new("TextLabel")
+    TitleLabel.Size = UDim2.new(1, 0, 0, 50)
+    TitleLabel.Position = UDim2.new(0, 0, 0, 15)
+    TitleLabel.BackgroundTransparency = 1
+    TitleLabel.Text = "🥔 MODO PATATA 🥔"
+    TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TitleLabel.TextSize = 32
+    TitleLabel.Font = Enum.Font.GothamBold
+    TitleLabel.Parent = MainFrame
+
+    -- Subtítulo
+    local SubLabel = Instance.new("TextLabel")
+    SubLabel.Size = UDim2.new(1, 0, 0, 25)
+    SubLabel.Position = UDim2.new(0, 0, 0, 65)
+    SubLabel.BackgroundTransparency = 1
+    SubLabel.Text = "Anti-Lag Optimizado | DanielSonrieScripts"
+    SubLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+    SubLabel.TextSize = 16
+    SubLabel.Font = Enum.Font.Gotham
+    SubLabel.Parent = MainFrame
+
+    -- Animación de entrada (rebote)
+    MainFrame.Position = UDim2.new(0.5, -200, 0.5, -100)
+    MainFrame.BackgroundTransparency = 1
+    TitleLabel.TextTransparency = 1
+    SubLabel.TextTransparency = 1
+    
+    local entrada1 = TweenService:Create(MainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, -200, 0.5, -60)})
+    local entrada2 = TweenService:Create(MainFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {BackgroundTransparency = 0.2})
+    local entrada3 = TweenService:Create(TitleLabel, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 0})
+    local entrada4 = TweenService:Create(SubLabel, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 0})
+    
+    entrada1:Play()
+    task.wait(0.15)
+    entrada2:Play()
+    entrada3:Play()
+    entrada4:Play()
+    
+    -- Animación de brillo (pulso)
+    local pulse = TweenService:Create(Gradient, TweenInfo.new(1, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), {Rotation = 405})
+    pulse:Play()
+    
+    -- Esperar 2.5 segundos y hacer animación de salida
+    task.wait(2.5)
+    
+    local saida1 = TweenService:Create(MainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Position = UDim2.new(0.5, -200, 0.5, 100)})
+    local saida2 = TweenService:Create(MainFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {BackgroundTransparency = 1})
+    local saida3 = TweenService:Create(TitleLabel, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 1})
+    local saida4 = TweenService:Create(SubLabel, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 1})
+    
+    saida1:Play()
+    saida2:Play()
+    saida3:Play()
+    saida4:Play()
+    
+    task.wait(0.4)
+    WelcomeGui:Destroy()
+end)
 
 -- ============================================
 -- CONTADOR DE FPS (ESQUINA SUPERIOR IZQUIERDA)
@@ -53,7 +146,6 @@ pcall(function()
             local fps = frameCount
             frameCount = 0
             lastTime = currentTime
-            
             if fps >= 50 then
                 FpsLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
             elseif fps >= 30 then
@@ -67,30 +159,7 @@ pcall(function()
 end)
 
 -- ============================================
--- INTRODUCCIÓN
--- ============================================
-pcall(function()
-    local WelcomeGui = Instance.new("ScreenGui")
-    WelcomeGui.Name = "DanielWelcomeGui"
-    WelcomeGui.ResetOnSpawn = false
-    WelcomeGui.Parent = PlayerGui
-
-    local CenterLabel = Instance.new("TextLabel")
-    CenterLabel.Size = UDim2.new(0, 300, 0, 50)
-    CenterLabel.Position = UDim2.new(0.5, -150, 0.4, -25)
-    CenterLabel.BackgroundTransparency = 1
-    CenterLabel.Text = "🥔 MODO PATATA ACTIVADO 🥔"
-    CenterLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-    CenterLabel.TextSize = 26
-    CenterLabel.Font = Enum.Font.GothamBold
-    CenterLabel.Parent = WelcomeGui
-
-    task.wait(3)
-    WelcomeGui:Destroy()
-end)
-
--- ============================================
--- PANEL ACTUALIZACIONES (8 segundos)
+-- PANEL DE ACTUALIZACIONES (CON ANIMACIÓN)
 -- ============================================
 pcall(function()
     local UpdateGui = Instance.new("ScreenGui")
@@ -99,16 +168,20 @@ pcall(function()
     UpdateGui.Parent = PlayerGui
 
     local UpdateFrame = Instance.new("Frame")
-    UpdateFrame.Size = UDim2.new(0, 160, 0, 85)
-    UpdateFrame.Position = UDim2.new(0, 10, 1, -95)
+    UpdateFrame.Size = UDim2.new(0, 170, 0, 95)
+    UpdateFrame.Position = UDim2.new(0, -180, 1, -105)
     UpdateFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-    UpdateFrame.BackgroundTransparency = 0.5
+    UpdateFrame.BackgroundTransparency = 0.6
     UpdateFrame.BorderSizePixel = 0
     UpdateFrame.Parent = UpdateGui
 
     local UpdateCorner = Instance.new("UICorner")
     UpdateCorner.CornerRadius = UDim.new(0, 8)
     UpdateCorner.Parent = UpdateFrame
+
+    -- Animación de entrada deslizando desde la izquierda
+    local entradaAnim = TweenService:Create(UpdateFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0, 10, 1, -105)})
+    entradaAnim:Play()
 
     local TitleLabel = Instance.new("TextLabel")
     TitleLabel.Size = UDim2.new(1, -10, 0, 22)
@@ -123,6 +196,7 @@ pcall(function()
 
     local actualizaciones = {
         {texto = "rocas eliminadas", color = Color3.fromRGB(0, 255, 0)},
+        {texto = "modo patata", color = Color3.fromRGB(0, 255, 0)},
         {texto = "efectos reducidos", color = Color3.fromRGB(0, 255, 0)},
         {texto = "arboles removidos", color = Color3.fromRGB(0, 255, 0)}
     }
@@ -142,25 +216,18 @@ pcall(function()
         yPos = yPos + 18
     end
 
+    -- Animación de salida después de 8 segundos
     task.spawn(function()
         task.wait(8)
-        for i = 1, 10 do
-            local alpha = i / 10
-            UpdateFrame.BackgroundTransparency = 0.5 + (alpha * 0.5)
-            TitleLabel.TextTransparency = alpha
-            for _, child in pairs(UpdateFrame:GetChildren()) do
-                if child:IsA("TextLabel") and child ~= TitleLabel then
-                    child.TextTransparency = alpha
-                end
-            end
-            task.wait(0.05)
-        end
+        local saidaAnim = TweenService:Create(UpdateFrame, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Position = UDim2.new(0, -180, 1, -105)})
+        saidaAnim:Play()
+        task.wait(0.3)
         UpdateGui:Destroy()
     end)
 end)
 
 -- ============================================
--- MARCA DE AGUA
+-- MARCA DE AGUA (CON ANIMACIÓN DE PARPADEO)
 -- ============================================
 pcall(function()
     local WatermarkGui = Instance.new("ScreenGui")
@@ -169,15 +236,20 @@ pcall(function()
     WatermarkGui.Parent = PlayerGui
 
     local WatermarkLabel = Instance.new("TextLabel")
-    WatermarkLabel.Size = UDim2.new(0, 130, 0, 15)
-    WatermarkLabel.Position = UDim2.new(1, -135, 1, -25)
+    WatermarkLabel.Size = UDim2.new(0, 140, 0, 18)
+    WatermarkLabel.Position = UDim2.new(1, -150, 1, -30)
     WatermarkLabel.BackgroundTransparency = 1
     WatermarkLabel.Text = "DanielSonrieScripts"
     WatermarkLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     WatermarkLabel.TextSize = 10
     WatermarkLabel.Font = Enum.Font.Gotham
     WatermarkLabel.TextXAlignment = Enum.TextXAlignment.Right
+    WatermarkLabel.TextTransparency = 0.3
     WatermarkLabel.Parent = WatermarkGui
+    
+    -- Animación de parpadeo suave
+    local parpadeo = TweenService:Create(WatermarkLabel, TweenInfo.new(2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), {TextTransparency = 0.6})
+    parpadeo:Play()
 end)
 
 -- ============================================
@@ -195,7 +267,6 @@ end)
 -- ============================================
 -- PROTECCIÓN DE DUMMY
 -- ============================================
-
 local function esDummy(obj)
     local current = obj.Parent
     while current do
@@ -212,9 +283,8 @@ local function esDummy(obj)
 end
 
 -- ============================================
--- ELIMINAR ROCAS (SOLO CUANDO APARECEN - SIN ESCANEO PERIÓDICO)
+-- ELIMINAR ROCAS
 -- ============================================
-
 local function esRoca(obj)
     if esDummy(obj) then return false end
     
@@ -241,14 +311,12 @@ local function esRoca(obj)
     return false
 end
 
--- Escaneo inicial (solo una vez al ejecutar)
 for _, obj in pairs(Workspace:GetDescendants()) do
     pcall(function()
         if esRoca(obj) then obj:Destroy() end
     end)
 end
 
--- SOLO cuando aparece algo nuevo (NO hay escaneo periódico)
 Workspace.DescendantAdded:Connect(function(obj)
     task.wait(0.0000000001)
     pcall(function()
@@ -257,7 +325,7 @@ Workspace.DescendantAdded:Connect(function(obj)
 end)
 
 -- ============================================
--- ELIMINAR EFECTOS (SOLO CUANDO APARECEN)
+-- ELIMINAR EFECTOS
 -- ============================================
 Workspace.DescendantAdded:Connect(function(obj)
     pcall(function()
@@ -285,4 +353,4 @@ pcall(function()
     end
 end)
 
-print("✅ ANTI-LAG CON FPS COUNTER - SIN ESCANEO PERIÓDICO - DanielSonrieScripts")
+print("✅ ANTI-LAG DEFINITIVO CON ANIMACIONES CHIDAS - DanielSonrieScripts")
