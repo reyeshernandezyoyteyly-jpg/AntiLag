@@ -1,4 +1,4 @@
--- DANIEL SCRIPT - ANTI LAG CONTROLADO (No borra jugadores)
+-- DANIEL SCRIPT - ANTI LAG DEFINITIVO (No borra jugadores)
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
@@ -10,7 +10,7 @@ print("⚔️ TSB Anti-Lag Activado - Modo Seguro")
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 if PlayerGui:FindFirstChild("DanielWelcomeGui") then PlayerGui.DanielWelcomeGui:Destroy() end
 if PlayerGui:FindFirstChild("DanielToastGui") then PlayerGui.DanielToastGui:Destroy() end
-if PlayerGui:FindFirstChild("DanielStatusGui") then PlayerGui.DanielStatusGui:Destroy() end
+if PlayerGui:FindFirstChild("DanielWarningGui") then PlayerGui.DanielWarningGui:Destroy() end
 
 -- ============================================
 -- 1. TEXTO DE BIENVENIDA (Original, 3 segundos)
@@ -132,7 +132,7 @@ pcall(function()
 end)
 
 -- ============================================
--- 3. ADVERTENCIAS NO PERMANENTES (8 segundos y desaparecen)
+-- 3. ADVERTENCIAS TEMPORALES (8 segundos, SÍ desaparecen)
 -- ============================================
 pcall(function()
     local WarningGui = Instance.new("ScreenGui")
@@ -141,9 +141,9 @@ pcall(function()
     WarningGui.DisplayOrder = 99997
     WarningGui.Parent = PlayerGui
 
-    -- Marco en esquina inferior izquierda
+    -- Marco en esquina inferior IZQUIERDA
     local LeftFrame = Instance.new("Frame")
-    LeftFrame.Size = UDim2.new(0, 200, 0, 95)
+    LeftFrame.Size = UDim2.new(0, 210, 0, 95)
     LeftFrame.Position = UDim2.new(0, 10, 1, -105)
     LeftFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
     LeftFrame.BackgroundTransparency = 0.5
@@ -154,7 +154,7 @@ pcall(function()
     LeftCorner.CornerRadius = UDim.new(0, 8)
     LeftCorner.Parent = LeftFrame
 
-    -- Texto "FPS BOOST ACTIVATED" (Verde)
+    -- FPS BOOST ACTIVATED
     local FPSLabel = Instance.new("TextLabel")
     FPSLabel.Size = UDim2.new(1, -10, 0, 22)
     FPSLabel.Position = UDim2.new(0, 5, 0, 5)
@@ -166,7 +166,7 @@ pcall(function()
     FPSLabel.TextXAlignment = Enum.TextXAlignment.Left
     FPSLabel.Parent = LeftFrame
 
-    -- Texto "Gráficos optimizados" (ya no ruso)
+    -- Gráficos optimizados
     local GraphicLabel = Instance.new("TextLabel")
     GraphicLabel.Size = UDim2.new(1, -10, 0, 20)
     GraphicLabel.Position = UDim2.new(0, 5, 0, 30)
@@ -178,7 +178,7 @@ pcall(function()
     GraphicLabel.TextXAlignment = Enum.TextXAlignment.Left
     GraphicLabel.Parent = LeftFrame
 
-    -- Texto "Física sin cambios"
+    -- Física sin cambios
     local PhysicsLabel = Instance.new("TextLabel")
     PhysicsLabel.Size = UDim2.new(1, -10, 0, 20)
     PhysicsLabel.Position = UDim2.new(0, 5, 0, 52)
@@ -190,7 +190,7 @@ pcall(function()
     PhysicsLabel.TextXAlignment = Enum.TextXAlignment.Left
     PhysicsLabel.Parent = LeftFrame
 
-    -- Texto "Modo serio activado" (nuevo, como en tu imagen)
+    -- Modo serio activado
     local SeriousLabel = Instance.new("TextLabel")
     SeriousLabel.Size = UDim2.new(1, -10, 0, 20)
     SeriousLabel.Position = UDim2.new(0, 5, 0, 74)
@@ -202,62 +202,64 @@ pcall(function()
     SeriousLabel.TextXAlignment = Enum.TextXAlignment.Left
     SeriousLabel.Parent = LeftFrame
 
-    -- Texto "DanielloScript" en esquina inferior derecha
+    -- Texto en esquina inferior DERECHA (con la ortografía corregida)
     local RightLabel = Instance.new("TextLabel")
-    RightLabel.Size = UDim2.new(0, 150, 0, 20)
-    RightLabel.Position = UDim2.new(1, -160, 1, -30)
+    RightLabel.Size = UDim2.new(0, 180, 0, 22)
+    RightLabel.Position = UDim2.new(1, -190, 1, -35)
     RightLabel.BackgroundTransparency = 1
-    RightLabel.Text = "DanielloScript"
+    RightLabel.Text = "DanielSonrieScripts"
     RightLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-    RightLabel.TextSize = 12
+    RightLabel.TextSize = 13
     RightLabel.Font = Enum.Font.GothamBold
     RightLabel.TextXAlignment = Enum.TextXAlignment.Right
-    RightLabel.TextTransparency = 0.3
+    RightLabel.TextTransparency = 0.2
     RightLabel.Parent = WarningGui
 
-    -- HACER QUE DESAPAREZCA TODO DESPUÉS DE 8 SEGUNDOS
+    -- HACER QUE DESAPAREZCA TODO DESPUÉS DE 8 SEGUNDOS (FUNCIONA)
     task.spawn(function()
         task.wait(8)
-        local tweenInfo = TweenInfo.new(0.8, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-        local fadeOut = {BackgroundTransparency = 1}
-        local textFade = {TextTransparency = 1}
-        
-        TweenService:Create(LeftFrame, tweenInfo, fadeOut):Play()
-        TweenService:Create(FPSLabel, tweenInfo, textFade):Play()
-        TweenService:Create(GraphicLabel, tweenInfo, textFade):Play()
-        TweenService:Create(PhysicsLabel, tweenInfo, textFade):Play()
-        TweenService:Create(SeriousLabel, tweenInfo, textFade):Play()
-        TweenService:Create(RightLabel, tweenInfo, textFade):Play()
-        
-        task.wait(1)
+        -- Animación de desvanecimiento
+        for i = 1, 10 do
+            local alpha = i / 10
+            LeftFrame.BackgroundTransparency = 0.5 + (alpha * 0.5)
+            FPSLabel.TextTransparency = alpha
+            GraphicLabel.TextTransparency = alpha
+            PhysicsLabel.TextTransparency = alpha
+            SeriousLabel.TextTransparency = alpha
+            RightLabel.TextTransparency = alpha
+            task.wait(0.05)
+        end
         WarningGui:Destroy()
     end)
 end)
 
 -- ============================================
--- 4. FILTRO ANTI-LAG (NO borra jugadores)
+-- 4. FILTRO ANTI-LAG (NO toca personajes NI partes del cuerpo)
 -- ============================================
 local function CleanMapOnly(obj)
-    -- 🔴 IMPORTANTE: NUNCA borrar personajes
-    if obj:IsDescendantOf(Workspace) then
-        local model = obj:FindFirstAncestorOfClass("Model")
-        if model and (model:FindFirstChild("Humanoid") or Players:GetPlayerFromCharacter(model)) then
-            return  -- No tocar personajes
+    -- ⚠️ NUNCA borrar personajes NI ninguna parte de ellos
+    local model = obj:FindFirstAncestorOfClass("Model")
+    if model then
+        -- Si es un personaje (tiene Humanoid) o es un jugador, NO TOCAR NADA
+        if model:FindFirstChild("Humanoid") or Players:GetPlayerFromCharacter(model) then
+            return
         end
     end
 
     local name = obj.Name and string.lower(obj.Name) or ""
     local parentName = obj.Parent and string.lower(obj.Parent.Name) or ""
 
-    -- Piedras del Down Slam
+    -- Solo borrar si NO está dentro de un personaje (ya verificado arriba)
+    
+    -- Piedras del Down Slam y escombros
     if string.find(name, "slam") or string.find(name, "down") or string.find(name, "piedra") 
        or string.find(name, "rock") or string.find(name, "stone") or string.find(name, "debris") 
-       or string.find(name, "fragment") or string.find(parentName, "slam") then
+       or string.find(name, "fragment") or string.find(name, "escombro") then
         obj:Destroy()
         return
     end
     
-    -- Efectos visuales (pero NO auras de personajes)
+    -- Efectos visuales (tornados, explosiones, slashes)
     if string.find(name, "effect") or string.find(name, "tornado") or string.find(name, "whirlwind") 
        or string.find(name, "slash") or string.find(name, "hit") or string.find(name, "explosion") 
        or string.find(name, "blast") or string.find(parentName, "visualeffects") then
@@ -265,13 +267,13 @@ local function CleanMapOnly(obj)
         return
     end
 
-    -- Árboles del mapa
+    -- Árboles y palmeras (solo los que están sueltos en el mapa)
     if string.find(name, "tree") or string.find(name, "palm") or string.find(name, "palmera") then
         obj:Destroy()
         return
     end
 
-    -- Partículas y efectos visuales
+    -- Partículas y efectos (humo, fuego, trails)
     if obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") 
        or obj:IsA("Smoke") or obj:IsA("Fire") or obj:IsA("Explosion") then
         obj:Destroy()
@@ -279,17 +281,27 @@ local function CleanMapOnly(obj)
     end
 end
 
--- Escaneo inicial y en vivo
+-- Escaneo inicial
 for _, child in pairs(Workspace:GetDescendants()) do 
     pcall(CleanMapOnly, child) 
 end
 
+-- Escaneo continuo cuando aparecen cosas nuevas
 Workspace.DescendantAdded:Connect(function(descendant) 
     pcall(CleanMapOnly, descendant) 
 end)
 
+-- Escaneo periódico cada 1 segundo (por si acaso)
+spawn(function()
+    while wait(1) do
+        for _, obj in pairs(Workspace:GetDescendants()) do
+            pcall(CleanMapOnly, obj)
+        end
+    end
+end)
+
 -- ============================================
--- 5. ILUMINACIÓN LIMPIA
+-- 5. ILUMINACIÓN LIMPIA (reduce lag visual)
 -- ============================================
 pcall(function()
     Lighting.GlobalShadows = false
