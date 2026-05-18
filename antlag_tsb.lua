@@ -1,4 +1,4 @@
--- ANTI-LAG DEFINITIVO - FONDO BORROSO - DanielSonrieScripts
+-- ANTI-LAG DEFINITIVO - FPS BOOST BETA - DanielSonrieScripts
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
@@ -6,7 +6,7 @@ local LocalPlayer = Players.LocalPlayer
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 
-print("⚔️ ANTI-LAG DEFINITIVO - INICIANDO")
+print("⚔️ ANTI-LAG DEFINITIVO - FPS BOOST BETA")
 
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 for _, gui in pairs(PlayerGui:GetChildren()) do
@@ -14,7 +14,7 @@ for _, gui in pairs(PlayerGui:GetChildren()) do
 end
 
 -- ============================================
--- PANTALLA DE CARGA CON FONDO BORROSO (Aparece de inmediato)
+-- PANTALLA DE CARGA CON FONDO BORROSO
 -- ============================================
 local LoadGui = Instance.new("ScreenGui")
 LoadGui.Name = "DanielLoadGui"
@@ -27,7 +27,7 @@ local Blur = Instance.new("BlurEffect")
 Blur.Size = 12
 Blur.Parent = Lighting
 
--- Fondo oscuro semitransparente (para que se vea el blur)
+-- Fondo semitransparente
 local Fondo = Instance.new("Frame")
 Fondo.Size = UDim2.new(2, 0, 2, 0)
 Fondo.Position = UDim2.new(-0.5, 0, -0.5, 0)
@@ -66,7 +66,7 @@ LoadText.Size = UDim2.new(0, 200, 0, 30)
 LoadText.Position = UDim2.new(0.5, -100, 0.5, -60)
 LoadText.BackgroundTransparency = 1
 LoadText.Text = "Cargando"
-LoadText.TextColor3 = Color3.fromRGB(255, 255, 255)  -- BLANCO
+LoadText.TextColor3 = Color3.fromRGB(255, 255, 255)
 LoadText.TextSize = 20
 LoadText.Font = Enum.Font.GothamBold
 LoadText.Parent = LoadGui
@@ -77,7 +77,7 @@ PercentText.Size = UDim2.new(0, 100, 0, 30)
 PercentText.Position = UDim2.new(0.5, -50, 0.5, 25)
 PercentText.BackgroundTransparency = 1
 PercentText.Text = "0%"
-PercentText.TextColor3 = Color3.fromRGB(255, 255, 255)  -- BLANCO
+PercentText.TextColor3 = Color3.fromRGB(255, 255, 255)
 PercentText.TextSize = 18
 PercentText.Font = Enum.Font.GothamBold
 PercentText.Parent = LoadGui
@@ -95,16 +95,15 @@ local cargaLoop = task.spawn(function()
 end)
 
 -- ============================================
--- FUNCIÓN PRINCIPAL (se ejecuta después de la carga)
+-- FUNCIÓN PRINCIPAL
 -- ============================================
 function ejecutarScriptPrincipal()
-    print("✅ OPTIMIZACIONES INICIANDO")
+    print("✅ FPS BOOST BETA ACTIVADO")
     
-    -- Eliminar el efecto blur
     Blur:Destroy()
     
     -- ============================================
-    -- TEXTO DE BIENVENIDA "MODO PATATA"
+    -- TEXTO DE BIENVENIDA
     -- ============================================
     pcall(function()
         local WelcomeGui = Instance.new("ScreenGui")
@@ -134,25 +133,22 @@ function ejecutarScriptPrincipal()
         TitleLabel.Font = Enum.Font.GothamBold
         TitleLabel.Parent = MainFrame
 
-        -- Subtítulo BLANCO y más abajo (tope inferior)
         local SubLabel = Instance.new("TextLabel")
         SubLabel.Size = UDim2.new(1, 0, 0, 25)
-        SubLabel.Position = UDim2.new(0, 0, 0, 70)  -- Más abajo
+        SubLabel.Position = UDim2.new(0, 0, 0, 70)
         SubLabel.BackgroundTransparency = 1
         SubLabel.Text = "Developed by DanielSonrieScripts"
-        SubLabel.TextColor3 = Color3.fromRGB(255, 255, 255)  -- BLANCO
+        SubLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
         SubLabel.TextSize = 12
         SubLabel.Font = Enum.Font.Gotham
         SubLabel.Parent = MainFrame
 
-        -- Animación de entrada
         MainFrame.Position = UDim2.new(0.5, -190, 1, 0)
         local entrarAnim = TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, -190, 0.5, -55)})
         entrarAnim:Play()
         
         task.wait(3)
         
-        -- Animación de salida
         local salirAnim = TweenService:Create(MainFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Position = UDim2.new(0.5, -190, 1, 0), BackgroundTransparency = 1})
         salirAnim:Play()
         TweenService:Create(TitleLabel, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 1}):Play()
@@ -216,74 +212,78 @@ function ejecutarScriptPrincipal()
     end)
 
     -- ============================================
-    -- PANEL DE ACTUALIZACIONES
+    -- PANEL "FPS BOOST BETA" (ABJO - TOPE INFERIOR)
     -- ============================================
     pcall(function()
-        local UpdateGui = Instance.new("ScreenGui")
-        UpdateGui.Name = "DanielUpdateGui"
-        UpdateGui.ResetOnSpawn = false
-        UpdateGui.Parent = PlayerGui
+        local BoostGui = Instance.new("ScreenGui")
+        BoostGui.Name = "DanielBoostGui"
+        BoostGui.ResetOnSpawn = false
+        BoostGui.Parent = PlayerGui
 
-        local UpdateFrame = Instance.new("Frame")
-        UpdateFrame.Size = UDim2.new(0, 160, 0, 95)
-        UpdateFrame.Position = UDim2.new(0, 10, 1, 0)
-        UpdateFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-        UpdateFrame.BackgroundTransparency = 0.5
-        UpdateFrame.BorderSizePixel = 0
-        UpdateFrame.Parent = UpdateGui
+        local BoostFrame = Instance.new("Frame")
+        BoostFrame.Size = UDim2.new(0, 160, 0, 95)
+        BoostFrame.Position = UDim2.new(0, 10, 1, 0)  -- Empieza abajo del todo
+        BoostFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+        BoostFrame.BackgroundTransparency = 0.5
+        BoostFrame.BorderSizePixel = 0
+        BoostFrame.Parent = BoostGui
 
-        local UpdateCorner = Instance.new("UICorner")
-        UpdateCorner.CornerRadius = UDim.new(0, 8)
-        UpdateCorner.Parent = UpdateFrame
+        local BoostCorner = Instance.new("UICorner")
+        BoostCorner.CornerRadius = UDim.new(0, 8)
+        BoostCorner.Parent = BoostFrame
 
-        local entrarAnim = TweenService:Create(UpdateFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0, 10, 1, -105)})
+        -- Animación de entrada (sube hasta tope inferior)
+        local entrarAnim = TweenService:Create(BoostFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0, 10, 1, -105)})
         entrarAnim:Play()
 
+        -- Título "FPS BOOST BETA" (BLANCO)
         local TitleLabel = Instance.new("TextLabel")
         TitleLabel.Size = UDim2.new(1, -10, 0, 22)
         TitleLabel.Position = UDim2.new(0, 5, 0, 5)
         TitleLabel.BackgroundTransparency = 1
-        TitleLabel.Text = "ACTUALIZACIONES"
-        TitleLabel.TextColor3 = Color3.fromRGB(255, 200, 0)
+        TitleLabel.Text = "FPS BOOST BETA"
+        TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)  -- BLANCO
         TitleLabel.TextSize = 11
         TitleLabel.Font = Enum.Font.GothamBold
         TitleLabel.TextXAlignment = Enum.TextXAlignment.Center
-        TitleLabel.Parent = UpdateFrame
+        TitleLabel.Parent = BoostFrame
 
-        local actualizaciones = {
-            {texto = "rocas eliminadas", color = Color3.fromRGB(0, 255, 0)},
-            {texto = "modo patata", color = Color3.fromRGB(0, 255, 0)},
-            {texto = "efectos reducidos", color = Color3.fromRGB(0, 255, 0)},
-            {texto = "arboles removidos", color = Color3.fromRGB(0, 255, 0)}
+        -- Lista de mejoras (BLANCO)
+        local mejoras = {
+            {texto = "rocas eliminadas", color = Color3.fromRGB(255, 255, 255)},
+            {texto = "modo patata", color = Color3.fromRGB(255, 255, 255)},
+            {texto = "efectos reducidos", color = Color3.fromRGB(255, 255, 255)},
+            {texto = "arboles removidos", color = Color3.fromRGB(255, 255, 255)}
         }
 
         local yPos = 30
-        for _, update in pairs(actualizaciones) do
+        for _, mejora in pairs(mejoras) do
             local label = Instance.new("TextLabel")
             label.Size = UDim2.new(1, -10, 0, 16)
             label.Position = UDim2.new(0, 5, 0, yPos)
             label.BackgroundTransparency = 1
-            label.Text = "✓ " .. update.texto
-            label.TextColor3 = update.color
+            label.Text = "✓ " .. mejora.texto
+            label.TextColor3 = mejora.color
             label.TextSize = 10
             label.Font = Enum.Font.Gotham
             label.TextXAlignment = Enum.TextXAlignment.Left
-            label.Parent = UpdateFrame
+            label.Parent = BoostFrame
             yPos = yPos + 18
         end
 
+        -- Salir después de 8 segundos
         task.spawn(function()
             task.wait(8)
-            local salirAnim = TweenService:Create(UpdateFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Position = UDim2.new(0, 10, 1, 0), BackgroundTransparency = 1})
+            local salirAnim = TweenService:Create(BoostFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Position = UDim2.new(0, 10, 1, 0), BackgroundTransparency = 1})
             salirAnim:Play()
             TweenService:Create(TitleLabel, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 1}):Play()
-            for _, child in pairs(UpdateFrame:GetChildren()) do
+            for _, child in pairs(BoostFrame:GetChildren()) do
                 if child:IsA("TextLabel") and child ~= TitleLabel then
                     TweenService:Create(child, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 1}):Play()
                 end
             end
             task.wait(0.5)
-            UpdateGui:Destroy()
+            BoostGui:Destroy()
         end)
     end)
 
@@ -398,14 +398,12 @@ function ejecutarScriptPrincipal()
         end
     end)
 
-    print("✅ ANTI-LAG DEFINITIVO - OPTIMIZACIONES COMPLETADAS")
+    print("✅ FPS BOOST BETA - OPTIMIZACIONES COMPLETADAS")
 end
 
 -- ============================================
--- INICIAR CARGA INMEDIATAMENTE
+-- INICIAR CARGA
 -- ============================================
-
--- ANIMACIÓN DE LA BARRA (5 SEGUNDOS)
 local duracion = 5
 local inicio = tick()
 
