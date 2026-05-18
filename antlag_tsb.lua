@@ -5,110 +5,109 @@ local Workspace = game:GetService("Workspace")
 local TweenService = game:GetService("TweenService")
 local LocalPlayer = Players.LocalPlayer
 
-print("⚔️ TSB Anti-Lag Iniciado por DanielSonrie")
+print("⚔️ TSB Anti-Lag Modificado por DanielSonrie")
 
--- 1. INTERFAZ: INTRO CENTRADA Y MARCA DE AGUA ABAJO A LA DERECHA
+-- 1. NOTIFICACIÓN ESTILO NOTIFICATION TOAST (Abajo a la derecha)
 pcall(function()
     local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
     
-    -- Limpiar GUIs viejas si existen
-    if PlayerGui:FindFirstChild("DanielIntroGui") then PlayerGui.DanielIntroGui:Destroy() end
-    if PlayerGui:FindFirstChild("DanielWatermarkGui") then PlayerGui.DanielWatermarkGui:Destroy() end
+    if PlayerGui:FindFirstChild("DanielToastGui") then 
+        PlayerGui.DanielToastGui:Destroy() 
+    end
     
-    -- --- [ INTRO DEL CENTRO QUE DESAPARECE ] ---
-    local IntroGui = Instance.new("ScreenGui")
-    IntroGui.Name = "DanielIntroGui"
-    IntroGui.ResetOnSpawn = false
-    IntroGui.Parent = PlayerGui
+    local ToastGui = Instance.new("ScreenGui")
+    ToastGui.Name = "DanielToastGui"
+    ToastGui.ResetOnSpawn = false
+    ToastGui.Parent = PlayerGui
     
-    local Frame = Instance.new("Frame")
-    Frame.Size = UDim2.new(0, 480, 0, 160)
-    Frame.Position = UDim2.new(0.5, -240, 0.5, -80)
-    Frame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-    Frame.BackgroundTransparency = 0.2
-    Frame.BorderSizePixel = 0
-    Frame.Parent = IntroGui
+    -- El contenedor gris oscuro de la esquina
+    local MainFrame = Instance.new("Frame")
+    MainFrame.Size = UDim2.new(0, 220, 0, 65)
+    MainFrame.Position = UDim2.new(1, -235, 1, -110) -- Ubicación exacta sobre los botones de ataque
+    MainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    MainFrame.BackgroundTransparency = 0.2
+    MainFrame.BorderSizePixel = 0
+    MainFrame.Parent = ToastGui
     
-    local UICorner1 = Instance.new("UICorner")
-    UICorner1.CornerRadius = UDim.new(0, 15)
-    UICorner1.Parent = Frame
+    local UICorner = Instance.new("UICorner")
+    UICorner.CornerRadius = UDim.new(0, 4)
+    UICorner.Parent = MainFrame
     
-    local TextIntro = Instance.new("TextLabel")
-    TextIntro.Size = UDim2.new(1, 0, 1, 0)
-    TextIntro.BackgroundTransparency = 1
-    TextIntro.Text = "DanielSonrieScripts"
-    TextIntro.TextColor3 = Color3.fromRGB(0, 255, 120) -- Verde neón
-    TextIntro.TextSize = 32
-    TextIntro.Font = Enum.Font.GothamBold
-    TextIntro.Parent = Frame
+    -- Texto Principal: FPS BOOST ACTIVATED
+    local TitleLabel = Instance.new("TextLabel")
+    TitleLabel.Size = UDim2.new(1, 0, 0, 25)
+    TitleLabel.Position = UDim2.new(0, 0, 0, 8)
+    TitleLabel.BackgroundTransparency = 1
+    TitleLabel.Text = "FPS BOOST ACTIVATED"
+    TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TitleLabel.TextSize = 14
+    TitleLabel.Font = Enum.Font.GothamBold
+    TitleLabel.Parent = MainFrame
     
-    -- --- [ TEXTO FIJO ABAJO A LA DERECHA ] ---
-    local WatermarkGui = Instance.new("ScreenGui")
-    WatermarkGui.Name = "DanielWatermarkGui"
-    WatermarkGui.ResetOnSpawn = false
-    WatermarkGui.Parent = PlayerGui
-    
-    local TextWatermark = Instance.new("TextLabel")
-    -- Posición en la esquina inferior derecha (con espacio para que no tape botones de salto/ataque)
-    TextWatermark.Size = UDim2.new(0, 200, 0, 30)
-    TextWatermark.Position = UDim2.new(1, -215, 1, -45) 
-    TextWatermark.BackgroundTransparency = 1
-    TextWatermark.Text = "DanielSonrieScript"
-    TextWatermark.TextColor3 = Color3.fromRGB(0, 255, 120) -- Verde neón combinando
-    TextWatermark.TextSize = 16
-    TextWatermark.Font = Enum.Font.GothamBold
-    TextWatermark.TextXAlignment = Enum.TextXAlignment.Right -- Alineado a la derecha
-    TextWatermark.Parent = WatermarkGui
-    
-    -- Animación para desaparecer la intro del centro sola
-    task.spawn(function()
-        task.wait(4)
-        local tweenInfo = TweenInfo.new(1, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
-        local frameTween = TweenService:Create(Frame, tweenInfo, {BackgroundTransparency = 1})
-        local textTween = TweenService:Create(TextIntro, tweenInfo, {TextTransparency = 1})
-        
-        frameTween:Play()
-        textTween:Play()
-        
-        frameTween.Completed:Connect(function()
-            IntroGui:Destroy()
-        end)
-    end)
+    -- Subtexto en verde: DanielSonrieScript
+    local SubLabel = Instance.new("TextLabel")
+    SubLabel.Size = UDim2.new(1, 0, 0, 20)
+    SubLabel.Position = UDim2.new(0, 0, 0, 33)
+    SubLabel.BackgroundTransparency = 1
+    SubLabel.Text = "DanielSonrieScript"
+    SubLabel.TextColor3 = Color3.fromRGB(0, 255, 120) -- Verde neón idéntico
+    SubLabel.TextSize = 13
+    SubLabel.Font = Enum.Font.GothamBold
+    SubLabel.Parent = MainFrame
 end)
 
--- 2. ANTI-LAG INVISIBLE DE FONDO
+-- 2. FILTRO INTELIGENTE (Respeta a Garou y vuela el lag real)
+local function CleanLaggyThings(obj)
+    -- EVITAR BORRAR EFECTOS DE GAROU
+    -- TSB suele nombrar los efectos de los personajes con el nombre del move o el user
+    local isGarouEffect = false
+    if obj:IsDescendantOf(Workspace) then
+        -- Si el efecto pertenece a un modelo de ataque de Garou o al personaje, saltarlo
+        if string.find(string.lower(obj.Name), "garou") or string.find(string.lower(obj.Name), "dash") then
+            isGarouEffect = true
+        end
+    end
+
+    if not isGarouEffect then
+        -- Desactivar partículas pesadas de mapa/actualización pero NO del dash salvado
+        if obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") then
+            -- Solo apaga si no es del dash del jugador
+            if not string.find(string.lower(obj.Name), "dash") then
+                obj.Enabled = false
+            end
+        elseif obj:IsA("Explosion") then
+            obj.Visible = false
+        -- Destruir las rocas y escombros del piso cuando tiras a alguien
+        elseif obj:IsA("Debris") or (obj:IsA("BasePart") and (obj.Name == "Debris" or obj.Name == "Rock" or obj.Name == "FloorRock")) then
+            obj:Destroy()
+        -- Modo Papa en el mapa base
+        elseif obj:IsA("BasePart") and not obj:IsA("MeshPart") and not obj.Parent:FindFirstChild("Humanoid") then
+            obj.Material = Enum.Material.SmoothPlastic
+        elseif obj:IsA("Texture") or obj:IsA("Decal") then
+            obj:Destroy()
+        end
+    end
+end
+
+-- 3. OPTIMIZAR ILUMINACIÓN DE GOLPES
 pcall(function()
     Lighting.GlobalShadows = false
     Lighting.FogEnd = 1e6
     Lighting.Brightness = 1
     for _, effect in pairs(Lighting:GetChildren()) do
-        if effect:IsA("PostEffect") or effect:IsA("BloomEffect") or effect:IsA("BlurEffect") or effect:IsA("ColorCorrectionEffect") or effect:IsA("SunRaysEffect") then
+        if effect:IsA("PostEffect") or effect:IsA("BloomEffect") or effect:IsA("BlurEffect") then
             effect.Enabled = false
         end
     end
 end)
 
--- 3. MODO PAPA EN TIEMPO REAL (Para la actualización)
-local function CleanLaggyThings(obj)
-    if obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") or obj:IsA("Fire") or obj:IsA("Smoke") then
-        obj.Enabled = false
-    elseif obj:IsA("Explosion") then
-        obj.Visible = false
-    elseif obj:IsA("Debris") or (obj:IsA("BasePart") and obj.Name == "Debris") then
-        obj:Destroy()
-    elseif obj:IsA("Texture") or obj:IsA("Decal") then
-        obj:Destroy()
-    end
-end
-
--- Limpiar lo actual
+-- Ejecutar limpieza inicial y activar el escáner de escombros en tiempo real
 for _, child in pairs(Workspace:GetDescendants()) do
     pcall(CleanLaggyThings, child)
 end
 
--- Monitorear nuevos efectos en tiempo real
 Workspace.DescendantAdded:Connect(function(descendant)
     pcall(CleanLaggyThings, descendant)
 end)
 
-print("🚀 Modo Papa Extremo Activo - FPS Booster v2")
+print("🚀 Modo Papa Extremo Activo - FPS Booster v3")
