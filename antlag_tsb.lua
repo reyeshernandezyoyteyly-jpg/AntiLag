@@ -1,10 +1,10 @@
--- ANTI-LAG EXTREMO - DanielSonrieScripts
+-- ANTI-LAG OPTIMIZADO - SIN LAG - DanielSonrieScripts
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 local LocalPlayer = Players.LocalPlayer
 
-print("⚔️ ANTI-LAG EXTREMO ACTIVADO - DanielSonrieScripts")
+print("⚔️ ANTI-LAG OPTIMIZADO - SIN LAG - DanielSonrieScripts")
 
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 for _, gui in pairs(PlayerGui:GetChildren()) do
@@ -35,7 +35,7 @@ pcall(function()
 end)
 
 -- ============================================
--- PANEL DE ACTUALIZACIONES (ESQUINA INFERIOR IZQUIERDA - 8 segundos)
+-- PANEL DE ACTUALIZACIONES (8 segundos)
 -- ============================================
 pcall(function()
     local UpdateGui = Instance.new("ScreenGui")
@@ -127,7 +127,7 @@ pcall(function()
 end)
 
 -- ============================================
--- ELIMINAR ÁRBOLES
+-- ELIMINAR ÁRBOLES (solo una vez)
 -- ============================================
 pcall(function()
     for _, obj in pairs(Workspace:GetDescendants()) do
@@ -139,7 +139,7 @@ pcall(function()
 end)
 
 -- ============================================
--- DETECCIÓN EXTREMA DE PIEDRAS (TAMAÑO ILIMITADO)
+-- DETECCIÓN DE PIEDRAS (SOLO CUANDO APARECEN - SIN ESCANEO PERIÓDICO)
 -- ============================================
 
 local function esRoca(obj)
@@ -159,43 +159,29 @@ local function esRoca(obj)
         current = current.Parent
     end
     
-    -- Detectar rocas (SIN LÍMITE DE TAMAÑO)
+    -- Detectar rocas
     if obj:IsA("BasePart") or obj:IsA("MeshPart") then
-        -- Excluir el terreno y partes esenciales
         if obj.Name == "Terrain" then return false end
         if obj.Name == "Baseplate" then return false end
         
-        -- Excluir partes de mapas o estructuras grandes
         local tamano = obj.Size.Magnitude
         
-        -- Detectar cualquier cosa que parezca piedra (por nombre o tamaño)
+        -- Por nombre
         if nombre:find("rock") or nombre:find("stone") or nombre:find("piedra") 
            or nombre:find("roca") or nombre:find("debris") or nombre:find("fragment")
            or nombre:find("slam") or nombre:find("down") then
             return true
         end
         
-        -- También eliminar partes pequeñas o medianas que no son terreno
-        if tamano < 50 and tamano > 0.5 then
-            -- Verificar que no sea parte del mapa principal
-            local esMapa = false
-            local parent = obj.Parent
-            while parent do
-                if parent.Name == "Map" or parent.Name == "Terrain" then
-                    esMapa = true
-                    break
-                end
-                parent = parent.Parent
-            end
-            if not esMapa then
-                return true
-            end
+        -- Por tamaño (pero sin escanear el mapa entero)
+        if tamano < 30 and tamano > 0.5 then
+            return true
         end
     end
     return false
 end
 
--- Escaneo inicial agresivo
+-- Escaneo inicial (solo una vez)
 for _, obj in pairs(Workspace:GetDescendants()) do
     pcall(function()
         if esRoca(obj) then 
@@ -204,7 +190,7 @@ for _, obj in pairs(Workspace:GetDescendants()) do
     end)
 end
 
--- Escaneo ultrarrápido para nuevas rocas
+-- ⚡ SOLO cuando aparecen objetos NUEVOS (NO escaneo periódico)
 Workspace.DescendantAdded:Connect(function(obj)
     task.wait(0.0000000001)
     pcall(function()
@@ -214,21 +200,8 @@ Workspace.DescendantAdded:Connect(function(obj)
     end)
 end)
 
--- Escaneo periódico cada 0.3 segundos (más agresivo)
-spawn(function()
-    while wait(0.3) do
-        pcall(function()
-            for _, obj in pairs(Workspace:GetDescendants()) do
-                if esRoca(obj) then
-                    obj:Destroy()
-                end
-            end
-        end)
-    end
-end)
-
 -- ============================================
--- ELIMINAR EFECTOS VISUALES
+-- ELIMINAR EFECTOS (SOLO CUANDO APARECEN)
 -- ============================================
 Workspace.DescendantAdded:Connect(function(obj)
     pcall(function()
@@ -243,7 +216,7 @@ Workspace.DescendantAdded:Connect(function(obj)
 end)
 
 -- ============================================
--- OPTIMIZACIÓN
+-- OPTIMIZACIÓN (solo una vez)
 -- ============================================
 pcall(function()
     Lighting.GlobalShadows = false
@@ -254,5 +227,4 @@ pcall(function()
     end
 end)
 
-print("✅ ANTI-LAG EXTREMO - DanielSonrieScripts")
-print("✅ Detección de piedras: TAMAÑO ILIMITADO")
+print("✅ ANTI-LAG OPTIMIZADO - SIN LAG - DanielSonrieScripts")
