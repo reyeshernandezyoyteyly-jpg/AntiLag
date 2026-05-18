@@ -1,12 +1,11 @@
--- DanielScript Ultimate Anti-Lag | TSB Down Slam Fix Edition
+-- DanielScript Ultimate Anti-Lag | TSB No Particles Edition
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 local TweenService = game:GetService("TweenService")
-local Debris = game:GetService("Debris")
 local LocalPlayer = Players.LocalPlayer
 
-print("⚔️ TSB Anti-Lag (Fix Patada Abajo) por DanielSonrie")
+print("⚔️ TSB Anti-Lag (Sin Partículas - Salvar Garou Dash) por DanielSonrie")
 
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 if PlayerGui:FindFirstChild("DanielWelcomeGui") then PlayerGui.DanielWelcomeGui:Destroy() end
@@ -127,41 +126,49 @@ pcall(function()
     end)
 end)
 
--- 3. DETECTOR AVANZADO DE EFECTOS DE GOLPES (Filtro agresivo sin importar el nombre)
-local function OcultarEfectoGrave(obj)
-    -- Salvar el Dash Azul
-    if string.find(string.lower(obj.Name), "dash") or string.find(string.lower(obj.Name), "blue") then return end
+-- 3. FILTRO ULTRA AGRESIVO: ELIMINA TODAS LAS PARTÍCULAS MENOS EL DASH DE GAROU
+local function CleanAllParticles(obj)
+    -- Verificar si pertenece al Dash de Garou o efectos azules esenciales
+    local lowerName = string.lower(obj.Name)
+    local parentName = obj.Parent and string.lower(obj.Parent.Name) or ""
+    
+    if string.find(lowerName, "dash") or string.find(lowerName, "blue") or string.find(lowerName, "garou") 
+       or string.find(parentName, "dash") or string.find(parentName, "garou") then 
+        return 
+    end
 
-    -- Seguir borrando palmeras completas
-    if string.find(string.lower(obj.Name), "tree") or string.find(string.lower(obj.Name), "palm") or string.find(string.lower(obj.Name), "palmera") then
+    -- Eliminar Palmeras por defecto (Siguen dando lag)
+    if string.find(lowerName, "tree") or string.find(lowerName, "palm") or string.find(lowerName, "palmera") then
         obj:Destroy()
         return
     end
 
-    -- CAPTURAR TODO LO QUE DETONE EN LAS CARPETAS DE EFECTOS (Rocas ocultas del Down Slam)
-    if obj:IsA("BasePart") or obj:IsA("MeshPart") then
-        local parentName = obj.Parent and obj.Parent.Name or ""
-        local lowerParent = string.lower(parentName)
-        local lowerName = string.lower(obj.Name)
-        
-        -- Si está metido en carpetas de FX, efectos visuales o se llama como escombro/parte suelta
-        if parentName == "VisualEffects" or string.find(lowerParent, "fx") or parentName == "Debris" 
-           or string.find(lowerName, "rock") or string.find(lowerName, "debris") or string.find(lowerName, "stone")
-           or (parentName == "Workspace" and obj.CanCollide == false and obj.Size.Y < 25 and not obj:IsDescendantOf(Workspace:FindFirstChild("Map"))) then
-            
-            -- Bloquear que toque el piso real del mapa
-            if obj.Name ~= "Terrain" and lowerName ~= "baseplate" then
+    -- Filtro de Rocas Down Slam (Invisibles y al subsuelo)
+    if obj:IsA("BasePart") then
+        if parentName == "visualeffects" or string.find(parentName, "fx") or parentName == "debris" or string.find(lowerName, "rock") or string.find(lowerName, "debris") then
+            if obj.Name ~= "Terrain" and obj.Size.Y < 30 and not obj:IsDescendantOf(Workspace:FindFirstChild("Map")) then
                 pcall(function()
                     obj.Transparency = 1
                     obj.Size = Vector3.new(0, 0, 0)
-                    obj.Position = Vector3.new(0, -999, 0) -- Mandadas al tártaro a la fuerza
+                    obj.Position = Vector3.new(0, -999, 0)
                     obj.CanCollide = false
                 end)
             end
         end
     end
+
+    -- APAGAR LITERALMENTE TODAS LAS PARTÍCULAS DEL JUEGO
+    if obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") or obj:IsA("Smoke") or obj:IsA("Fire") then
+        pcall(function()
+            obj.Enabled = false
+        end)
+    elseif obj:IsA("Explosion") then
+        pcall(function()
+            obj.Visible = false
+        end)
+    end
 end
 
--- Escaneo completo en vivo
-for _, child in pairs(Workspace:GetDescendants()) do pcall(OcultarEfectoGrave, child) end
-Workspace.DescendantAdded:Connect(function(descendant) pcall(OcultarEfectoGrave, descendant) end)
+-- Ejecución en vivo y escaneo inicial
+for _, child in pairs(Workspace:GetDescendants()) do pcall(CleanAllParticles, child) end
+Workspace.DescendantAdded:Connect(function(descendant) pcall(CleanAllParticles, descendant) end)
