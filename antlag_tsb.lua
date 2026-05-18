@@ -1,4 +1,4 @@
--- ANTI-LAG DEFINITIVO - CON ANIMACIONES SIMPLES - DanielSonrieScripts
+-- ANTI-LAG DEFINITIVO - CON ESPERA TOTAL DE 8 SEGUNDOS - DanielSonrieScripts
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
@@ -14,7 +14,14 @@ for _, gui in pairs(PlayerGui:GetChildren()) do
 end
 
 -- ============================================
--- TEXTO DE BIENVENIDA (ANIMACIÓN: entra desde abajo, sube, se desvanece)
+-- ESPERAR 8 SEGUNDOS ANTES DE EJECUTAR TODO
+-- ============================================
+task.wait(8)
+
+print("✅ INICIANDO OPTIMIZACIONES - El juego ya cargó")
+
+-- ============================================
+-- TEXTO DE BIENVENIDA (ABAJO - entra desde abajo, sube, se desvanece)
 -- ============================================
 pcall(function()
     local WelcomeGui = Instance.new("ScreenGui")
@@ -54,12 +61,13 @@ pcall(function()
     SubLabel.Font = Enum.Font.Gotham
     SubLabel.Parent = MainFrame
 
-    -- Animación: entra desde abajo, sube a su posición, se desvanece
-    local entrarAnim = TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, -175, 0.7, 0)})
+    -- Animación: entra desde abajo, sube a su posición
+    local entrarAnim = TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, -175, 0.85, 0)})
     entrarAnim:Play()
     
     task.wait(3)
     
+    -- Animación de salida: se desvanece y baja
     local salirAnim = TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Position = UDim2.new(0.5, -175, 1, 0), BackgroundTransparency = 1})
     salirAnim:Play()
     TweenService:Create(TitleLabel, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 1}):Play()
@@ -70,14 +78,7 @@ pcall(function()
 end)
 
 -- ============================================
--- ESPERAR 8 SEGUNDOS ANTES DE EJECUTAR TODO
--- ============================================
-task.wait(8)
-
-print("✅ INICIANDO OPTIMIZACIONES - El juego ya cargó")
-
--- ============================================
--- CONTADOR DE FPS (ANIMACIÓN: entra desde abajo)
+-- CONTADOR DE FPS (ESQUINA SUPERIOR IZQUIERDA - como estaba antes)
 -- ============================================
 pcall(function()
     local FpsGui = Instance.new("ScreenGui")
@@ -87,7 +88,7 @@ pcall(function()
 
     local FpsFrame = Instance.new("Frame")
     FpsFrame.Size = UDim2.new(0, 70, 0, 25)
-    FpsFrame.Position = UDim2.new(0, 10, 1, 0)
+    FpsFrame.Position = UDim2.new(0, 10, 0, 10)
     FpsFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
     FpsFrame.BackgroundTransparency = 0.5
     FpsFrame.BorderSizePixel = 0
@@ -106,10 +107,6 @@ pcall(function()
     FpsLabel.Font = Enum.Font.GothamBold
     FpsLabel.TextXAlignment = Enum.TextXAlignment.Center
     FpsLabel.Parent = FpsFrame
-
-    -- Animación de entrada
-    local entrarAnim = TweenService:Create(FpsFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0, 10, 1, -35)})
-    entrarAnim:Play()
 
     local lastTime = tick()
     local frameCount = 0
@@ -134,7 +131,7 @@ pcall(function()
 end)
 
 -- ============================================
--- PANEL DE ACTUALIZACIONES (ANIMACIÓN: entra desde abajo, sale abajo)
+-- PANEL DE ACTUALIZACIONES (CON ANIMACIÓN DE ENTRADA Y SALIDA)
 -- ============================================
 pcall(function()
     local UpdateGui = Instance.new("ScreenGui")
@@ -154,7 +151,7 @@ pcall(function()
     UpdateCorner.CornerRadius = UDim.new(0, 8)
     UpdateCorner.Parent = UpdateFrame
 
-    -- Animación de entrada
+    -- ANIMACIÓN DE ENTRADA (desde abajo)
     local entrarAnim = TweenService:Create(UpdateFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0, 10, 1, -105)})
     entrarAnim:Play()
 
@@ -191,7 +188,7 @@ pcall(function()
         yPos = yPos + 18
     end
 
-    -- Salir después de 8 segundos (animación hacia abajo)
+    -- ANIMACIÓN DE SALIDA (después de 8 segundos, baja y se desvanece)
     task.spawn(function()
         task.wait(8)
         local salirAnim = TweenService:Create(UpdateFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Position = UDim2.new(0, 10, 1, 0), BackgroundTransparency = 1})
@@ -208,7 +205,7 @@ pcall(function()
 end)
 
 -- ============================================
--- MARCA DE AGUA (ANIMACIÓN: entra desde abajo, se queda)
+-- MARCA DE AGUA (esquina inferior derecha)
 -- ============================================
 pcall(function()
     local WatermarkGui = Instance.new("ScreenGui")
@@ -218,7 +215,7 @@ pcall(function()
 
     local WatermarkLabel = Instance.new("TextLabel")
     WatermarkLabel.Size = UDim2.new(0, 140, 0, 18)
-    WatermarkLabel.Position = UDim2.new(1, -150, 1, 0)
+    WatermarkLabel.Position = UDim2.new(1, -150, 1, -30)
     WatermarkLabel.BackgroundTransparency = 1
     WatermarkLabel.Text = "DanielSonrieScripts"
     WatermarkLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -227,14 +224,10 @@ pcall(function()
     WatermarkLabel.TextXAlignment = Enum.TextXAlignment.Right
     WatermarkLabel.TextTransparency = 0.3
     WatermarkLabel.Parent = WatermarkGui
-    
-    -- Animación de entrada
-    local entrarAnim = TweenService:Create(WatermarkLabel, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(1, -150, 1, -30)})
-    entrarAnim:Play()
 end)
 
 -- ============================================
--- OPTIMIZACIONES (SE EJECUTAN DESPUÉS DE 8 SEGUNDOS)
+-- OPTIMIZACIONES
 -- ============================================
 
 -- Eliminar árboles
