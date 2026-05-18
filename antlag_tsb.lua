@@ -96,7 +96,7 @@ function ejecutarScriptPrincipal()
     Blur:Destroy()
     
     -- ============================================
-    -- TEXTO DE BIENVENIDA (ABAJO - SIN FONDO NEGRO)
+    -- TEXTO DE BIENVENIDA "MODO PATATA" (ABAJO - SIN FONDO)
     -- ============================================
     pcall(function()
         local WelcomeGui = Instance.new("ScreenGui")
@@ -104,10 +104,9 @@ function ejecutarScriptPrincipal()
         WelcomeGui.ResetOnSpawn = false
         WelcomeGui.Parent = PlayerGui
 
-        -- Solo el texto, sin fondo
         local TitleLabel = Instance.new("TextLabel")
         TitleLabel.Size = UDim2.new(0, 300, 0, 40)
-        TitleLabel.Position = UDim2.new(0.5, -150, 1, 0)  -- Empieza abajo del todo
+        TitleLabel.Position = UDim2.new(0.5, -150, 1, 0)
         TitleLabel.BackgroundTransparency = 1
         TitleLabel.Text = "🥔 MODO PATATA 🥔"
         TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -125,7 +124,7 @@ function ejecutarScriptPrincipal()
         SubLabel.Font = Enum.Font.Gotham
         SubLabel.Parent = WelcomeGui
 
-        -- Animación: suben desde abajo y se quedan abajo
+        -- Subir desde abajo y quedarse ABAJO (Y = 0.85)
         local entrarTitle = TweenService:Create(TitleLabel, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, -150, 0.85, 0)})
         local entrarSub = TweenService:Create(SubLabel, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, -150, 0.91, 0)})
         entrarTitle:Play()
@@ -133,7 +132,6 @@ function ejecutarScriptPrincipal()
         
         task.wait(3)
         
-        -- Salida: se desvanecen
         local salirTitle = TweenService:Create(TitleLabel, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 1})
         local salirSub = TweenService:Create(SubLabel, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 1})
         salirTitle:Play()
@@ -197,7 +195,7 @@ function ejecutarScriptPrincipal()
     end)
 
     -- ============================================
-    -- PANEL "FPS BOOST BETA" (Título blanco, texto normal)
+    -- PANEL "FPS BOOST BETA" (Título BLANCO, textos VERDES)
     -- ============================================
     pcall(function()
         local BoostGui = Instance.new("ScreenGui")
@@ -226,13 +224,13 @@ function ejecutarScriptPrincipal()
         TitleLabel.Position = UDim2.new(0, 5, 0, 5)
         TitleLabel.BackgroundTransparency = 1
         TitleLabel.Text = "FPS BOOST BETA"
-        TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)  -- BLANCO
+        TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
         TitleLabel.TextSize = 11
         TitleLabel.Font = Enum.Font.GothamBold
         TitleLabel.TextXAlignment = Enum.TextXAlignment.Center
         TitleLabel.Parent = BoostFrame
 
-        -- Lista de mejoras (con colores originales)
+        -- Textos en VERDE (como estaban antes)
         local mejoras = {
             {texto = "rocas eliminadas", color = Color3.fromRGB(0, 255, 0)},
             {texto = "modo patata", color = Color3.fromRGB(0, 255, 0)},
