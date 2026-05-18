@@ -73,28 +73,23 @@ pcall(function()
     end)
 end)
 
--- 3. FILTRO INTELIGENTE (Protege Garou, elimina piedras y down slam)
+-- 2. FILTRO INTELIGENTE (Elimina rocas del jugador, down slam, rocas lanzadas)
 local function CleanLaggyThings(obj)
     if not obj or not obj.Parent then return end
     
     local objName = string.lower(obj.Name)
     
-    -- PROTEGER: Dash de Garou y efectos del personaje
-    if string.find(objName, "dash") or string.find(objName, "garou") or string.find(objName, "effect") then
-        return
-    end
-    
-    -- ELIMINAR: Piedras, Down Slam y escombros pesados (PRIORIDAD MÁXIMA EN TSB)
+    -- ELIMINAR: Todas las rocas que lanza el jugador, down slam, escombros
     if string.find(objName, "rock") or string.find(objName, "stone") or string.find(objName, "debris") or 
        string.find(objName, "downslam") or string.find(objName, "down slam") or string.find(objName, "slam") or
-       string.find(objName, "pebble") or string.find(objName, "boulder") then
+       string.find(objName, "pebble") or string.find(objName, "boulder") or string.find(objName, "projectile") then
         pcall(function() obj:Destroy() end)
         return
     end
     
-    -- Desactivar partículas pesadas (excepto de ataques)
+    -- Desactivar partículas pesadas (excepto de ataques importantes)
     if obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") then
-        if not (string.find(objName, "attack") or string.find(objName, "skill") or string.find(objName, "move")) then
+        if not (string.find(objName, "attack") or string.find(objName, "skill") or string.find(objName, "move") or string.find(objName, "aura")) then
             pcall(function() obj.Enabled = false end)
         end
     elseif obj:IsA("Explosion") then
@@ -103,6 +98,42 @@ local function CleanLaggyThings(obj)
         pcall(function() obj.Material = Enum.Material.SmoothPlastic end)
     elseif obj:IsA("Texture") or obj:IsA("Decal") then
         pcall(function() obj:Destroy() end)
+    end
+end
+
+-- 3. MODIFICAR DASH DE GAROU - Línea azul tipo Flag Potato
+local function OptimizeDash(obj)
+    if not obj or not obj.Parent then return end
+    
+    local objName = string.lower(obj.Name)
+    
+    -- Detectar dash de Garou
+    if string.find(objName, "dash") and string.find(objName, "garou") then
+        -- Eliminar todas las partículas del dash original
+        for _, child in pairs(obj:GetDescendants()) do
+            if child:IsA("ParticleEmitter") or child:IsA("Trail") or child:IsA("Beam") then
+                pcall(function() child:Destroy() end)
+            end
+        end
+        
+        -- Crear línea azul simple tipo flag
+        pcall(function()
+            local dashLine = Instance.new("Part")
+            dashLine.Name = "DashLinePotato"
+            dashLine.Shape = Enum.PartType.Block
+            dashLine.Size = Vector3.new(0.3, 0.3, 5)
+            dashLine.Color = Color3.fromRGB(0, 150, 255) -- Azul
+            dashLine.Material = Enum.Material.Neon
+            dashLine.CanCollide = false
+            dashLine.TopSurface = Enum.SurfaceType.Smooth
+            dashLine.BottomSurface = Enum.SurfaceType.Smooth
+            dashLine.Parent = obj
+            
+            -- Efecto flag potato (pixelado)
+            local mesh = Instance.new("BlockMesh")
+            mesh.Scale = Vector3.new(1, 1, 1)
+            mesh.Parent = dashLine
+        end)
     end
 end
 
@@ -121,13 +152,15 @@ end)
 -- Limpiar elementos existentes
 for _, child in pairs(Workspace:GetDescendants()) do
     pcall(function() CleanLaggyThings(child) end)
+    pcall(function() OptimizeDash(child) end)
 end
 
 -- Monitorear nuevos elementos en tiempo real
 Workspace.DescendantAdded:Connect(function(descendant)
-    task.delay(0.1, function()
+    task.delay(0.05, function()
         pcall(function() CleanLaggyThings(descendant) end)
+        pcall(function() OptimizeDash(descendant) end)
     end)
 end)
 
-print("🚀 Modo Papa Extremo Activo - DanielSonrie v4")
+print("🚀 Modo Papa Extremo Activo - DanielSonrie v5")
