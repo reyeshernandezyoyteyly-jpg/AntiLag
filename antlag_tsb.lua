@@ -1,10 +1,10 @@
--- ANTI-LAG DEFINITIVO - PISO LISO (SIN PLÁSTICO) - DanielSonrieScripts
+-- ANTI-LAG - PISO LISO (SmoothPlastic) - DanielSonrieScripts
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 local LocalPlayer = Players.LocalPlayer
 
-print("⚔️ ANTI-LAG - PISO LISO SIN PLÁSTICO")
+print("⚔️ ANTI-LAG - PISO LISO CON SMOOTHPLASTIC")
 
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 for _, gui in pairs(PlayerGui:GetChildren()) do
@@ -127,15 +127,13 @@ pcall(function()
 end)
 
 -- ============================================
--- PISO LISO (SIN PLÁSTICO - solo quitar texturas)
+-- PISO LISO (SmoothPlastic - sin cuadrados, sin brillo)
 -- ============================================
 pcall(function()
     for _, obj in pairs(Workspace:GetDescendants()) do
         if obj:IsA("BasePart") or obj:IsA("MeshPart") or obj:IsA("Part") then
             if obj.Name ~= "Terrain" then
                 pcall(function()
-                    -- En lugar de plástico, solo quitamos las texturas cuadriculadas
-                    -- Dejamos el material original pero sin detalles
                     obj.Material = Enum.Material.SmoothPlastic
                 end)
             end
@@ -166,7 +164,7 @@ local function esDummy(obj)
             return true
         end
         local nombre = current.Name and string.lower(current.Name) or ""
-        if nombre:find("dummy") or nombre:find("training") or nombre:find("target") then
+        if nombre:find("dummy") or nombre:find("training") or nombre:find("target") or nombre:find("Weakest") then
             return true
         end
         current = current.Parent
@@ -175,7 +173,7 @@ local function esDummy(obj)
 end
 
 -- ============================================
--- ELIMINAR ROCAS (GRANDES Y CHICAS)
+-- ELIMINAR ROCAS
 -- ============================================
 
 local function esRoca(obj)
@@ -258,4 +256,4 @@ pcall(function()
     end
 end)
 
-print("✅ ANTI-LAG - PISO LISO (SIN PLÁSTICO) - DanielSonrieScripts")
+print("✅ ANTI-LAG - PISO LISO (SmoothPlastic) - DanielSonrieScripts")
