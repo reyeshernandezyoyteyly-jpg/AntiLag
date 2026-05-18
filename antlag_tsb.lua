@@ -1,4 +1,4 @@
--- ANTI-LAG DEFINITIVO - CON ESPERA TOTAL DE 8 SEGUNDOS - DanielSonrieScripts
+-- ANTI-LAG DEFINITIVO - CON PANTALLA DE CARGA - DanielSonrieScripts
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
@@ -6,7 +6,7 @@ local LocalPlayer = Players.LocalPlayer
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 
-print("⚔️ ANTI-LAG DEFINITIVO - ESPERANDO 8 SEGUNDOS")
+print("⚔️ ANTI-LAG DEFINITIVO - INICIANDO")
 
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 for _, gui in pairs(PlayerGui:GetChildren()) do
@@ -14,14 +14,123 @@ for _, gui in pairs(PlayerGui:GetChildren()) do
 end
 
 -- ============================================
--- ESPERAR 8 SEGUNDOS ANTES DE EJECUTAR TODO
+-- PANTALLA DE CARGA (BARRA DE PROGRESO)
 -- ============================================
-task.wait(8)
+pcall(function()
+    local LoadGui = Instance.new("ScreenGui")
+    LoadGui.Name = "DanielLoadGui"
+    LoadGui.ResetOnSpawn = false
+    LoadGui.Parent = PlayerGui
 
-print("✅ INICIANDO OPTIMIZACIONES - El juego ya cargó")
+    -- Fondo oscuro
+    local Background = Instance.new("Frame")
+    Background.Size = UDim2.new(1, 0, 1, 0)
+    Background.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    Background.BackgroundTransparency = 0
+    Background.Parent = LoadGui
+
+    -- Marco de la barra
+    local BarFrame = Instance.new("Frame")
+    BarFrame.Size = UDim2.new(0, 300, 0, 30)
+    BarFrame.Position = UDim2.new(0.5, -150, 0.5, -15)
+    BarFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
+    BarFrame.BackgroundTransparency = 0
+    BarFrame.BorderSizePixel = 0
+    BarFrame.Parent = LoadGui
+
+    local BarCorner = Instance.new("UICorner")
+    BarCorner.CornerRadius = UDim.new(0, 15)
+    BarCorner.Parent = BarFrame
+
+    -- Barra de progreso (se llenará)
+    local ProgressBar = Instance.new("Frame")
+    ProgressBar.Size = UDim2.new(0, 0, 1, 0)
+    ProgressBar.BackgroundColor3 = Color3.fromRGB(255, 200, 0)
+    ProgressBar.BorderSizePixel = 0
+    ProgressBar.Parent = BarFrame
+
+    local ProgressCorner = Instance.new("UICorner")
+    ProgressCorner.CornerRadius = UDim.new(0, 15)
+    ProgressCorner.Parent = ProgressBar
+
+    -- Texto "Cargando..."
+    local LoadText = Instance.new("TextLabel")
+    LoadText.Size = UDim2.new(0, 200, 0, 30)
+    LoadText.Position = UDim2.new(0.5, -100, 0.5, -50)
+    LoadText.BackgroundTransparency = 1
+    LoadText.Text = "Cargando"
+    LoadText.TextColor3 = Color3.fromRGB(255, 255, 255)
+    LoadText.TextSize = 18
+    LoadText.Font = Enum.Font.GothamBold
+    LoadText.Parent = LoadGui
+
+    -- Texto del porcentaje
+    local PercentText = Instance.new("TextLabel")
+    PercentText.Size = UDim2.new(0, 100, 0, 30)
+    PercentText.Position = UDim2.new(0.5, -50, 0.5, 25)
+    PercentText.BackgroundTransparency = 1
+    PercentText.Text = "0%"
+    PercentText.TextColor3 = Color3.fromRGB(255, 200, 0)
+    PercentText.TextSize = 14
+    PercentText.Font = Enum.Font.GothamBold
+    PercentText.Parent = LoadGui
+
+    -- Animación de puntos suspensivos
+    local puntos = 0
+    local cargaLoop = task.spawn(function()
+        while LoadGui.Parent do
+            task.wait(0.3)
+            puntos = (puntos % 3) + 1
+            LoadText.Text = "Cargando" .. string.rep(".", puntos)
+        end
+    end)
+
+    -- Animar la barra durante 5 segundos
+    local duracion = 5 -- 5 segundos
+    local inicio = tick()
+    
+    local function actualizarBarra()
+        local transcurrido = tick() - inicio
+        local progreso = math.min(transcurrido / duracion, 1)
+        local ancho = 300 * progreso
+        ProgressBar:TweenSize(UDim2.new(0, ancho, 1, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 0.1, true)
+        PercentText.Text = math.floor(progreso * 100) .. "%"
+        
+        if progreso < 1 then
+            task.wait(0.05)
+            actualizarBarra()
+        else
+            -- Cargar completado
+            task.cancel(cargaLoop)
+            
+            -- Animación de salida
+            local fadeOut = TweenService:Create(Background, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {BackgroundTransparency = 1})
+            local fadeBar = TweenService:Create(BarFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {BackgroundTransparency = 1})
+            local fadeText = TweenService:Create(LoadText, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 1})
+            local fadePercent = TweenService:Create(PercentText, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 1})
+            
+            fadeOut:Play()
+            fadeBar:Play()
+            fadeText:Play()
+            fadePercent:Play()
+            
+            task.wait(0.6)
+            LoadGui:Destroy()
+        end
+    end
+    
+    actualizarBarra()
+end)
 
 -- ============================================
--- TEXTO DE BIENVENIDA (ABAJO - entra desde abajo, sube, se desvanece)
+-- ESPERAR A QUE TERMINE LA CARGA (5 SEGUNDOS)
+-- ============================================
+task.wait(5.5)
+
+print("✅ OPTIMIZACIONES INICIANDO")
+
+-- ============================================
+-- TEXTO DE BIENVENIDA (ABAJO - con subtítulo)
 -- ============================================
 pcall(function()
     local WelcomeGui = Instance.new("ScreenGui")
@@ -30,7 +139,7 @@ pcall(function()
     WelcomeGui.Parent = PlayerGui
 
     local MainFrame = Instance.new("Frame")
-    MainFrame.Size = UDim2.new(0, 350, 0, 80)
+    MainFrame.Size = UDim2.new(0, 350, 0, 100)
     MainFrame.Position = UDim2.new(0.5, -175, 1, 0)
     MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
     MainFrame.BackgroundTransparency = 0.4
@@ -53,21 +162,21 @@ pcall(function()
 
     local SubLabel = Instance.new("TextLabel")
     SubLabel.Size = UDim2.new(1, 0, 0, 20)
-    SubLabel.Position = UDim2.new(0, 0, 0, 50)
+    SubLabel.Position = UDim2.new(0, 0, 0, 55)
     SubLabel.BackgroundTransparency = 1
-    SubLabel.Text = "DanielSonrieScripts"
+    SubLabel.Text = "Developed by DanielSonrieScripts"
     SubLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
-    SubLabel.TextSize = 12
+    SubLabel.TextSize = 11
     SubLabel.Font = Enum.Font.Gotham
     SubLabel.Parent = MainFrame
 
-    -- Animación: entra desde abajo, sube a su posición
+    -- Animación de entrada
     local entrarAnim = TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, -175, 0.85, 0)})
     entrarAnim:Play()
     
     task.wait(3)
     
-    -- Animación de salida: se desvanece y baja
+    -- Animación de salida
     local salirAnim = TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Position = UDim2.new(0.5, -175, 1, 0), BackgroundTransparency = 1})
     salirAnim:Play()
     TweenService:Create(TitleLabel, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 1}):Play()
@@ -78,7 +187,7 @@ pcall(function()
 end)
 
 -- ============================================
--- CONTADOR DE FPS (ESQUINA SUPERIOR IZQUIERDA - como estaba antes)
+-- CONTADOR DE FPS
 -- ============================================
 pcall(function()
     local FpsGui = Instance.new("ScreenGui")
@@ -131,7 +240,7 @@ pcall(function()
 end)
 
 -- ============================================
--- PANEL DE ACTUALIZACIONES (CON ANIMACIÓN DE ENTRADA Y SALIDA)
+-- PANEL DE ACTUALIZACIONES
 -- ============================================
 pcall(function()
     local UpdateGui = Instance.new("ScreenGui")
@@ -151,7 +260,6 @@ pcall(function()
     UpdateCorner.CornerRadius = UDim.new(0, 8)
     UpdateCorner.Parent = UpdateFrame
 
-    -- ANIMACIÓN DE ENTRADA (desde abajo)
     local entrarAnim = TweenService:Create(UpdateFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0, 10, 1, -105)})
     entrarAnim:Play()
 
@@ -188,7 +296,6 @@ pcall(function()
         yPos = yPos + 18
     end
 
-    -- ANIMACIÓN DE SALIDA (después de 8 segundos, baja y se desvanece)
     task.spawn(function()
         task.wait(8)
         local salirAnim = TweenService:Create(UpdateFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Position = UDim2.new(0, 10, 1, 0), BackgroundTransparency = 1})
@@ -205,7 +312,7 @@ pcall(function()
 end)
 
 -- ============================================
--- MARCA DE AGUA (esquina inferior derecha)
+-- MARCA DE AGUA
 -- ============================================
 pcall(function()
     local WatermarkGui = Instance.new("ScreenGui")
@@ -230,7 +337,6 @@ end)
 -- OPTIMIZACIONES
 -- ============================================
 
--- Eliminar árboles
 pcall(function()
     for _, obj in pairs(Workspace:GetDescendants()) do
         local nombre = obj.Name and string.lower(obj.Name) or ""
@@ -240,7 +346,6 @@ pcall(function()
     end
 end)
 
--- Protección de dummy
 local function esDummy(obj)
     local current = obj.Parent
     while current do
@@ -256,7 +361,6 @@ local function esDummy(obj)
     return false
 end
 
--- Eliminar rocas
 local function esRoca(obj)
     if esDummy(obj) then return false end
     
@@ -296,7 +400,6 @@ Workspace.DescendantAdded:Connect(function(obj)
     end)
 end)
 
--- Eliminar efectos
 Workspace.DescendantAdded:Connect(function(obj)
     pcall(function()
         if esDummy(obj) then return end
@@ -311,7 +414,6 @@ Workspace.DescendantAdded:Connect(function(obj)
     end)
 end)
 
--- Optimización de gráficos
 pcall(function()
     Lighting.GlobalShadows = false
     for _, effect in pairs(Lighting:GetChildren()) do
