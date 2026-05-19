@@ -1,184 +1,514 @@
--- TSB ANTI-LAG - DanielSonrieScripts
+-- TSB ANTI-LAG - DANIELSONRIESCRIPTS
 local Lighting = game:GetService("Lighting")
-local Workspace = game:GetService("Workspace")
 local Players = game:GetService("Players")
+local Workspace = game:GetService("Workspace")
 local LocalPlayer = Players.LocalPlayer
+local RunService = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
 
--- Verificar si es TSB
+-- ============================================
+-- VERIFICAR SI ES THE STRONGEST BATTLEGROUNDS
+-- ============================================
 local placeId = game.PlaceId
-if placeId ~= 10449761463 and placeId ~= 14933485796 then
+local esTSB = false
+local tsbIds = {10449761463, 14933485796, 15589623872, 15846341900}
+
+for _, id in pairs(tsbIds) do
+    if placeId == id then
+        esTSB = true
+        break
+    end
+end
+
+-- SI NO ES TSB, KICK
+if not esTSB then
+    local pg = LocalPlayer:WaitForChild("PlayerGui")
     local gui = Instance.new("ScreenGui")
-    gui.Parent = LocalPlayer:WaitForChild("PlayerGui")
+    gui.Parent = pg
+    
     local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(0, 400, 0, 150)
-    frame.Position = UDim2.new(0.5, -200, 0.5, -75)
-    frame.BackgroundColor3 = Color3.fromRGB(0,0,0)
-    frame.BackgroundTransparency = 0.3
+    frame.Size = UDim2.new(0, 500, 0, 180)
+    frame.Position = UDim2.new(0.5, -250, 0.5, -90)
+    frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    frame.BackgroundTransparency = 0.4
     frame.Parent = gui
-    local txt = Instance.new("TextLabel")
-    txt.Size = UDim2.new(1,0,1,0)
-    txt.BackgroundTransparency = 1
-    txt.Text = "ESTE SCRIPT NO ES UNIVERSAL\nES PARA THE STRONGEST BATTLEGROUNDS"
-    txt.TextColor3 = Color3.fromRGB(255,255,255)
-    txt.TextSize = 18
-    txt.Font = Enum.Font.GothamBold
-    txt.Parent = frame
-    task.wait(3)
+    
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 20)
+    corner.Parent = frame
+    
+    local icon = Instance.new("TextLabel")
+    icon.Size = UDim2.new(1, 0, 0, 60)
+    icon.Position = UDim2.new(0, 0, 0, 10)
+    icon.BackgroundTransparency = 1
+    icon.Text = "⚠️"
+    icon.TextColor3 = Color3.fromRGB(255, 100, 0)
+    icon.TextSize = 45
+    icon.Font = Enum.Font.GothamBold
+    icon.Parent = frame
+    
+    local title = Instance.new("TextLabel")
+    title.Size = UDim2.new(1, 0, 0, 35)
+    title.Position = UDim2.new(0, 0, 0, 70)
+    title.BackgroundTransparency = 1
+    title.Text = "JUEGO NO SOPORTADO"
+    title.TextColor3 = Color3.fromRGB(255, 50, 50)
+    title.TextSize = 18
+    title.Font = Enum.Font.GothamBold
+    title.Parent = frame
+    
+    local msg = Instance.new("TextLabel")
+    msg.Size = UDim2.new(1, 0, 0, 50)
+    msg.Position = UDim2.new(0, 0, 0, 105)
+    msg.BackgroundTransparency = 1
+    msg.Text = "ESTE SCRIPT ES BETA NO ES UNIVERSAL\nPOR AHORA FUNCIONA NADA MAS EN\nTHE STRONGEST BATTLEGROUNDS"
+    msg.TextColor3 = Color3.fromRGB(255, 255, 255)
+    msg.TextSize = 13
+    msg.Font = Enum.Font.Gotham
+    msg.Parent = frame
+    
+    task.wait(2)
     gui:Destroy()
+    task.wait(0.5)
+    
+    LocalPlayer:Kick("⚠️ ESTE SCRIPT ES BETA NO ES UNIVERSAL | POR AHORA FUNCIONA NADA MAS EN THE STRONGEST BATTLEGROUNDS")
     return
 end
 
 print("✅ TSB DETECTADO - INICIANDO")
 
--- Pantalla de carga
-local pg = LocalPlayer:WaitForChild("PlayerGui")
-local loadGui = Instance.new("ScreenGui")
-loadGui.Name = "LoadGui"
-loadGui.Parent = pg
+-- ============================================
+-- VENTANA DE CONTRASEÑA
+-- ============================================
+print("⚔️ ANTI-LAG DEFINITIVO - ESPERANDO CONTRASEÑA")
 
-local fondo = Instance.new("Frame")
-fondo.Size = UDim2.new(1,0,1,0)
-fondo.BackgroundColor3 = Color3.fromRGB(0,0,0)
-fondo.Parent = loadGui
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
-local barra = Instance.new("Frame")
-barra.Size = UDim2.new(0,300,0,30)
-barra.Position = UDim2.new(0.5,-150,0.5,-15)
-barra.BackgroundColor3 = Color3.fromRGB(50,50,60)
-barra.Parent = loadGui
+local PasswordGui = Instance.new("ScreenGui")
+PasswordGui.Name = "PasswordGui"
+PasswordGui.ResetOnSpawn = false
+PasswordGui.Parent = PlayerGui
 
-local progress = Instance.new("Frame")
-progress.Size = UDim2.new(0,0,1,0)
-progress.BackgroundColor3 = Color3.fromRGB(255,200,0)
-progress.Parent = barra
+local FondoPass = Instance.new("Frame")
+FondoPass.Size = UDim2.new(1, 0, 1, 0)
+FondoPass.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+FondoPass.BackgroundTransparency = 0.8
+FondoPass.Parent = PasswordGui
 
-local texto = Instance.new("TextLabel")
-texto.Size = UDim2.new(0,200,0,30)
-texto.Position = UDim2.new(0.5,-100,0.5,-60)
-texto.BackgroundTransparency = 1
-texto.Text = "Cargando"
-texto.TextColor3 = Color3.fromRGB(255,255,255)
-texto.TextSize = 20
-texto.Font = Enum.Font.GothamBold
-texto.Parent = loadGui
+local LoginFrame = Instance.new("Frame")
+LoginFrame.Size = UDim2.new(0, 300, 0, 150)
+LoginFrame.Position = UDim2.new(0.5, -150, 0.5, -75)
+LoginFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
+LoginFrame.BorderSizePixel = 0
+LoginFrame.Parent = PasswordGui
 
-local pct = Instance.new("TextLabel")
-pct.Size = UDim2.new(0,100,0,30)
-pct.Position = UDim2.new(0.5,-50,0.5,25)
-pct.BackgroundTransparency = 1
-pct.Text = "0%"
-pct.TextColor3 = Color3.fromRGB(255,255,255)
-pct.TextSize = 18
-pct.Font = Enum.Font.GothamBold
-pct.Parent = loadGui
+local LoginCorner = Instance.new("UICorner")
+LoginCorner.CornerRadius = UDim.new(0, 15)
+LoginCorner.Parent = LoginFrame
 
-for i = 1, 100 do
-    progress:TweenSize(UDim2.new(0,300 * i/100,1,0), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 0.02, true)
-    pct.Text = i .. "%"
-    task.wait(0.05)
-end
+local TitlePass = Instance.new("TextLabel")
+TitlePass.Size = UDim2.new(1, 0, 0, 35)
+TitlePass.Position = UDim2.new(0, 0, 0, 10)
+TitlePass.BackgroundTransparency = 1
+TitlePass.Text = "🔒 SCRIPT PROTEGIDO"
+TitlePass.TextColor3 = Color3.fromRGB(255, 200, 0)
+TitlePass.TextSize = 16
+TitlePass.Font = Enum.Font.GothamBold
+TitlePass.Parent = LoginFrame
 
-loadGui:Destroy()
+local PasswordBox = Instance.new("TextBox")
+PasswordBox.Size = UDim2.new(0, 200, 0, 35)
+PasswordBox.Position = UDim2.new(0.5, -100, 0, 55)
+PasswordBox.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+PasswordBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+PasswordBox.TextSize = 14
+PasswordBox.Font = Enum.Font.Gotham
+PasswordBox.PlaceholderText = "Ingresa la contraseña"
+PasswordBox.Text = ""
+PasswordBox.ClearTextOnFocus = false
+PasswordBox.Parent = LoginFrame
 
--- Bienvenida
-local welcome = Instance.new("ScreenGui")
-welcome.Name = "WelcomeGui"
-welcome.Parent = pg
+local PassCorner = Instance.new("UICorner")
+PassCorner.CornerRadius = UDim.new(0, 8)
+PassCorner.Parent = PasswordBox
 
-local bubble = Instance.new("Frame")
-bubble.Size = UDim2.new(0,350,0,90)
-bubble.Position = UDim2.new(0.5,-175,0.5,-45)
-bubble.BackgroundColor3 = Color3.fromRGB(0,0,0)
-bubble.BackgroundTransparency = 0.5
-bubble.Parent = welcome
+local ConfirmButton = Instance.new("TextButton")
+ConfirmButton.Size = UDim2.new(0, 100, 0, 35)
+ConfirmButton.Position = UDim2.new(0.5, -50, 0, 105)
+ConfirmButton.BackgroundColor3 = Color3.fromRGB(255, 200, 0)
+ConfirmButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+ConfirmButton.TextSize = 14
+ConfirmButton.Font = Enum.Font.GothamBold
+ConfirmButton.Text = "ENTRAR"
+ConfirmButton.Parent = LoginFrame
 
-local title = Instance.new("TextLabel")
-title.Size = UDim2.new(1,0,0,45)
-title.Position = UDim2.new(0,0,0,5)
-title.BackgroundTransparency = 1
-title.Text = "🥔 MODO PATATA 🥔"
-title.TextColor3 = Color3.fromRGB(255,255,255)
-title.TextSize = 26
-title.Font = Enum.Font.GothamBold
-title.Parent = bubble
+local ButtonCorner = Instance.new("UICorner")
+ButtonCorner.CornerRadius = UDim.new(0, 8)
+ButtonCorner.Parent = ConfirmButton
 
-local sub = Instance.new("TextLabel")
-sub.Size = UDim2.new(1,0,0,25)
-sub.Position = UDim2.new(0,0,0,55)
-sub.BackgroundTransparency = 1
-sub.Text = "Developed by DanielSonrieScripts"
-sub.TextColor3 = Color3.fromRGB(255,200,0)
-sub.TextSize = 12
-sub.Font = Enum.Font.Gotham
-sub.Parent = bubble
+local ErrorMsg = Instance.new("TextLabel")
+ErrorMsg.Size = UDim2.new(1, 0, 0, 25)
+ErrorMsg.Position = UDim2.new(0, 0, 0, 145)
+ErrorMsg.BackgroundTransparency = 1
+ErrorMsg.Text = ""
+ErrorMsg.TextColor3 = Color3.fromRGB(255, 0, 0)
+ErrorMsg.TextSize = 12
+ErrorMsg.Font = Enum.Font.Gotham
+ErrorMsg.Parent = LoginFrame
 
-task.wait(3)
-welcome:Destroy()
+local CONTRASENA_CORRECTA = "DanielSonrieScripts"
 
--- FPS Counter
-local fpsGui = Instance.new("ScreenGui")
-fpsGui.Name = "FpsGui"
-fpsGui.Parent = pg
-
-local fpsFrame = Instance.new("Frame")
-fpsFrame.Size = UDim2.new(0,70,0,25)
-fpsFrame.Position = UDim2.new(0,10,0,10)
-fpsFrame.BackgroundColor3 = Color3.fromRGB(0,0,0)
-fpsFrame.BackgroundTransparency = 0.5
-fpsFrame.Parent = fpsGui
-
-local fpsLabel = Instance.new("TextLabel")
-fpsLabel.Size = UDim2.new(1,0,1,0)
-fpsLabel.BackgroundTransparency = 1
-fpsLabel.Text = "FPS: --"
-fpsLabel.TextColor3 = Color3.fromRGB(0,255,0)
-fpsLabel.TextSize = 14
-fpsLabel.Font = Enum.Font.GothamBold
-fpsLabel.Parent = fpsFrame
-
-local lastTime = tick()
-local frameCount = 0
-game:GetService("RunService").RenderStepped:Connect(function()
-    frameCount = frameCount + 1
-    if tick() - lastTime >= 1 then
-        local fps = frameCount
-        frameCount = 0
-        lastTime = tick()
-        if fps >= 50 then
-            fpsLabel.TextColor3 = Color3.fromRGB(0,255,0)
-        elseif fps >= 30 then
-            fpsLabel.TextColor3 = Color3.fromRGB(255,255,0)
-        else
-            fpsLabel.TextColor3 = Color3.fromRGB(255,0,0)
-        end
-        fpsLabel.Text = "FPS: " .. fps
+-- ============================================
+-- FUNCIÓN PRINCIPAL
+-- ============================================
+local function ejecutarScriptCompleto()
+    PasswordGui:Destroy()
+    print("✅ CONTRASEÑA CORRECTA - INICIANDO SCRIPT")
+    
+    for _, gui in pairs(PlayerGui:GetChildren()) do
+        if gui.Name:find("Daniel") then gui:Destroy() end
     end
-end)
 
--- Eliminar rocas y árboles
-for _, obj in pairs(Workspace:GetDescendants()) do
-    pcall(function()
-        local n = obj.Name and obj.Name:lower() or ""
-        if n:find("tree") or n:find("palm") or n:find("rock") or n:find("stone") or n:find("debris") then
-            obj:Destroy()
-        end
-        if obj:IsA("ParticleEmitter") or obj:IsA("Smoke") or obj:IsA("Fire") then
-            obj:Destroy()
+    -- Pantalla de carga
+    local LoadGui = Instance.new("ScreenGui")
+    LoadGui.Name = "DanielLoadGui"
+    LoadGui.ResetOnSpawn = false
+    LoadGui.Parent = PlayerGui
+    LoadGui.DisplayOrder = 999999
+
+    local Blur = Instance.new("BlurEffect")
+    Blur.Size = 12
+    Blur.Parent = Lighting
+
+    local FondoCarga = Instance.new("Frame")
+    FondoCarga.Size = UDim2.new(2, 0, 2, 0)
+    FondoCarga.Position = UDim2.new(-0.5, 0, -0.5, 0)
+    FondoCarga.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    FondoCarga.BackgroundTransparency = 0.2
+    FondoCarga.BorderSizePixel = 0
+    FondoCarga.Parent = LoadGui
+
+    local BarFrame = Instance.new("Frame")
+    BarFrame.Size = UDim2.new(0, 300, 0, 30)
+    BarFrame.Position = UDim2.new(0.5, -150, 0.5, -15)
+    BarFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
+    BarFrame.BackgroundTransparency = 0
+    BarFrame.BorderSizePixel = 0
+    BarFrame.Parent = LoadGui
+
+    local BarCorner = Instance.new("UICorner")
+    BarCorner.CornerRadius = UDim.new(0, 15)
+    BarCorner.Parent = BarFrame
+
+    local ProgressBar = Instance.new("Frame")
+    ProgressBar.Size = UDim2.new(0, 0, 1, 0)
+    ProgressBar.BackgroundColor3 = Color3.fromRGB(255, 200, 0)
+    ProgressBar.BorderSizePixel = 0
+    ProgressBar.Parent = BarFrame
+
+    local ProgressCorner = Instance.new("UICorner")
+    ProgressCorner.CornerRadius = UDim.new(0, 15)
+    ProgressCorner.Parent = ProgressBar
+
+    local LoadText = Instance.new("TextLabel")
+    LoadText.Size = UDim2.new(0, 200, 0, 30)
+    LoadText.Position = UDim2.new(0.5, -100, 0.5, -60)
+    LoadText.BackgroundTransparency = 1
+    LoadText.Text = "Cargando"
+    LoadText.TextColor3 = Color3.fromRGB(255, 255, 255)
+    LoadText.TextSize = 20
+    LoadText.Font = Enum.Font.GothamBold
+    LoadText.Parent = LoadGui
+
+    local PercentText = Instance.new("TextLabel")
+    PercentText.Size = UDim2.new(0, 100, 0, 30)
+    PercentText.Position = UDim2.new(0.5, -50, 0.5, 25)
+    PercentText.BackgroundTransparency = 1
+    PercentText.Text = "0%"
+    PercentText.TextColor3 = Color3.fromRGB(255, 255, 255)
+    PercentText.TextSize = 18
+    PercentText.Font = Enum.Font.GothamBold
+    PercentText.Parent = LoadGui
+
+    local puntos = 0
+    local cargaLoop = task.spawn(function()
+        while LoadGui and LoadGui.Parent do
+            task.wait(0.3)
+            puntos = (puntos % 3) + 1
+            pcall(function()
+                LoadText.Text = "Cargando" .. string.rep(".", puntos)
+            end)
         end
     end)
-end
 
-Workspace.DescendantAdded:Connect(function(obj)
-    pcall(function()
-        local n = obj.Name and obj.Name:lower() or ""
-        if n:find("tree") or n:find("palm") or n:find("rock") or n:find("stone") then
-            obj:Destroy()
-        end
-        if obj:IsA("ParticleEmitter") or obj:IsA("Smoke") or obj:IsA("Fire") then
-            obj:Destroy()
-        end
-    end)
-end)
+    function ejecutarOptimizaciones()
+        print("✅ OPTIMIZACIONES INICIANDO")
+        Blur:Destroy()
+        
+        -- BIENVENIDA MODO PATATA
+        pcall(function()
+            local WelcomeGui = Instance.new("ScreenGui")
+            WelcomeGui.Name = "DanielWelcomeGui"
+            WelcomeGui.ResetOnSpawn = false
+            WelcomeGui.Parent = PlayerGui
 
-Lighting.GlobalShadows = false
-print("✅ TSB ANTI-LAG ACTIVADO - DanielSonrieScripts")
+            local Bubble = Instance.new("Frame")
+            Bubble.Size = UDim2.new(0, 350, 0, 90)
+            Bubble.Position = UDim2.new(0.5, -175, 0.5, -45)
+            Bubble.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+            Bubble.BackgroundTransparency = 0.5
+            Bubble.BorderSizePixel = 0
+            Bubble.Parent = WelcomeGui
+
+            local BubbleCorner = Instance.new("UICorner")
+            BubbleCorner.CornerRadius = UDim.new(0, 20)
+            BubbleCorner.Parent = Bubble
+
+            local TitleLabel = Instance.new("TextLabel")
+            TitleLabel.Size = UDim2.new(1, 0, 0, 45)
+            TitleLabel.Position = UDim2.new(0, 0, 0, 5)
+            TitleLabel.BackgroundTransparency = 1
+            TitleLabel.Text = "🥔 MODO PATATA 🥔"
+            TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+            TitleLabel.TextSize = 26
+            TitleLabel.Font = Enum.Font.GothamBold
+            TitleLabel.Parent = Bubble
+
+            local SubLabel = Instance.new("TextLabel")
+            SubLabel.Size = UDim2.new(1, 0, 0, 25)
+            SubLabel.Position = UDim2.new(0, 0, 0, 55)
+            SubLabel.BackgroundTransparency = 1
+            SubLabel.Text = "Developed by DanielSonrieScripts"
+            SubLabel.TextColor3 = Color3.fromRGB(255, 200, 0)
+            SubLabel.TextSize = 12
+            SubLabel.Font = Enum.Font.Gotham
+            SubLabel.Parent = Bubble
+
+            Bubble.Position = UDim2.new(0.5, -175, 1, 0)
+            local entrarAnim = TweenService:Create(Bubble, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, -175, 0.5, -45)})
+            entrarAnim:Play()
+            
+            task.wait(3)
+            
+            local salirAnim = TweenService:Create(Bubble, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Position = UDim2.new(0.5, -175, 1, 0), BackgroundTransparency = 1})
+            salirAnim:Play()
+            TweenService:Create(TitleLabel, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 1}):Play()
+            TweenService:Create(SubLabel, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 1}):Play()
+            
+            task.wait(0.5)
+            WelcomeGui:Destroy()
+        end)
+
+        -- FPS COUNTER
+        pcall(function()
+            local FpsGui = Instance.new("ScreenGui")
+            FpsGui.Name = "DanielFpsGui"
+            FpsGui.ResetOnSpawn = false
+            FpsGui.Parent = PlayerGui
+
+            local FpsFrame = Instance.new("Frame")
+            FpsFrame.Size = UDim2.new(0, 70, 0, 25)
+            FpsFrame.Position = UDim2.new(0, 10, 0, 10)
+            FpsFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+            FpsFrame.BackgroundTransparency = 0.5
+            FpsFrame.BorderSizePixel = 0
+            FpsFrame.Parent = FpsGui
+
+            local FpsCorner = Instance.new("UICorner")
+            FpsCorner.CornerRadius = UDim.new(0, 5)
+            FpsCorner.Parent = FpsFrame
+
+            local FpsLabel = Instance.new("TextLabel")
+            FpsLabel.Size = UDim2.new(1, 0, 1, 0)
+            FpsLabel.BackgroundTransparency = 1
+            FpsLabel.Text = "FPS: --"
+            FpsLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
+            FpsLabel.TextSize = 14
+            FpsLabel.Font = Enum.Font.GothamBold
+            FpsLabel.TextXAlignment = Enum.TextXAlignment.Center
+            FpsLabel.Parent = FpsFrame
+
+            local lastTime = tick()
+            local frameCount = 0
+
+            RunService.RenderStepped:Connect(function()
+                frameCount = frameCount + 1
+                local currentTime = tick()
+                if currentTime - lastTime >= 1 then
+                    local fps = frameCount
+                    frameCount = 0
+                    lastTime = currentTime
+                    if fps >= 50 then
+                        FpsLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
+                    elseif fps >= 30 then
+                        FpsLabel.TextColor3 = Color3.fromRGB(255, 255, 0)
+                    else
+                        FpsLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+                    end
+                    FpsLabel.Text = "FPS: " .. fps
+                end
+            end)
+        end)
+
+        -- PANEL FPS BOOST BETA
+        pcall(function()
+            local BoostGui = Instance.new("ScreenGui")
+            BoostGui.Name = "DanielBoostGui"
+            BoostGui.ResetOnSpawn = false
+            BoostGui.Parent = PlayerGui
+
+            local BoostFrame = Instance.new("Frame")
+            BoostFrame.Size = UDim2.new(0, 160, 0, 95)
+            BoostFrame.Position = UDim2.new(0, 10, 1, 0)
+            BoostFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+            BoostFrame.BackgroundTransparency = 0.5
+            BoostFrame.BorderSizePixel = 0
+            BoostFrame.Parent = BoostGui
+
+            local BoostCorner = Instance.new("UICorner")
+            BoostCorner.CornerRadius = UDim.new(0, 8)
+            BoostCorner.Parent = BoostFrame
+
+            local entrarAnim = TweenService:Create(BoostFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Position = UDim2.new(0, 10, 1, -105)})
+            entrarAnim:Play()
+
+            local TitleLabel = Instance.new("TextLabel")
+            TitleLabel.Size = UDim2.new(1, -10, 0, 22)
+            TitleLabel.Position = UDim2.new(0, 5, 0, 5)
+            TitleLabel.BackgroundTransparency = 1
+            TitleLabel.Text = "FPS BOOST BETA"
+            TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+            TitleLabel.TextSize = 11
+            TitleLabel.Font = Enum.Font.GothamBold
+            TitleLabel.TextXAlignment = Enum.TextXAlignment.Center
+            TitleLabel.Parent = BoostFrame
+
+            local mejoras = {
+                {texto = "rocas eliminadas", color = Color3.fromRGB(0, 255, 0)},
+                {texto = "modo patata", color = Color3.fromRGB(0, 255, 0)},
+                {texto = "efectos reducidos", color = Color3.fromRGB(0, 255, 0)},
+                {texto = "arboles removidos", color = Color3.fromRGB(0, 255, 0)}
+            }
+
+            local yPos = 30
+            for _, mejora in pairs(mejoras) do
+                local label = Instance.new("TextLabel")
+                label.Size = UDim2.new(1, -10, 0, 16)
+                label.Position = UDim2.new(0, 5, 0, yPos)
+                label.BackgroundTransparency = 1
+                label.Text = "✓ " .. mejora.texto
+                label.TextColor3 = mejora.color
+                label.TextSize = 10
+                label.Font = Enum.Font.Gotham
+                label.TextXAlignment = Enum.TextXAlignment.Left
+                label.Parent = BoostFrame
+                yPos = yPos + 18
+            end
+
+            task.spawn(function()
+                task.wait(8)
+                local salirAnim = TweenService:Create(BoostFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Position = UDim2.new(0, 10, 1, 0), BackgroundTransparency = 1})
+                salirAnim:Play()
+                TweenService:Create(TitleLabel, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 1}):Play()
+                for _, child in pairs(BoostFrame:GetChildren()) do
+                    if child:IsA("TextLabel") and child ~= TitleLabel then
+                        TweenService:Create(child, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {TextTransparency = 1}):Play()
+                    end
+                end
+                task.wait(0.5)
+                BoostGui:Destroy()
+            end)
+        end)
+
+        -- MARCA DE AGUA
+        pcall(function()
+            local WatermarkGui = Instance.new("ScreenGui")
+            WatermarkGui.Name = "DanielWatermark"
+            WatermarkGui.ResetOnSpawn = false
+            WatermarkGui.Parent = PlayerGui
+
+            local WatermarkLabel = Instance.new("TextLabel")
+            WatermarkLabel.Size = UDim2.new(0, 150, 0, 18)
+            WatermarkLabel.Position = UDim2.new(1, -160, 1, -30)
+            WatermarkLabel.BackgroundTransparency = 1
+            WatermarkLabel.Text = "DanielSonrieScripts"
+            WatermarkLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+            WatermarkLabel.TextSize = 10
+            WatermarkLabel.Font = Enum.Font.Gotham
+            WatermarkLabel.TextXAlignment = Enum.TextXAlignment.Right
+            WatermarkLabel.TextTransparency = 0.3
+            WatermarkLabel.Parent = WatermarkGui
+        end)
+
+        -- ELIMINAR ÁRBOLES
+        pcall(function()
+            for _, obj in pairs(Workspace:GetDescendants()) do
+                local nombre = obj.Name and string.lower(obj.Name) or ""
+                if nombre:find("tree") or nombre:find("palm") or nombre:find("palmera") then
+                    obj:Destroy()
+                end
+            end
+        end)
+
+        -- PROTECCIÓN DUMMY
+        local function esDummy(obj)
+            local current = obj.Parent
+            while current do
+                if current:FindFirstChild("Humanoid") then
+                    return true
+                end
+                local nombre = current.Name and string.lower(current.Name) or ""
+                if nombre:find("dummy") or nombre:find("training") or nombre:find("target") or nombre:find("weakest") then
+                    return true
+                end
+                current = current.Parent
+            end
+            return false
+        end
+
+        -- ELIMINAR ROCAS
+        local function esRoca(obj)
+            if esDummy(obj) then return false end
+            local nombre = obj.Name and string.lower(obj.Name) or ""
+            if nombre:find("garou") or nombre:find("dash") then return false end
+            if obj:IsA("BasePart") or obj:IsA("MeshPart") then
+                if obj.Name == "Terrain" then return false end
+                if nombre:find("rock") or nombre:find("stone") or nombre:find("piedra") 
+                   or nombre:find("roca") or nombre:find("debris") or nombre:find("fragment")
+                   or nombre:find("slam") or nombre:find("down") then
+                    return true
+                end
+                local tamano = obj.Size.Magnitude
+                if tamano < 50 and tamano > 0.5 then
+                    return true
+                end
+            end
+            return false
+        end
+
+        for _, obj in pairs(Workspace:GetDescendants()) do
+            pcall(function() if esRoca(obj) then obj:Destroy() end end)
+        end
+
+        Workspace.DescendantAdded:Connect(function(obj)
+            task.wait(0.0000000001)
+            pcall(function() if esRoca(obj) then obj:Destroy() end end)
+        end)
+
+        -- ELIMINAR EFECTOS
+        Workspace.DescendantAdded:Connect(function(obj)
+            pcall(function()
+                if esDummy(obj) then return end
+                local nombre = obj.Name and string.lower(obj.Name) or ""
+                if nombre:find("garou") or nombre:find("dash") then return end
+                if obj:IsA("ParticleEmitter") or obj:IsA("Trail") or obj:IsA("Beam") 
+                   or obj:IsA("Smoke") or obj:IsA("Fire") or obj:IsA("Explosion") then
+                    obj:Destroy()
+                end
+            end)
+        end)
+
+        -- OPTIMIZACIÓN
+        pcall(function()
+            Lighting.GlobalShadows = false
+            for _, effect in pairs(Lighting:GetChildr
