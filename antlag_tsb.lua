@@ -512,4 +512,4 @@ PasswordBox.FocusLost:Connect(function(enterPressed)
             ErrorMsg.Text = ""
         end
     end
-end
+end)
