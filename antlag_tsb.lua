@@ -6,6 +6,7 @@ local LocalPlayer = Players.LocalPlayer
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 -- VERIFICAR SI ES THE STRONGEST BATTLEGROUNDS
+
 local placeId = game.PlaceId
 local esTSB = false
 
@@ -46,6 +47,7 @@ if not esTSB then
 
     return
 end
+
 print("⚔️ ANTI-LAG DEFINITIVO - ESPERANDO CONTRASEÑA")
 
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
