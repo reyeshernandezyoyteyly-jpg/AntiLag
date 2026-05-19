@@ -12,8 +12,11 @@ if not esTSB then
     local f=Instance.new("Frame")f.Size=UDim2.new(0,450,0,160)f.Position=UDim2.new(0.5,-225,0.5,-80)f.BackgroundColor3=Color3.fromRGB(0,0,0)f.BackgroundTransparency=0.4f.Parent=g
     local c=Instance.new("UICorner")c.CornerRadius=UDim.new(0,20)c.Parent=f
     local t=Instance.new("TextLabel")t.Size=UDim2.new(1,0,0,40)t.Position=UDim2.new(0,0,0,20)t.BackgroundTransparency=1t.Text="⚠️ JUEGO NO SOPORTADO"t.TextColor3=Color3.fromRGB(255,50,50)t.TextSize=20t.Font=Enum.Font.GothamBold t.Parent=f
-    local m=Instance.new("TextLabel")m.Size=UDim2.new(1,0,0,60)m.Position=UDim2.new(0,0,0,65)m.BackgroundTransparency=1m.Text="ESTE SCRIPT ES BETA NO ES UNIVERSAL\nPOR AHORA FUNCIONA NADA MAS EN\nTHE STRONGEST BATTLEGROUNDS"m.TextColor3=Color3.fromRGB(255,255,255)m.TextSize=13m.Font=Enum.Font.Gothamm.Parent=f
-    task.wait(2)g:Destroy()task.wait(0.5)LP:Kick("⚠️ ESTE SCRIPT SOLO FUNCIONA EN THE STRONGEST BATTLEGROUNDS")
+    local m=Instance.new("TextLabel")m.Size=UDim2.new(1,0,0,60)m.Position=UDim2.new(0,0,0,65)m.BackgroundTransparency=1m.Text="ESTE SCRIPT ES BETA NO ES UNIVERSAL\nPOR AHORA FUNCIONA NADA MAS EN\nTHE STRONGEST BATTLEGROUNDS"m.TextColor3=Color3.fromRGB(255,255,255)m.TextSize=13m.Font=Enum.Font.Gotham m.Parent=f
+    task.wait(2)
+    g:Destroy()
+    task.wait(0.5)
+    LP:Kick("ESTE SCRIPT ES BETA NO ES UNIVERSAL, POR AHORA FUNCIONA NADA MAS EN THE STRONGEST BATTLEGROUNDS")
     return
 end
 
@@ -23,7 +26,7 @@ local passGui=Instance.new("ScreenGui")passGui.Name="PassGui"passGui.Parent=pg
 local frame=Instance.new("Frame")frame.Size=UDim2.new(0,300,0,150)frame.Position=UDim2.new(0.5,-150,0.5,-75)frame.BackgroundColor3=Color3.fromRGB(30,30,40)frame.Parent=passGui
 local corner=Instance.new("UICorner")corner.CornerRadius=UDim.new(0,15)corner.Parent=frame
 local title=Instance.new("TextLabel")title.Size=UDim2.new(1,0,0,35)title.Position=UDim2.new(0,0,0,10)title.BackgroundTransparency=1title.Text="🔒 SCRIPT PROTEGIDO"title.TextColor3=Color3.fromRGB(255,200,0)title.TextSize=16title.Font=Enum.Font.GothamBold title.Parent=frame
-local box=Instance.new("TextBox")box.Size=UDim2.new(0,200,0,35)box.Position=UDim2.new(0.5,-100,0,55)box.BackgroundColor3=Color3.fromRGB(20,20,30)box.TextColor3=Color3.fromRGB(255,255,255)box.TextSize=14box.Font=Enum.Font.Gothambox.PlaceholderText="Ingresa la contraseña"box.Text=""box.Parent=frame
+local box=Instance.new("TextBox")box.Size=UDim2.new(0,200,0,35)box.Position=UDim2.new(0.5,-100,0,55)box.BackgroundColor3=Color3.fromRGB(20,20,30)box.TextColor3=Color3.fromRGB(255,255,255)box.TextSize=14box.Font=Enum.Font.Gotham box.PlaceholderText="Ingresa la contraseña"box.Text=""box.Parent=frame
 local btn=Instance.new("TextButton")btn.Size=UDim2.new(0,100,0,35)btn.Position=UDim2.new(0.5,-50,0,105)btn.BackgroundColor3=Color3.fromRGB(255,200,0)btn.TextColor3=Color3.fromRGB(0,0,0)btn.TextSize=14btn.Font=Enum.Font.GothamBold btn.Text="ENTRAR"btn.Parent=frame
 local err=Instance.new("TextLabel")err.Size=UDim2.new(1,0,0,25)err.Position=UDim2.new(0,0,0,145)err.BackgroundTransparency=1err.Text=""err.TextColor3=Color3.fromRGB(255,0,0)err.TextSize=12err.Font=Enum.Font.Gotham err.Parent=frame
 
@@ -61,7 +64,7 @@ local function start()
     local items={"✓ rocas eliminadas","✓ modo patata","✓ efectos reducidos","✓ arboles removidos"}
     local y=30
     for _,v in pairs(items)do
-        local l=Instance.new("TextLabel")l.Size=UDim2.new(1,-10,0,16)l.Position=UDim2.new(0,5,0,y)l.BackgroundTransparency=1l.Text=v l.TextColor3=Color3.fromRGB(0,255,0)l.TextSize=10l.Font=Enum.Font.Gothaml.Parent=bf
+        local l=Instance.new("TextLabel")l.Size=UDim2.new(1,-10,0,16)l.Position=UDim2.new(0,5,0,y)l.BackgroundTransparency=1l.Text=v l.TextColor3=Color3.fromRGB(0,255,0)l.TextSize=10l.Font=Enum.Font.Gotham l.Parent=bf
         y=y+18
     end
     task.delay(8,function()boost:Destroy()end)
